@@ -7,8 +7,8 @@
     <ProjectGuid>{2A51480C-712D-4EDE-BDF8-77F5C671BBDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WildtabAlt</RootNamespace>
-    <AssemblyName>WildtabAlt</AssemblyName>
+    <RootNamespace>WildlifeTabAlt</RootNamespace>
+    <AssemblyName>WildlifeTabAlt</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -23,25 +23,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\1.2\Assemblies\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Cassowary">
-      <HintPath>..\..\..\RWLayout\1.2\Assemblies\0Cassowary.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\RWLayout_dev\1.2\Assemblies\0Cassowary.dll</HintPath>
     </Reference>
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\..\..\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="0RWLayout">
-      <HintPath>..\..\..\RWLayout\1.2\Assemblies\0RWLayout.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\RWLayout_dev\1.2\Assemblies\0RWLayout.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -85,6 +84,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="PawnTablePatches.cs" />
+    <Compile Include="MainTabWindow_GroupedPawnTable.cs" />
+    <Compile Include="MainTabWindow_WildlifeAlt.cs" />
+    <Compile Include="PawnTableGroupDef.cs" />
+    <Compile Include="PawnTableGrouped.cs" />
+    <Compile Include="PawnTableGrouped_Wildlife.cs" />
     <Compile Include="WildLifeTabMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

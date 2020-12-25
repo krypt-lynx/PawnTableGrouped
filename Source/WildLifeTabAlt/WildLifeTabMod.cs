@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using RimWorld;
 using RWLayout.alpha2;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace WildtabAlt
+namespace WildlifeTabAlt
 {
     public class WildLifeTabMod : CMod
     {
@@ -22,6 +23,14 @@ namespace WildtabAlt
             ReadModInfo(content);
 
             Harmony harmony = new Harmony(PackageIdOfMine);
+
+            ApplyPatches(harmony);
+        }
+
+
+        private static void ApplyPatches(Harmony harmony)
+        {
+            PawnTablePatches.Patch(harmony);
         }
 
         private static void ReadModInfo(ModContentPack content)
