@@ -259,7 +259,6 @@ namespace WildlifeTabAlt
                 ShowScrollBar = CScrollBarMode.Show
             });
 
-
             host.StackTop((header, header.intrinsicHeight), list);
         }
 

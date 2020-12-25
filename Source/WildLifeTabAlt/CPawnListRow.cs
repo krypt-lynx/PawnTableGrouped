@@ -14,12 +14,14 @@ namespace WildlifeTabAlt
         private PawnTable_WildlifeGrouped table;
         private PawnTableAccessor accessor;
         private Pawn pawn;
+        private LookTargets target;
 
         public CPawnListRow(PawnTable_WildlifeGrouped pawnTable_WildlifeGrouped, PawnTableAccessor accessor, Pawn pawn)
         {
             this.table = pawnTable_WildlifeGrouped;
             this.accessor = accessor;
             this.pawn = pawn;
+            this.target = new LookTargets(pawn);
         }
 
         public override Vector2 tryFit(Vector2 size)
@@ -46,7 +48,7 @@ namespace WildlifeTabAlt
             if (Mouse.IsOver(BoundsRounded))
             {
                 GUI.DrawTexture(BoundsRounded, TexUI.HighlightTex);
-                //this.cachedLookTargets[rowIndex].Highlight(true, this.cachedPawns[rowIndex].IsColonist, false);
+                target.Highlight(true, pawn.IsColonist, false);
             }
             for (int columnIndex = 0; columnIndex < columns.Count; columnIndex++)
             {
