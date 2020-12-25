@@ -86,10 +86,8 @@
   <ItemGroup>
     <Compile Include="LogHelper.cs" />
     <Compile Include="PawnTablePatches.cs" />
-    <Compile Include="MainTabWindow_GroupedPawnTable.cs" />
-    <Compile Include="MainTabWindow_WildlifeAlt.cs" />
     <Compile Include="PawnTableGroupDef.cs" />
-    <Compile Include="PawnTableGrouped.cs" />
+    <Compile Include="PawnTable_WildlifeGrouped.cs" />
     <Compile Include="PawnTableGrouped_Wildlife.cs" />
     <Compile Include="WildLifeTabMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

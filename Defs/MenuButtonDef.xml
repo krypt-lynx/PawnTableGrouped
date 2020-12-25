@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <MainButtonDef>
-    <defName>WildlifeAlt</defName>
-    <label>wildlife</label>
-    <description>List wild animals in the area and designate them for hunting or taming.</description>
-    <tabWindowClass>WildlifeTabAlt.MainTabWindow_WildlifeAlt</tabWindowClass>
-    <order>51</order>
-   <!-- <defaultHotKey>F5</defaultHotKey> -->
-  </MainButtonDef>
-
-
+  
   <WildlifeTabAlt.PawnTableGroupDef>
-    <defName>WildlifeGrouped</defName>
+    <defName>Wildlife</defName>
 	<groupBy>Label</groupBy>
   </WildlifeTabAlt.PawnTableGroupDef>
   
+
   <PawnTableDef>
-    <defName>WildlifeGrouped</defName>
-    <workerClass>PawnTable_Wildlife</workerClass>
+    <defName>Wildlife</defName>
+    <workerClass>WildlifeTabAlt.PawnTable_WildlifeGrouped</workerClass>
     <columns>
       <li>Label</li>
       <li>Gender</li>
@@ -35,13 +27,7 @@
     </columns>
     <minWidth>0</minWidth>
   </PawnTableDef>
-  
-  <PawnColumnDef>
-    <defName>Label</defName>
-    <workerClass>PawnColumnWorker_Label</workerClass>
-    <sortable>true</sortable>
-    <widthPriority>100</widthPriority>
-  </PawnColumnDef>
 
+  
 
 </Defs>

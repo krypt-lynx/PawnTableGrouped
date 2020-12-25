@@ -17,42 +17,47 @@ namespace WildlifeTabAlt
         public static void Patch(Harmony harmony)
         {
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_prefix"));
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_prefix"),
+                postfix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_postfix"));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"));
-            //harmony.Patch(AccessTools.Method(typeof(PawnColumnWorker), "Compare"),
-            //    prefix: new HarmonyMethod(typeof(PawnTablePatches), "Compare_prefix"));
-        }
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"),
+                postfix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_postfix"));
 
-        public static void RegisterPawnTableExtension(PawnTable table, PawnTableGrouped extension)
-        {
-            extensions.Add(table, extension);
         }
-
-        static ConditionalWeakTable<PawnTable, PawnTableGrouped> extensions = new ConditionalWeakTable<PawnTable, PawnTableGrouped>();
 
         static bool PawnTableOnGUI_prefix(PawnTable __instance, Vector2 position)
         {
-            PawnTableGrouped extension;
-            if (extensions.TryGetValue(__instance, out extension))
-            {
-                extension.override_PawnTableOnGUI(position);
-                return false;
+            if (__instance is IPawnTableGrouped groupedTable)
+            {                
+                return groupedTable.override_PawnTableOnGUI_Prefix(position);
             }
 
             return true;
         }
 
-        static bool RecacheIfDirty_prefix(PawnTable __instance)
+        static void PawnTableOnGUI_postfix(PawnTable __instance, Vector2 position)
         {
-            PawnTableGrouped extension;
-            if (extensions.TryGetValue(__instance, out extension))
+            if (__instance is IPawnTableGrouped groupedTable)
             {
-                extension.override_RecacheIfDirty();
-                return false;
+                groupedTable.override_PawnTableOnGUI_Postfix(position);
+            }
+        }
+
+        static bool RecacheIfDirty_prefix(PawnTable __instance, ref bool __state)
+        {
+            if (__instance is IPawnTableGrouped groupedTable)
+            {
+                return groupedTable.override_RecacheIfDirty_Prefix(out __state);
             }
 
             return true;
+        }
+        static void RecacheIfDirty_postfix(PawnTable __instance, bool __state)
+        {
+            if (__instance is IPawnTableGrouped groupedTable)
+            {
+                groupedTable.override_RecacheIfDirty_Postfix(__state);
+            }
         }
     }
 }
