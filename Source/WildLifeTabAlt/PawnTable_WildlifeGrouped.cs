@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using Cassowary;
+using RimWorld;
 using RWLayout.alpha2;
 using System;
 using System.Collections;
@@ -195,7 +196,6 @@ namespace WildlifeTabAlt
 
         public void override_PawnTableOnGUI_Postfix(Vector2 position) { }
 
-
         public bool override_RecacheIfDirty_Prefix(out bool wasDirty)
         {
             wasDirty = accessor.dirty;
@@ -220,12 +220,9 @@ namespace WildlifeTabAlt
             Log.Message(groups.ToString());
         }
 
-
         private void PopulateList(IEnumerable<IGrouping<Pawn, Pawn>> groups)
         {
             list.ClearRows();
-
-            float width = accessor.cachedSize.x - 16f;
 
             foreach (var group in groups)
             {
@@ -242,90 +239,25 @@ namespace WildlifeTabAlt
 
                 foreach (var pawn in group)
                 {
-                    var rowHeight = accessor.CalculateRowHeight(pawn);
+                    row = list.AppendRow(new CPawnListRow(this, accessor, pawn));
 
-                    row = list.AppendRow(new CListingRow());
-                    row.Embed(row.AddElement(new CWidget
-                    {
-                        DoWidgetContent = (_, bounds) => {
-                            int x = (int)bounds.xMin;
-
-                            GUI.color = new Color(1f, 1f, 1f, 0.2f);
-                            Widgets.DrawLineHorizontal((int)bounds.xMin, bounds.yMin, bounds.width);
-                            GUI.color = Color.white;
-                            if (!this.CanAssignPawn(pawn))
-                            {
-                                GUI.color = Color.gray;
-                            }
-
-                            if (Mouse.IsOver(bounds))
-                            {
-                                GUI.DrawTexture(bounds, TexUI.HighlightTex);
-                                //this.cachedLookTargets[rowIndex].Highlight(true, this.cachedPawns[rowIndex].IsColonist, false);
-                            }
-                            for (int columnIndex = 0; columnIndex < ColumnsListForReading.Count; columnIndex++)
-                            {
-                                int columnWidth;
-                                if (columnIndex == ColumnsListForReading.Count - 1)
-                                {
-                                    columnWidth = (int)(width - x);
-                                }
-                                else
-                                {
-                                    columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
-                                }
-                                Rect cellRect = new Rect(x, bounds.yMin, columnWidth, (int)rowHeight);
-                                ColumnsListForReading[columnIndex].Worker.DoCell(cellRect, pawn, this);
-                                x += columnWidth;
-                            }
-                            if (pawn.Downed)
-                            {
-                                GUI.color = new Color(1f, 0f, 0f, 0.5f);
-                                Widgets.DrawLineHorizontal(bounds.xMin, bounds.center.y, bounds.width);
-                            }
-                            GUI.color = Color.white;
-                        }
-
-                    }));
-                    row.AddConstraint(row.height ^ rowHeight);
-
+                    row.AddConstraint(row.height ^ row.intrinsicHeight);
                 }
-
             }
         }
 
         CGuiRoot host = new CGuiRoot();
         CListView list;
-        CWidget header;
+        CElement header;
 
 
         void ConstructGUI()
         {
-            header = host.AddElement(new CWidget
+            header = host.AddElement(new CPawnListHeader(this, accessor));
+            list = host.AddElement(new CListView
             {
-                TryFitContent = (_) => new Vector2(0, (int)accessor.cachedHeaderHeight),
-                DoWidgetContent = (_, bounds) =>
-                {
-                    float width = bounds.width - 16f;
-                    int x = 0;
-                    for (int headerColumnIndex = 0; headerColumnIndex < ColumnsListForReading.Count; headerColumnIndex++)
-                    {
-                        int columnWidth;
-                        if (headerColumnIndex == this.ColumnsListForReading.Count - 1)
-                        {
-                            columnWidth = (int)(width - x);
-                        }
-                        else
-                        {
-                            columnWidth = (int)accessor.cachedColumnWidths[headerColumnIndex];
-                        }
-                        Rect rect = new Rect(((int)bounds.xMin + x), (int)bounds.yMin, columnWidth, bounds.height);
-                        ColumnsListForReading[headerColumnIndex].Worker.DoHeader(rect, this);
-                        x += columnWidth;
-                    }
-                }
+                ShowScrollBar = CScrollBarMode.Show
             });
-            list = host.AddElement(new CListView());
 
 
             host.StackTop((header, header.intrinsicHeight), list);
