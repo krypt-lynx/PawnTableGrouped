@@ -22,7 +22,8 @@ namespace WildlifeTabAlt
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"),
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"),
                 postfix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_postfix"));
-
+            harmony.Patch(AccessTools.Method(typeof(PawnTable), "CalculateTotalRequiredHeight"),
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));
         }
 
         static bool PawnTableOnGUI_prefix(PawnTable __instance, Vector2 position)
@@ -52,12 +53,25 @@ namespace WildlifeTabAlt
 
             return true;
         }
+
         static void RecacheIfDirty_postfix(PawnTable __instance, bool __state)
         {
             if (__instance is IPawnTableGrouped groupedTable)
             {
                 groupedTable.override_RecacheIfDirty_Postfix(__state);
             }
+        }
+
+
+        static bool CalculateTotalRequiredHeight_prefix(PawnTable __instance, ref float __result)
+        {
+            if (__instance is IPawnTableGrouped groupedTable)
+            {
+                __result = groupedTable.override_CalculateTotalRequiredHeight();
+                return false;
+            }
+
+            return true;
         }
     }
 }

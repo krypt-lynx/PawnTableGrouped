@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
@@ -19,6 +20,13 @@ namespace WildlifeTabAlt
         void override_RecacheIfDirty_Postfix(bool wasDirty);
         bool override_PawnTableOnGUI_Prefix(Vector2 position);
         void override_PawnTableOnGUI_Postfix(Vector2 position);
+
+        float override_CalculateTotalRequiredHeight();
+
+        // bool override_ _Prefix();
+        // void override_ _Postfix();
+
+        
     }
 
     public class PawnTableAccessor // Accessors
@@ -40,6 +48,18 @@ namespace WildlifeTabAlt
             set
             {
                 typeof(PawnTable).GetField("dirty", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
+            }
+        }
+
+        public bool hasFixedSize
+        {
+            get
+            {
+                return (bool)typeof(PawnTable).GetField("hasFixedSize", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
+            }
+            set
+            {
+                typeof(PawnTable).GetField("hasFixedSize", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
             }
         }
 
@@ -103,6 +123,29 @@ namespace WildlifeTabAlt
             }
         }
 
+        public float minTableHeight
+        {
+            get
+            {
+                return (float)typeof(PawnTable).GetField("minTableHeight", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
+            }
+            set
+            {
+                typeof(PawnTable).GetField("minTableHeight", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
+            }
+        }
+
+        public float maxTableHeight
+        {
+            get
+            {
+                return (float)typeof(PawnTable).GetField("maxTableHeight", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
+            }
+            set
+            {
+                typeof(PawnTable).GetField("maxTableHeight", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
+            }
+        }
 
 
         public void RecachePawns()
@@ -145,6 +188,12 @@ namespace WildlifeTabAlt
         {
             typeof(PawnTable).GetMethod("RecacheIfDirty", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });            
         }
+    }
+
+    public class PawnTableGroup
+    {
+        public List<Pawn> Pawns = null;
+        public string Title = null;
     }
 
     public class PawnTable_WildlifeGrouped : PawnTable_Wildlife, IPawnTableGrouped
@@ -207,41 +256,84 @@ namespace WildlifeTabAlt
             if (wasDirty)
             {
                 RecacheGroups();
+                accessor.RecacheSize();
             }
+        }
+
+        List<PawnTableGroup> sections;
+        Dictionary<string, bool> ExpandedState = new Dictionary<string, bool>();
+        bool IsExpanded(PawnTableGroup group)
+        {
+            if (ExpandedState.ContainsKey(group.Title))
+            {
+                return ExpandedState[group.Title];
+            } 
+            else
+            {
+                return true;
+            }
+        }
+
+        void SetExpanded(PawnTableGroup group, bool expanded)
+        {
+            ExpandedState[group.Title] = expanded;
         }
 
         private void RecacheGroups()
         {
             //  IEqualityComparer
-            var groups = PawnsListForReading.GroupBy(x => x, new ByColumnComparer(DefDatabase<PawnColumnDef>.GetNamed("Label")));
+            // var groups = PawnsListForReading.GroupBy(x => x, new ByColumnComparer(DefDatabase<PawnColumnDef>.GetNamed("Label")));
 
-            PopulateList(groups);
+            // return input.OrderByDescending((Pawn p) => p.RaceProps.baseBodySize).ThenBy((Pawn p) => p.def.label);
+
+            var groups = PawnsListForReading.GroupBy(p => p.kindDef.race).OrderByDescending(g => g.Key.race.baseBodySize).ThenBy(g => g.Key.label);
+            sections = groups.Select(x => new PawnTableGroup
+            {
+                Title = x.Key.label.CapitalizeFirst() ?? "<unknown race>",
+                Pawns = x.ToList(),
+            }).ToList();
+
+            PopulateList(sections);
 
             Log.Message(groups.ToString());
         }
 
-        private void PopulateList(IEnumerable<IGrouping<Pawn, Pawn>> groups)
+        static private string PawnLabel(Pawn pawn)
+        {
+            if (!pawn.RaceProps.Humanlike && pawn.Name != null && !pawn.Name.Numerical)
+            {
+                return pawn.Name.ToStringShort.CapitalizeFirst() + ", " + pawn.KindLabel;
+            }
+            else
+            {
+                return pawn.LabelCap;
+            }
+        }
+
+        private void PopulateList(IEnumerable<PawnTableGroup> groups)
         {
             list.ClearRows();
 
             foreach (var group in groups)
             {
-                var row = list.AppendRow(new CListingRow());
-
-                row.Embed(row.AddElement(new CLabel
+                var row = new CPawnListSection(group, IsExpanded(group));
+                row.Action = (sectionRow) =>
                 {
-                    Title = group.Key.ToString(),
-                    Font = GameFont.Small,
-                    TextAlignment = TextAnchor.MiddleLeft,
-                }));
+                    var g = ((CPawnListSection)sectionRow).Group;
+                    SetExpanded(g, !IsExpanded(g));
+                    SetDirty();
+                };
+                list.AppendRow(row);
                 row.AddConstraint(row.height ^ 30);
 
-
-                foreach (var pawn in group)
+                if (IsExpanded(group))
                 {
-                    row = list.AppendRow(new CPawnListRow(this, accessor, pawn));
+                    foreach (var pawn in group.Pawns)
+                    {
+                        var pawnRow = list.AppendRow(new CPawnListRow(this, accessor, pawn));
 
-                    row.AddConstraint(row.height ^ row.intrinsicHeight);
+                        pawnRow.AddConstraint(pawnRow.height ^ pawnRow.intrinsicHeight);
+                    }
                 }
             }
         }
@@ -262,6 +354,37 @@ namespace WildlifeTabAlt
             host.StackTop((header, header.intrinsicHeight), list);
         }
 
+
+        private float CalculateTotalRequiredHeight2()
+        {
+            if (sections == null) // todo: 
+                return 0;
+
+
+            float height = accessor.cachedHeaderHeight;
+            foreach (var section in sections)
+            {
+                height += 30;
+                if (IsExpanded(section))
+                {
+                    foreach (var pawn in section.Pawns)
+                    {
+                         height += accessor.CalculateRowHeight(pawn);
+                    }                            
+                }
+            }
+            /*
+            for (int i = 0; i < this.cachedPawns.Count; i++)
+            {
+                num += this.CalculateRowHeight(this.cachedPawns[i]);
+            }*/
+            return height;
+        }
+
+        public float override_CalculateTotalRequiredHeight()
+        {
+            return CalculateTotalRequiredHeight2();
+        }
 
     }
 
