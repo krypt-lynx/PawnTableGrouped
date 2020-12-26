@@ -91,11 +91,18 @@
     <Compile Include="CPawnListHeader.cs" />
     <Compile Include="CPawnListRow.cs" />
     <Compile Include="CPawnListSection.cs" />
+    <Compile Include="GroupColumnResolver.cs" />
+    <Compile Include="GroupColumns\GroupColumnWorker_Checkbox.cs" />
+    <Compile Include="GroupColumns\GroupColumnWorker_Icon.cs" />
+    <Compile Include="GroupColumns\GroupColumnWorker_MedicalCare.cs" />
+    <Compile Include="GroupColumns\GroupColumnWorker_Text.cs" />
+    <Compile Include="GroupColumns\GroupColumnWorker_Trainable.cs" />
+    <Compile Include="Linq.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="PawnTableAccessor.cs" />
     <Compile Include="PawnTablePatches.cs" />
     <Compile Include="PawnTableGroupDef.cs" />
-    <Compile Include="PawnTable_WildlifeGrouped.cs" />
+    <Compile Include="PawnTableGrouped.cs" />
     <Compile Include="WildLifeTabMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -104,6 +111,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>git describe --tag  --dirty --always &gt; "$(ProjectDir)\git.txt"

@@ -73,50 +73,5 @@ namespace WildlifeTabAlt
             }
             GUI.color = Color.white;
         }
-
-        /*
-                    row.Embed(row.AddElement(new CWidget
-                    {
-                        DoWidgetContent = (_, bounds) => {
-                            int x = (int)bounds.xMin;
-
-                            GUI.color = new Color(1f, 1f, 1f, 0.2f);
-                            Widgets.DrawLineHorizontal((int)bounds.xMin, bounds.yMin, bounds.width);
-                            GUI.color = Color.white;
-                            if (!this.CanAssignPawn(pawn))
-                            {
-                                GUI.color = Color.gray;
-                            }
-
-                            if (Mouse.IsOver(bounds))
-                            {
-                                GUI.DrawTexture(bounds, TexUI.HighlightTex);
-                                //this.cachedLookTargets[rowIndex].Highlight(true, this.cachedPawns[rowIndex].IsColonist, false);
-                            }
-                            for (int columnIndex = 0; columnIndex < ColumnsListForReading.Count; columnIndex++)
-                            {
-                                int columnWidth;
-                                if (columnIndex == ColumnsListForReading.Count - 1)
-                                {
-                                    columnWidth = (int)(width - x);
-                                }
-                                else
-                                {
-                                    columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
-                                }
-                                Rect cellRect = new Rect(x, bounds.yMin, columnWidth, (int)rowHeight);
-                                ColumnsListForReading[columnIndex].Worker.DoCell(cellRect, pawn, this);
-                                x += columnWidth;
-                            }
-                            if (pawn.Downed)
-                            {
-                                GUI.color = new Color(1f, 0f, 0f, 0.5f);
-                                Widgets.DrawLineHorizontal(bounds.xMin, bounds.center.y, bounds.width);
-                            }
-                            GUI.color = Color.white;
-                        }
-
-                    }));
-        */
     }
 }

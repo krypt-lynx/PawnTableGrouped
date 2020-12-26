@@ -17,10 +17,12 @@ namespace WildlifeTabAlt
         public static string PackageIdOfMine = null;
         //public static Settings Settings { get; private set; }
         public static string CommitInfo = null;
+        public static ModContentPack Content = null;
 
         public WildLifeTabMod(ModContentPack content) : base(content)
         {
             ReadModInfo(content);
+            Content = content;
 
             Harmony harmony = new Harmony(PackageIdOfMine);
 

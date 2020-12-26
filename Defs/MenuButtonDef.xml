@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
   
-  <WildlifeTabAlt.PawnTableGroupDef>
-    <defName>Wildlife</defName>
-  </WildlifeTabAlt.PawnTableGroupDef>
+   
+
   
-<!--  <WildlifeTabAlt.PawnTableGroupColumn>  -->
   
   <PawnTableDef>
     <defName>Animals</defName>
