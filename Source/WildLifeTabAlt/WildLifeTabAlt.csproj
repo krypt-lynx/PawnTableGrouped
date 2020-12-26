@@ -92,6 +92,7 @@
     <Compile Include="CPawnListRow.cs" />
     <Compile Include="CPawnListSection.cs" />
     <Compile Include="LogHelper.cs" />
+    <Compile Include="PawnTableAccessor.cs" />
     <Compile Include="PawnTablePatches.cs" />
     <Compile Include="PawnTableGroupDef.cs" />
     <Compile Include="PawnTable_WildlifeGrouped.cs" />

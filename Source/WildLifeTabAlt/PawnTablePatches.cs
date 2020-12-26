@@ -17,11 +17,9 @@ namespace WildlifeTabAlt
         public static void Patch(Harmony harmony)
         {
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_prefix"),
-                postfix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_postfix"));
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_prefix"));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"),
-                postfix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_postfix"));
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "CalculateTotalRequiredHeight"),
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));
         }
@@ -29,37 +27,23 @@ namespace WildlifeTabAlt
         static bool PawnTableOnGUI_prefix(PawnTable __instance, Vector2 position)
         {
             if (__instance is IPawnTableGrouped groupedTable)
-            {                
-                return groupedTable.override_PawnTableOnGUI_Prefix(position);
+            {
+                groupedTable.override_PawnTableOnGUI(position);
+                return false;
             }
 
             return true;
         }
 
-        static void PawnTableOnGUI_postfix(PawnTable __instance, Vector2 position)
+        static bool RecacheIfDirty_prefix(PawnTable __instance)
         {
             if (__instance is IPawnTableGrouped groupedTable)
             {
-                groupedTable.override_PawnTableOnGUI_Postfix(position);
-            }
-        }
-
-        static bool RecacheIfDirty_prefix(PawnTable __instance, ref bool __state)
-        {
-            if (__instance is IPawnTableGrouped groupedTable)
-            {
-                return groupedTable.override_RecacheIfDirty_Prefix(out __state);
+                groupedTable.override_RecacheIfDirty();
+                return false;
             }
 
             return true;
-        }
-
-        static void RecacheIfDirty_postfix(PawnTable __instance, bool __state)
-        {
-            if (__instance is IPawnTableGrouped groupedTable)
-            {
-                groupedTable.override_RecacheIfDirty_Postfix(__state);
-            }
         }
 
 

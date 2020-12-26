@@ -16,178 +16,11 @@ namespace WildlifeTabAlt
 {
     public interface IPawnTableGrouped
     {
-        bool override_RecacheIfDirty_Prefix(out bool wasDirty);
-        void override_RecacheIfDirty_Postfix(bool wasDirty);
-        bool override_PawnTableOnGUI_Prefix(Vector2 position);
-        void override_PawnTableOnGUI_Postfix(Vector2 position);
+        void override_RecacheIfDirty();
+        void override_PawnTableOnGUI(Vector2 position);
 
         float override_CalculateTotalRequiredHeight();
-
-        // bool override_ _Prefix();
-        // void override_ _Postfix();
-
         
-    }
-
-    public class PawnTableAccessor // Accessors
-    {
-        private Verse.WeakReference<PawnTable> table;
-        private PawnTable Table => table?.Target;
-
-        public PawnTableAccessor(PawnTable table)
-        {
-            this.table = new Verse.WeakReference<PawnTable>(table);
-        }
-
-        public bool dirty
-        {
-            get
-            {
-                return (bool)typeof(PawnTable).GetField("dirty", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
-            }
-            set
-            {
-                typeof(PawnTable).GetField("dirty", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
-            }
-        }
-
-        public bool hasFixedSize
-        {
-            get
-            {
-                return (bool)typeof(PawnTable).GetField("hasFixedSize", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
-            }
-            set
-            {
-                typeof(PawnTable).GetField("hasFixedSize", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
-            }
-        }
-
-        public float cachedHeaderHeight
-        {
-            get
-            {
-                return (float)typeof(PawnTable).GetField("cachedHeaderHeight", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
-            }
-            set
-            {
-                typeof(PawnTable).GetField("cachedHeaderHeight", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
-            }
-        }
-
-        public float cachedHeightNoScrollbar
-        {
-            get
-            {
-                return (float)typeof(PawnTable).GetField("cachedHeightNoScrollbar", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
-            }
-            set
-            {
-                typeof(PawnTable).GetField("cachedHeightNoScrollbar", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
-            }
-        }
-
-        public List<Pawn> cachedPawns
-        {
-            get
-            {
-                return (List<Pawn>)typeof(PawnTable).GetField("cachedPawns", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
-            }
-            set
-            {
-                typeof(PawnTable).GetField("cachedPawns", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
-            }
-        }
-
-        public Vector2 cachedSize
-        {
-            get
-            {
-                return (Vector2)typeof(PawnTable).GetField("cachedSize", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
-            }
-            set
-            {
-                typeof(PawnTable).GetField("cachedSize", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
-            }
-        }
-
-        public List<float> cachedColumnWidths
-        {
-            get
-            {
-                return (List<float>)typeof(PawnTable).GetField("cachedColumnWidths", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
-            }
-            set
-            {
-                typeof(PawnTable).GetField("cachedColumnWidths", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
-            }
-        }
-
-        public float minTableHeight
-        {
-            get
-            {
-                return (float)typeof(PawnTable).GetField("minTableHeight", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
-            }
-            set
-            {
-                typeof(PawnTable).GetField("minTableHeight", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
-            }
-        }
-
-        public float maxTableHeight
-        {
-            get
-            {
-                return (float)typeof(PawnTable).GetField("maxTableHeight", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
-            }
-            set
-            {
-                typeof(PawnTable).GetField("maxTableHeight", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
-            }
-        }
-
-
-        public void RecachePawns()
-        {
-            typeof(PawnTable).GetMethod("RecachePawns", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });
-        }
-        public void RecacheRowHeights()
-        {
-            typeof(PawnTable).GetMethod("RecacheRowHeights", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });
-        }
-        public void RecacheSize()
-        {
-            typeof(PawnTable).GetMethod("RecacheSize", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });
-        }
-        public void RecacheColumnWidths()
-        {
-            typeof(PawnTable).GetMethod("RecachePawns", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });
-        }
-        public void RecacheLookTargets()
-        {
-            typeof(PawnTable).GetMethod("RecacheLookTargets", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });
-        }
-        public float CalculateHeaderHeight()
-        {
-            return (float)typeof(PawnTable).GetMethod("CalculateHeaderHeight", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });
-        }
-        public float CalculateTotalRequiredHeight()
-        {
-            return (float)typeof(PawnTable).GetMethod("CalculateTotalRequiredHeight", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });
-        }
-        public bool CanAssignPawn(Pawn p)
-        {
-            return (bool)typeof(PawnTable).GetMethod("CanAssignPawn", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { p });
-        }
-        public float CalculateRowHeight(Pawn p)
-        {
-            return (float)typeof(PawnTable).GetMethod("CalculateRowHeight", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { p });
-        }
-        public void RecacheIfDirty()
-        {
-            typeof(PawnTable).GetMethod("RecacheIfDirty", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });            
-        }
     }
 
     public class PawnTableGroup
@@ -196,107 +29,39 @@ namespace WildlifeTabAlt
         public string Title = null;
     }
 
-    public class PawnTable_WildlifeGrouped : PawnTable_Wildlife, IPawnTableGrouped
+    public class PawnTableGroupedImpl
     {
-        class ByColumnComparer : IEqualityComparer<Pawn>
-        {
-            private PawnColumnDef groupBy;
-
-            public ByColumnComparer(PawnColumnDef groupBy)
-            {
-                this.groupBy = groupBy;
-            }
-
-            public bool Equals(Pawn x, Pawn y)
-            {
-                return groupBy.Worker.Compare(x, y) == 0;
-            }
-
-            public int GetHashCode(Pawn obj)
-            {
-                return 0; // have no cache; TODO: test performance
-            }
-        }
-
         PawnTableAccessor accessor;
+        PawnTable table; // todo: weak ref
+        private PawnTableDef def;
 
-        public PawnTable_WildlifeGrouped(PawnTableDef def, Func<IEnumerable<Pawn>> pawnsGetter, int uiWidth, int uiHeight) : base(def, pawnsGetter, uiWidth, uiHeight)
+
+        public PawnTableGroupedImpl(PawnTable table, PawnTableDef def, Func<IEnumerable<Pawn>> pawnsGetter, int uiWidth, int uiHeight)
         {
-            accessor = new PawnTableAccessor(this);
+            this.table = table;
+            this.def = def;
 
-            this.SetDirty();
+            accessor = new PawnTableAccessor(table);
+
+            table.SetDirty();
             ConstructGUI();
         }
 
-        public bool override_PawnTableOnGUI_Prefix(Vector2 position)
+        CGuiRoot host = new CGuiRoot();
+        CListView list;
+        CElement header;
+
+        void ConstructGUI()
         {
-            if (Event.current.type == EventType.Layout)
+            header = host.AddElement(new CPawnListHeader(table, accessor));
+            list = host.AddElement(new CListView
             {
-                return false;
-            }
-            accessor.RecacheIfDirty();
+                ShowScrollBar = CScrollBarMode.Show
+            });
 
-            host.InRect = new Rect((int)position.x, (int)position.y, (int)accessor.cachedSize.x, (int)accessor.cachedSize.y);
-            host.UpdateLayoutIfNeeded();
-            host.DoElementContent();
-
-            return false;
+            host.StackTop((header, header.intrinsicHeight), list);
         }
 
-        public void override_PawnTableOnGUI_Postfix(Vector2 position) { }
-
-        public bool override_RecacheIfDirty_Prefix(out bool wasDirty)
-        {
-            wasDirty = accessor.dirty;
-            return true;
-        }
-
-        public void override_RecacheIfDirty_Postfix(bool wasDirty)
-        {
-            if (wasDirty)
-            {
-                RecacheGroups();
-                accessor.RecacheSize();
-            }
-        }
-
-        List<PawnTableGroup> sections;
-        Dictionary<string, bool> ExpandedState = new Dictionary<string, bool>();
-        bool IsExpanded(PawnTableGroup group)
-        {
-            if (ExpandedState.ContainsKey(group.Title))
-            {
-                return ExpandedState[group.Title];
-            } 
-            else
-            {
-                return true;
-            }
-        }
-
-        void SetExpanded(PawnTableGroup group, bool expanded)
-        {
-            ExpandedState[group.Title] = expanded;
-        }
-
-        private void RecacheGroups()
-        {
-            //  IEqualityComparer
-            // var groups = PawnsListForReading.GroupBy(x => x, new ByColumnComparer(DefDatabase<PawnColumnDef>.GetNamed("Label")));
-
-            // return input.OrderByDescending((Pawn p) => p.RaceProps.baseBodySize).ThenBy((Pawn p) => p.def.label);
-
-            var groups = PawnsListForReading.GroupBy(p => p.kindDef.race).OrderByDescending(g => g.Key.race.baseBodySize).ThenBy(g => g.Key.label);
-            sections = groups.Select(x => new PawnTableGroup
-            {
-                Title = x.Key.label.CapitalizeFirst() ?? "<unknown race>",
-                Pawns = x.ToList(),
-            }).ToList();
-
-            PopulateList(sections);
-
-            Log.Message(groups.ToString());
-        }
 
         static private string PawnLabel(Pawn pawn)
         {
@@ -321,7 +86,7 @@ namespace WildlifeTabAlt
                 {
                     var g = ((CPawnListSection)sectionRow).Group;
                     SetExpanded(g, !IsExpanded(g));
-                    SetDirty();
+                    table.SetDirty();
                 };
                 list.AppendRow(row);
                 row.AddConstraint(row.height ^ 30);
@@ -330,7 +95,7 @@ namespace WildlifeTabAlt
                 {
                     foreach (var pawn in group.Pawns)
                     {
-                        var pawnRow = list.AppendRow(new CPawnListRow(this, accessor, pawn));
+                        var pawnRow = list.AppendRow(new CPawnListRow(table, accessor, pawn));
 
                         pawnRow.AddConstraint(pawnRow.height ^ pawnRow.intrinsicHeight);
                     }
@@ -338,29 +103,44 @@ namespace WildlifeTabAlt
             }
         }
 
-        CGuiRoot host = new CGuiRoot();
-        CListView list;
-        CElement header;
 
-
-        void ConstructGUI()
+        List<PawnTableGroup> sections;
+        Dictionary<string, bool> ExpandedState = new Dictionary<string, bool>();
+        bool IsExpanded(PawnTableGroup group)
         {
-            header = host.AddElement(new CPawnListHeader(this, accessor));
-            list = host.AddElement(new CListView
+            if (ExpandedState.ContainsKey(group.Title))
             {
-                ShowScrollBar = CScrollBarMode.Show
-            });
-
-            host.StackTop((header, header.intrinsicHeight), list);
+                return ExpandedState[group.Title];
+            }
+            else
+            {
+                return true;
+            }
         }
 
-
-        private float CalculateTotalRequiredHeight2()
+        void SetExpanded(PawnTableGroup group, bool expanded)
         {
-            if (sections == null) // todo: 
-                return 0;
+            ExpandedState[group.Title] = expanded;
+        }
 
+        public void RecacheGroups()
+        {
+            //  IEqualityComparer
+            // var groups = PawnsListForReading.GroupBy(x => x, new ByColumnComparer(DefDatabase<PawnColumnDef>.GetNamed("Label")));
 
+            // return input.OrderByDescending((Pawn p) => p.RaceProps.baseBodySize).ThenBy((Pawn p) => p.def.label);
+
+            var groups = table.PawnsListForReading.GroupBy(p => p.kindDef.race).OrderByDescending(g => g.Key.race.baseBodySize).ThenBy(g => g.Key.label);
+            sections = groups.Select(x => new PawnTableGroup
+            {
+                Title = x.Key.label.CapitalizeFirst() ?? "<unknown race>",
+                Pawns = x.ToList(),
+            }).ToList();
+
+        }
+
+        public float CalculateTotalRequiredHeight()
+        {
             float height = accessor.cachedHeaderHeight;
             foreach (var section in sections)
             {
@@ -369,217 +149,311 @@ namespace WildlifeTabAlt
                 {
                     foreach (var pawn in section.Pawns)
                     {
-                         height += accessor.CalculateRowHeight(pawn);
-                    }                            
+                        height += accessor.CalculateRowHeight(pawn);
+                    }
                 }
             }
-            /*
-            for (int i = 0; i < this.cachedPawns.Count; i++)
-            {
-                num += this.CalculateRowHeight(this.cachedPawns[i]);
-            }*/
+
             return height;
         }
 
-        public float override_CalculateTotalRequiredHeight()
-        {
-            return CalculateTotalRequiredHeight2();
-        }
-
-    }
-
-    /*
-
-    public partial class PawnTableGrouped
-    {
-
-        class ByColumnComparer : IEqualityComparer<Pawn>
-        {
-            private PawnColumnDef groupBy;
-
-            public ByColumnComparer(PawnColumnDef groupBy)
-            {
-                this.groupBy = groupBy;
-            }
-
-            public bool Equals(Pawn x, Pawn y)
-            {
-                return groupBy.Worker.Compare(x, y) == 0;
-            }
-
-            public int GetHashCode(Pawn obj)
-            {
-                return 0; // have no cache; TODO: test performance
-            }
-        }
-
-        private PawnTableGroupDef groupDef;
-        public PawnTableGrouped(PawnTable table, PawnTableGroupDef groupDef)
-        {
-            this.table = new Verse.WeakReference<PawnTable>(table);
-            this.groupDef = groupDef;
-
-            PawnTablePatches.RegisterPawnTableExtension(table, this);
-
-            ConstructGUI();
-            Table.SetDirty();
-        }
-
-
-        public void override_RecacheIfDirty()
-        {
-            if (!this.dirty)
-            {
-                return;
-            }
-
-            this.dirty = false;
-            this.RecachePawns();
-            //this.RecacheRowHeights();
-            this.cachedHeaderHeight = this.CalculateHeaderHeight();
-            this.cachedHeightNoScrollbar = this.CalculateTotalRequiredHeight();
-            RecacheGroups();
-            this.RecacheSize();
-            this.RecacheColumnWidths();
-            this.RecacheLookTargets();
-
-
-        }
-
-        private void RecacheGroups()
-        {
-            //  IEqualityComparer
-            var groups = Table.PawnsListForReading.GroupBy(x => x, new ByColumnComparer(groupDef.groupBy));
-
-            PopulateList(groups);
-
-            Log.Message(groups.ToString());
-        }
-
-        private void PopulateList(IEnumerable<IGrouping<Pawn, Pawn>> groups)
-        {
-            list.ClearRows();
-
-            float width = this.cachedSize.x - 16f;
-
-            foreach (var group in groups)
-            {
-                var row = list.AppendRow(new CListingRow());
-
-                row.Embed(row.AddElement(new CLabel
-                {
-                    Title = group.Key.ToString(),
-                    Font = GameFont.Small,
-                    TextAlignment = TextAnchor.MiddleLeft,
-                }));
-                row.AddConstraint(row.height ^ 30);
-
-
-                foreach (var pawn in group)
-                {
-                    var rowHeight = CalculateRowHeight(pawn);
-
-                    row = list.AppendRow(new CListingRow());
-                    row.Embed(row.AddElement(new CWidget
-                    {
-                        DoWidgetContent = (_, bounds) => {
-                            int x = (int)bounds.xMin;
-
-                                GUI.color = new Color(1f, 1f, 1f, 0.2f);
-                                Widgets.DrawLineHorizontal((int)bounds.xMin, bounds.yMin, bounds.width);
-                                GUI.color = Color.white;
-                                if (!this.CanAssignPawn(pawn))
-                                {
-                                    GUI.color = Color.gray;
-                                }
-                               
-                                if (Mouse.IsOver(bounds))
-                                {
-                                    GUI.DrawTexture(bounds, TexUI.HighlightTex);
-                                    //this.cachedLookTargets[rowIndex].Highlight(true, this.cachedPawns[rowIndex].IsColonist, false);
-                                }
-                                for (int columnIndex = 0; columnIndex < Table.ColumnsListForReading.Count; columnIndex++)
-                                {
-                                    int columnWidth;
-                                    if (columnIndex == Table.ColumnsListForReading.Count - 1)
-                                    {
-                                        columnWidth = (int)(width - x);
-                                    }
-                                    else
-                                    {
-                                        columnWidth = (int)cachedColumnWidths[columnIndex];
-                                    }
-                                    Rect cellRect = new Rect(x, bounds.yMin, columnWidth, (int)rowHeight);
-                                    Table.ColumnsListForReading[columnIndex].Worker.DoCell(cellRect, pawn, Table);
-                                    x += columnWidth;
-                                }
-                                if (pawn.Downed)
-                                {
-                                    GUI.color = new Color(1f, 0f, 0f, 0.5f);
-                                    Widgets.DrawLineHorizontal(bounds.xMin, bounds.center.y, bounds.width);
-                                }
-                                GUI.color = Color.white;
-                            }
-                        
-                    }));
-                    row.AddConstraint(row.height ^ rowHeight);
-
-                }
-
-            } 
-        }
-
-        CGuiRoot host = new CGuiRoot();
-        CListView list;
-        CWidget header;
-
-
-        void ConstructGUI()
-        {
-            header = host.AddElement(new CWidget
-            {
-                TryFitContent = (_) => new Vector2(0, (int)cachedHeaderHeight),
-                DoWidgetContent = (_, bounds) =>
-                {
-                    float width = bounds.width - 16f;
-                    int x = 0;
-                    for (int headerColumnIndex = 0; headerColumnIndex < Table.ColumnsListForReading.Count; headerColumnIndex++)
-                    {
-                        int columnWidth;
-                        if (headerColumnIndex == Table.ColumnsListForReading.Count - 1)
-                        {
-                            columnWidth = (int)(width - x);
-                        }
-                        else
-                        {
-                            columnWidth = (int)cachedColumnWidths[headerColumnIndex];
-                        }
-                        Rect rect = new Rect(((int)bounds.xMin + x), (int)bounds.yMin, columnWidth, bounds.height);
-                        Table.ColumnsListForReading[headerColumnIndex].Worker.DoHeader(rect, Table);
-                        x += columnWidth;
-                    }
-                }
-            });
-            list = host.AddElement(new CListView());
-
-
-            host.StackTop((header, header.intrinsicHeight), list);
-        }
-
-        public void override_PawnTableOnGUI(Vector2 position)
+        public void PawnTableOnGUI(Vector2 position)
         {
             if (Event.current.type == EventType.Layout)
             {
                 return;
             }
-            this.override_RecacheIfDirty();
 
-            host.InRect = new Rect((int)position.x, (int)position.y, (int)this.cachedSize.x, (int)this.cachedSize.y);
+            accessor.RecacheIfDirty();
+
+            host.InRect = new Rect((int)position.x, (int)position.y, (int)accessor.cachedSize.x, (int)accessor.cachedSize.y);
             host.UpdateLayoutIfNeeded();
             host.DoElementContent();
+        }
 
+
+        public void RecacheIfDirty()
+        {
+            if (!accessor.dirty)
+            {
+                return;
+            }
+            accessor.dirty = false;
+            accessor.RecachePawns();
+            RecacheGroups();
+
+            accessor.RecacheRowHeights();
+            accessor.cachedHeaderHeight = accessor.CalculateHeaderHeight();
+            accessor.cachedHeightNoScrollbar = CalculateTotalRequiredHeight();
+            accessor.RecacheSize();
+            accessor.RecacheColumnWidths();
+            //RecacheColumnWidths();
+            accessor.RecacheLookTargets();
+
+            PopulateList(sections);
+        }/*
+
+        private void RecacheColumnWidths()
+        {
+            float num = accessor.cachedSize.x - 16f;
+            float num2 = 0f;
+            this.RecacheColumnWidths_StartWithMinWidths(out num2);
+            if (num2 == num)
+            {
+                return;
+            }
+            if (num2 > num)
+            {
+                this.SubtractProportionally(num2 - num, num2);
+                return;
+            }
+            bool flag;
+            this.RecacheColumnWidths_DistributeUntilOptimal(num, ref num2, out flag);
+            if (flag)
+            {
+                return;
+            }
+            this.RecacheColumnWidths_DistributeAboveOptimal(num, ref num2);
+        }*/
+        /*
+        private void RecacheColumnWidths_StartWithMinWidths(out float minWidthsSum)
+        {
+            minWidthsSum = 0f;
+            accessor.cachedColumnWidths.Clear();
+            for (int i = 0; i < this.def.columns.Count; i++)
+            {
+                float minWidth = this.GetMinWidth(this.def.columns[i]);
+                accessor.cachedColumnWidths.Add(minWidth);
+                minWidthsSum += minWidth;
+            }
+        }     
+
+        private void SubtractProportionally(float toSubtract, float totalUsedWidth)
+        {
+            for (int i = 0; i < accessor.cachedColumnWidths.Count; i++)
+            {
+                List<float> list = accessor.cachedColumnWidths;
+                int index = i;
+                list[index] -= toSubtract * accessor.cachedColumnWidths[i] / totalUsedWidth;
+            }
+        }
+
+        private void RecacheColumnWidths_DistributeUntilOptimal(float totalAvailableSpaceForColumns, ref float usedWidth, out bool noMoreFreeSpace)
+        {
+            accessor.columnAtOptimalWidth.Clear();
+            for (int i = 0; i < this.def.columns.Count; i++)
+            {
+                accessor.columnAtOptimalWidth.Add(accessor.cachedColumnWidths[i] >= this.GetOptimalWidth(this.def.columns[i]));
+            }
+            int num = 0;
+            for (; ; )
+            {
+                num++;
+                if (num >= 10000)
+                {
+                    break;
+                }
+                float num2 = float.MinValue;
+                for (int j = 0; j < this.def.columns.Count; j++)
+                {
+                    if (!accessor.columnAtOptimalWidth[j])
+                    {
+                        num2 = Mathf.Max(num2, (float)this.def.columns[j].widthPriority);
+                    }
+                }
+                float num3 = 0f;
+                for (int k = 0; k < accessor.cachedColumnWidths.Count; k++)
+                {
+                    if (!accessor.columnAtOptimalWidth[k] && (float)this.def.columns[k].widthPriority == num2)
+                    {
+                        num3 += this.GetOptimalWidth(this.def.columns[k]);
+                    }
+                }
+                float num4 = totalAvailableSpaceForColumns - usedWidth;
+                bool flag = false;
+                bool flag2 = false;
+                for (int l = 0; l < accessor.cachedColumnWidths.Count; l++)
+                {
+                    if (!accessor.columnAtOptimalWidth[l])
+                    {
+                        if ((float)this.def.columns[l].widthPriority != num2)
+                        {
+                            flag = true;
+                        }
+                        else
+                        {
+                            float num5 = num4 * this.GetOptimalWidth(this.def.columns[l]) / num3;
+                            float num6 = this.GetOptimalWidth(this.def.columns[l]) - accessor.cachedColumnWidths[l];
+                            if (num5 >= num6)
+                            {
+                                num5 = num6;
+                                accessor.columnAtOptimalWidth[l] = true;
+                                flag2 = true;
+                            }
+                            else
+                            {
+                                flag = true;
+                            }
+                            if (num5 > 0f)
+                            {
+                                List<float> list = accessor.cachedColumnWidths;
+                                int index = l;
+                                list[index] += num5;
+                                usedWidth += num5;
+                            }
+                        }
+                    }
+                }
+                if (usedWidth >= totalAvailableSpaceForColumns - 0.1f)
+                {
+                    goto Block_13;
+                }
+                if (!flag || !flag2)
+                {
+                    goto IL_243;
+                }
+            }
+            Log.Error("Too many iterations.", false);
+            goto IL_243;
+        Block_13:
+            noMoreFreeSpace = true;
+        IL_243:
+            noMoreFreeSpace = false;
+        }
+
+        private void RecacheColumnWidths_DistributeAboveOptimal(float totalAvailableSpaceForColumns, ref float usedWidth)
+        {
+            accessor.columnAtMaxWidth.Clear();
+            for (int i = 0; i < this.def.columns.Count; i++)
+            {
+                this.columnAtMaxWidth.Add(this.cachedColumnWidths[i] >= this.GetMaxWidth(this.def.columns[i]));
+            }
+            int num = 0;
+            for (; ; )
+            {
+                num++;
+                if (num >= 10000)
+                {
+                    break;
+                }
+                float num2 = 0f;
+                for (int j = 0; j < this.def.columns.Count; j++)
+                {
+                    if (!this.columnAtMaxWidth[j])
+                    {
+                        num2 += Mathf.Max(this.GetOptimalWidth(this.def.columns[j]), 1f);
+                    }
+                }
+                float num3 = totalAvailableSpaceForColumns - usedWidth;
+                bool flag = false;
+                for (int k = 0; k < this.def.columns.Count; k++)
+                {
+                    if (!this.columnAtMaxWidth[k])
+                    {
+                        float num4 = num3 * Mathf.Max(this.GetOptimalWidth(this.def.columns[k]), 1f) / num2;
+                        float num5 = this.GetMaxWidth(this.def.columns[k]) - this.cachedColumnWidths[k];
+                        if (num4 >= num5)
+                        {
+                            num4 = num5;
+                            this.columnAtMaxWidth[k] = true;
+                        }
+                        else
+                        {
+                            flag = true;
+                        }
+                        if (num4 > 0f)
+                        {
+                            List<float> list = this.cachedColumnWidths;
+                            int index = k;
+                            list[index] += num4;
+                            usedWidth += num4;
+                        }
+                    }
+                }
+                if (usedWidth >= totalAvailableSpaceForColumns - 0.1f)
+                {
+                    return;
+                }
+                if (!flag)
+                {
+                    goto Block_10;
+                }
+            }
+            Log.Error("Too many iterations.", false);
+            return;
+        Block_10:
+            this.DistributeRemainingWidthProportionallyAboveMax(totalAvailableSpaceForColumns - usedWidth);
+        }
+
+
+        // Token: 0x0600627B RID: 25211 RVA: 0x002226C9 File Offset: 0x002208C9
+        private float GetOptimalWidth(PawnColumnDef column)
+        {
+            return Mathf.Max((float)column.Worker.GetOptimalWidth(table), 0f);
+        }
+
+        // Token: 0x0600627C RID: 25212 RVA: 0x002226E2 File Offset: 0x002208E2
+        private float GetMinWidth(PawnColumnDef column)
+        {
+            return Mathf.Max((float)column.Worker.GetMinWidth(table), 0f);
+        }
+
+        // Token: 0x0600627D RID: 25213 RVA: 0x002226FB File Offset: 0x002208FB
+        private float GetMaxWidth(PawnColumnDef column)
+        {
+            return Mathf.Max((float)column.Worker.GetMaxWidth(table), 0f);
+        }*/
+    }
+
+
+    public class PawnTable_WildlifeGrouped : PawnTable_Wildlife, IPawnTableGrouped
+    {
+        PawnTableGroupedImpl impl;
+
+        public PawnTable_WildlifeGrouped(PawnTableDef def, Func<IEnumerable<Pawn>> pawnsGetter, int uiWidth, int uiHeight) : base(def, pawnsGetter, uiWidth, uiHeight)
+        {
+            impl = new PawnTableGroupedImpl(this, def, pawnsGetter, uiWidth, uiHeight);
+        }
+
+        public void override_PawnTableOnGUI(Vector2 position)
+        {
+            impl.PawnTableOnGUI(position);
+        }
+
+        public void override_RecacheIfDirty()
+        {
+            impl.RecacheIfDirty();
+        }
+  
+        public float override_CalculateTotalRequiredHeight()
+        {
+            return impl.CalculateTotalRequiredHeight();
         }
     }
 
-    */
+    public class PawnTable_AnimalsGrouped : PawnTable_Animals, IPawnTableGrouped
+    {
+        PawnTableGroupedImpl impl;
+
+        public PawnTable_AnimalsGrouped(PawnTableDef def, Func<IEnumerable<Pawn>> pawnsGetter, int uiWidth, int uiHeight) : base(def, pawnsGetter, uiWidth, uiHeight)
+        {
+            impl = new PawnTableGroupedImpl(this, def, pawnsGetter, uiWidth, uiHeight);
+        }
+
+        public void override_PawnTableOnGUI(Vector2 position)
+        {
+            impl.PawnTableOnGUI(position);
+        }
+
+        public void override_RecacheIfDirty()
+        {
+            impl.RecacheIfDirty();
+        }
+
+        public float override_CalculateTotalRequiredHeight()
+        {
+            return impl.CalculateTotalRequiredHeight();
+        }
+    }
+
 }

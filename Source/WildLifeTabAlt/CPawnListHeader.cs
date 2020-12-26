@@ -11,13 +11,13 @@ namespace WildlifeTabAlt
 {
     class CPawnListHeader : CElement
     {
-        private PawnTable_WildlifeGrouped table;
+        private PawnTable table;
         private PawnTableAccessor accessor;
 
 
-        public CPawnListHeader(PawnTable_WildlifeGrouped pawnTable_WildlifeGrouped, PawnTableAccessor accessor)
+        public CPawnListHeader(PawnTable table, PawnTableAccessor accessor)
         {
-            this.table = pawnTable_WildlifeGrouped;
+            this.table = table;
             this.accessor = accessor;
         }
 

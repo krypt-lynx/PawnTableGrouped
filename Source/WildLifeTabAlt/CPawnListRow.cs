@@ -1,4 +1,5 @@
-﻿using RWLayout.alpha2;
+﻿using RimWorld;
+using RWLayout.alpha2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,14 @@ namespace WildlifeTabAlt
 {
     class CPawnListRow : CListingRow
     {
-        private PawnTable_WildlifeGrouped table;
+        private PawnTable table;
         private PawnTableAccessor accessor;
         private Pawn pawn;
         private LookTargets target;
 
-        public CPawnListRow(PawnTable_WildlifeGrouped pawnTable_WildlifeGrouped, PawnTableAccessor accessor, Pawn pawn)
+        public CPawnListRow(PawnTable table, PawnTableAccessor accessor, Pawn pawn)
         {
-            this.table = pawnTable_WildlifeGrouped;
+            this.table = table;
             this.accessor = accessor;
             this.pawn = pawn;
             this.target = new LookTargets(pawn);
