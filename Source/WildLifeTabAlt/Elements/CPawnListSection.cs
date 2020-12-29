@@ -19,16 +19,14 @@ namespace WildlifeTabAlt
 
         private PawnTable table;
         private PawnTableAccessor accessor;
-        private List<GroupColumnResolver> columnResolvers;
         public PawnTableGroup Group;
 
         public Action<CElement> Action { get; set; }
-        public CPawnListSection(PawnTable table, PawnTableAccessor accessor, PawnTableGroup group, List<GroupColumnResolver> columnResolvers, bool expanded)
+        public CPawnListSection(PawnTable table, PawnTableAccessor accessor, PawnTableGroup group, bool expanded)
         {
             this.table = table;
             this.accessor = accessor;
             this.Group = group;
-            this.columnResolvers = columnResolvers;
 
             var img = AddElement(new CImage
             {
@@ -39,7 +37,7 @@ namespace WildlifeTabAlt
             {
                 Title = $"{group.Title ?? "<Unknown>"} ({group.Pawns?.Count ?? 0})",
                 Font = GameFont.Small,
-                Color = Color.grey,
+                Color = new Color(1, 1, 1, 0.6f),
                 TextAlignment = TextAnchor.MiddleLeft,
             });
 
@@ -59,36 +57,21 @@ namespace WildlifeTabAlt
             //  Texture2D tex = node.IsOpen(openMask) ? TexButton.Collapse : TexButton.Reveal;
             base.DoContent();
 
+            DoRowsSummary();
+
             if (Widgets.ButtonInvisible(BoundsRounded))
             {                
                 this.Action?.Invoke(this);
             }
 
-            if (Event.current.type == EventType.Repaint)
-            {
-                DoRowsSummary();
-            }
         }
 
         private void DoRowsSummary()
         {
-            int x = (int)BoundsRounded.xMin;
+            int x = (int)(BoundsRounded.xMin + Metrics.TableLeftMargin);
             var columns = table.ColumnsListForReading;
 
 
-            GUI.color = new Color(1f, 1f, 1f, 0.2f);
-            Widgets.DrawLineHorizontal(BoundsRounded.xMin, BoundsRounded.yMin, BoundsRounded.width);
-            GUI.color = Color.white;
-            //if (!accessor.CanAssignPawn(pawn))
-            //{
-            //    GUI.color = Color.gray;
-            //}
-
-            //if (Mouse.IsOver(BoundsRounded))
-            //{
-            //    GUI.DrawTexture(BoundsRounded, TexUI.HighlightTex);
-            //    target.Highlight(true, pawn.IsColonist, false);
-            //}
             for (int columnIndex = 0; columnIndex < columns.Count; columnIndex++)
             {
                 int columnWidth;
@@ -100,11 +83,11 @@ namespace WildlifeTabAlt
                 {
                     columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
                 }
-                var resolver = columnResolvers[columnIndex];
-                if (resolver != null)
+                var resolver = Group.ColumnResolvers[columnIndex];
+                if (resolver != null && resolver.IsVisible(Group.Pawns))
                 {
                     Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
-                    resolver.DoCell(cellRect, Group, table);
+                    resolver.DoCell(cellRect, Group, table, columnIndex);
                 }
                 x += columnWidth;
             }

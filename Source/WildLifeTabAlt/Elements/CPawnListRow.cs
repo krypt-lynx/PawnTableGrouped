@@ -15,13 +15,15 @@ namespace WildlifeTabAlt
         private PawnTable table;
         private PawnTableAccessor accessor;
         private Pawn pawn;
+        PawnTableGroup group;
         private LookTargets target;
 
-        public CPawnListRow(PawnTable table, PawnTableAccessor accessor, Pawn pawn)
+        public CPawnListRow(PawnTable table, PawnTableAccessor accessor, PawnTableGroup group, Pawn pawn)
         {
             this.table = table;
             this.accessor = accessor;
             this.pawn = pawn;
+            this.group = group;
             this.target = new LookTargets(pawn);
         }
 
@@ -34,12 +36,12 @@ namespace WildlifeTabAlt
         {
             base.DoContent();
 
-            int x = (int)BoundsRounded.xMin;
+            int x = (int)(BoundsRounded.xMin + Metrics.TableLeftMargin);
             var columns = table.ColumnsListForReading;
 
 
             GUI.color = new Color(1f, 1f, 1f, 0.2f);
-            Widgets.DrawLineHorizontal(BoundsRounded.xMin, BoundsRounded.yMin, BoundsRounded.width);
+            Widgets.DrawLineHorizontal(BoundsRounded.xMin + Metrics.TableLeftMargin, BoundsRounded.yMin, BoundsRounded.width - Metrics.TableLeftMargin);
             GUI.color = Color.white;
             if (!accessor.CanAssignPawn(pawn))
             {
@@ -63,7 +65,32 @@ namespace WildlifeTabAlt
                     columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
                 }
                 Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
+
+                bool needValidateCellValue = Event.current.type != EventType.Repaint &&
+                        Event.current.type != EventType.Layout &&
+                        Event.current.type != EventType.Ignore &&
+                        Event.current.type != EventType.Used && 
+                        Mouse.IsOver(cellRect) &&
+                        group.IsInteractive(columnIndex);
+
+                object oldCellValue = null;
+                if (needValidateCellValue)
+                {
+                    oldCellValue = group.GetValue(columnIndex, pawn);
+                }
+
                 columns[columnIndex].Worker.DoCell(cellRect, pawn, table);
+
+                if (needValidateCellValue)
+                {
+                    object newCellValue = group.GetValue(columnIndex, pawn);
+
+                    if (object.Equals(oldCellValue, newCellValue))
+                    {
+                        group.NotifyValueChanged(columnIndex);
+                    }
+                }
+
                 x += columnWidth;
             }
             if (pawn.Downed)

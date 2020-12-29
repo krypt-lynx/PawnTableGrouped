@@ -22,6 +22,46 @@ namespace WildlifeTabAlt
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "CalculateTotalRequiredHeight"),
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));
+            harmony.Patch(AccessTools.Method(typeof(PawnTable), "GetOptimalWidth"),
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "GetOptimalWidth_prefix"));
+            harmony.Patch(AccessTools.Method(typeof(PawnTable), "GetMinWidth"),
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "GetMinWidth_prefix"));
+            harmony.Patch(AccessTools.Method(typeof(PawnTable), "GetMaxWidth"),
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "GetMaxWidth_prefix"));
+
+        }
+
+        static bool GetOptimalWidth_prefix(PawnTable __instance, PawnColumnDef column, ref float __result)
+        {
+            if (__instance is IPawnTableGrouped groupedTable)
+            {
+                __result = groupedTable.override_GetOptimalWidth(column);
+                return false;
+            }
+
+            return true;
+        }
+
+        static bool GetMinWidth_prefix(PawnTable __instance, PawnColumnDef column, ref float __result)
+        {
+            if (__instance is IPawnTableGrouped groupedTable)
+            {
+                __result = groupedTable.override_GetMinWidth(column);
+                return false;
+            }
+
+            return true;
+        }
+
+        static bool GetMaxWidth_prefix(PawnTable __instance, PawnColumnDef column, ref float __result)
+        {
+            if (__instance is IPawnTableGrouped groupedTable)
+            {
+                __result = groupedTable.override_GetMaxWidth(column);
+                return false;
+            }
+
+            return true;
         }
 
         static bool PawnTableOnGUI_prefix(PawnTable __instance, Vector2 position)

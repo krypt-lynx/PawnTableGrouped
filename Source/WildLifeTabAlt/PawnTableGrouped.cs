@@ -14,30 +14,28 @@ using Verse;
 
 namespace WildlifeTabAlt
 {
+    public static class Metrics {
+        public const float TableLeftMargin = 8;
+    }
+
     public interface IPawnTableGrouped
     {
         void override_RecacheIfDirty();
         void override_PawnTableOnGUI(Vector2 position);
 
-        void override_GetOptimalWidth(PawnColumnDef column);
-        void override_GetMinWidth(PawnColumnDef column);
-        void override_GetMaxWidth(PawnColumnDef column);
+        float override_GetOptimalWidth(PawnColumnDef column);
+        float override_GetMinWidth(PawnColumnDef column);
+        float override_GetMaxWidth(PawnColumnDef column);
 
         float override_CalculateTotalRequiredHeight();
         
-    }
-
-    public class PawnTableGroup
-    {
-        public List<Pawn> Pawns = null;
-        public string Title = null;
     }
 
     public class PawnTableGroupedImpl
     {
         PawnTableAccessor accessor;
         PawnTable table; // todo: weak ref
-        List<GroupColumnResolver> columnResolvers;
+        List<GroupColumnWorker> columnResolvers;
         private PawnTableDef def;
 
 
@@ -45,7 +43,7 @@ namespace WildlifeTabAlt
         {
             this.table = table;
             this.def = def;
-            columnResolvers = new List<GroupColumnResolver>();
+            columnResolvers = new List<GroupColumnWorker>();
             accessor = new PawnTableAccessor(table);
 
             table.SetDirty();
@@ -73,7 +71,7 @@ namespace WildlifeTabAlt
 
             foreach (var group in groups)
             {
-                var row = new CPawnListSection(table, accessor, group, columnResolvers, IsExpanded(group));
+                var row = new CPawnListSection(table, accessor, group, IsExpanded(group));
                 row.Action = (sectionRow) =>
                 {
                     var g = ((CPawnListSection)sectionRow).Group;
@@ -88,7 +86,7 @@ namespace WildlifeTabAlt
                 {
                     foreach (var pawn in group.Pawns)
                     {
-                        var pawnRow = list.AppendRow(new CPawnListRow(table, accessor, pawn));
+                        var pawnRow = list.AppendRow(new CPawnListRow(table, accessor, group, pawn));
 
                         pawnRow.AddConstraint(pawnRow.height ^ pawnRow.intrinsicHeight);
                     }
@@ -124,11 +122,7 @@ namespace WildlifeTabAlt
             // return input.OrderByDescending((Pawn p) => p.RaceProps.baseBodySize).ThenBy((Pawn p) => p.def.label);
 
             var groups = table.PawnsListForReading.GroupBy(p => p.kindDef.race).OrderByDescending(g => g.Key.race.baseBodySize).ThenBy(g => g.Key.label);
-            sections = groups.Select(x => new PawnTableGroup
-            {
-                Title = x.Key.label.CapitalizeFirst() ?? "<unknown race>",
-                Pawns = x.ToList(),
-            }).ToList();
+            sections = groups.Select(x => new PawnTableGroup(x.Key, x, columnResolvers)).ToList();
         }
 
         public void RecacheColumnResolvers()
@@ -136,7 +130,7 @@ namespace WildlifeTabAlt
             columnResolvers.Clear();
             foreach (var column in table.ColumnsListForReading)
             {
-                var resolverDef = GroupColumnResolver.GetResolverSilentFail(column);
+                var resolverDef = GroupColumnWorker.GetResolverSilentFail(column);
                 columnResolvers.Add(resolverDef?.Worker);
             }
         }
@@ -173,7 +167,6 @@ namespace WildlifeTabAlt
             host.DoElementContent();
         }
 
-
         public void RecacheIfDirty()
         {
             if (!accessor.dirty)
@@ -181,18 +174,130 @@ namespace WildlifeTabAlt
                 return;
             }
             accessor.dirty = false;
+            RecacheColumnResolvers();
             accessor.RecachePawns();
             RecacheGroups();
-            RecacheColumnResolvers();
 
             accessor.RecacheRowHeights();
             accessor.cachedHeaderHeight = accessor.CalculateHeaderHeight();
             accessor.cachedHeightNoScrollbar = CalculateTotalRequiredHeight();
             accessor.RecacheSize();
-            accessor.RecacheColumnWidths();
+            var oldSize = accessor.cachedSize;
+            accessor.cachedSize = new Vector2(oldSize.x + Metrics.TableLeftMargin, oldSize.y); // expand table for collapse indicator
+            RecacheColumnWidths();
             accessor.RecacheLookTargets();
 
             PopulateList(sections);
+        }
+
+
+        public void RecacheColumnWidths()
+        {
+            ClSimplexSolver solver = new ClSimplexSolver();
+            solver.AutoSolve = false;
+
+            var cachedColumnWidths = accessor.cachedColumnWidths;
+
+            float width = accessor.cachedSize.x - 16f - Metrics.TableLeftMargin;
+
+            List<float> columnOptimal = new List<float>();
+
+            // variables representing column widths
+            List<ClVariable> columnVars = new List<ClVariable>();
+
+            // expression for summ of column widths
+            ClLinearExpression widthExpr = new ClLinearExpression();
+            HashSet<int> distinctPriorities = new HashSet<int>();
+
+            // summ of optimal column widths
+            float optimalWidth = 0;
+
+            foreach (var column in def.columns)
+            {
+                float optimalColumnWidth;
+                if (column.ignoreWhenCalculatingOptimalTableSize)
+                {
+                    optimalColumnWidth = 0;
+                }
+                else
+                {
+                    optimalColumnWidth = GetOptimalWidth(column);
+                }
+
+                optimalWidth += optimalColumnWidth;
+                columnOptimal.Add(optimalColumnWidth);
+                var columnVar = new ClVariable(column.defName); // name is used for debug purposes only
+                columnVars.Add(columnVar);
+
+                widthExpr.AddExpression(columnVar); // building summ
+
+                distinctPriorities.Add(column.widthPriority);
+            }
+
+            // variable representing flexability of columns. Will be equal to 1 if all column widths are optimal and something else if not. 
+            var flex = new ClVariable("flex");
+
+            // constraining summ of column widths to window width
+            solver.AddConstraint(widthExpr ^ width, ClStrength.Strong);
+
+            // To make prorities work sorting them in order and using order as priority in solver
+            // And hope for the best, because of priorities bug.
+            // But we are fine if we have less then 10 different priorities (2^n < 1000)
+
+            var priorities = distinctPriorities.ToList();
+            priorities.Sort();
+
+            var orderForPriority = priorities.Select((x, i) => (x, i)).ToDictionary(xi => xi.Item1, xi => xi.Item2);
+
+            // to make columns with equal priorities break together bind them together with ClStrength.Strong priority 
+            var priorityVars = priorities.Select(x => new ClVariable($"priority_{x}")).ToArray();
+
+            for (int i = 0; i < def.columns.Count; i++)
+            {
+                var column = def.columns[i];
+                var p = orderForPriority[column.widthPriority];
+
+                var columnWidthExpr = priorityVars[p] * columnOptimal[i] * width / optimalWidth - columnVars[i]; // == 0. Equation for width proportional resize
+                solver.AddConstraint(new ClLinearConstraint(columnWidthExpr, ClStrength.Strong));
+
+                // Limit size min/max 
+                solver.AddConstraint(columnVars[i] >= GetMinWidth(column), ClStrength.Medium);
+                solver.AddConstraint(columnVars[i] <= GetMaxWidth(column), ClStrength.Medium);
+            }
+
+
+            for (int i = 0; i < priorities.Count; i++)
+            {
+                var priorityVar = priorityVars[i];
+                // binding priority variables to flex var
+                solver.AddConstraint(new ClLinearConstraint(priorityVar - flex, ClStrength.Weak, Mathf.Pow(2, i)));
+            }
+
+            // do the magic
+            solver.Solve();
+
+            // copy results to widths cache
+            cachedColumnWidths.Clear();
+            for (int i = 0; i < def.columns.Count; i++)
+            {
+                cachedColumnWidths.Add((float)columnVars[i].Value);
+            }
+        }
+
+
+        public float GetOptimalWidth(PawnColumnDef column)
+        {
+            return Mathf.Max((float)column.Worker.GetOptimalWidth(table), 0f);
+        }
+
+        public float GetMinWidth(PawnColumnDef column)
+        {
+            return Mathf.Max((float)column.Worker.GetMinWidth(table), 0f);
+        }
+
+        public float GetMaxWidth(PawnColumnDef column)
+        {
+            return Mathf.Max((float)column.Worker.GetMaxWidth(table), 0f);
         }
     }
 
@@ -220,6 +325,21 @@ namespace WildlifeTabAlt
         {
             return impl.CalculateTotalRequiredHeight();
         }
+
+        public float override_GetOptimalWidth(PawnColumnDef column)
+        {
+            return impl.GetOptimalWidth(column);
+        }
+
+        public float override_GetMinWidth(PawnColumnDef column)
+        {
+            return impl.GetMinWidth(column);
+        }
+
+        public float override_GetMaxWidth(PawnColumnDef column)
+        {
+            return impl.GetMaxWidth(column);
+        }
     }
 
     public class PawnTable_AnimalsGrouped : PawnTable_Animals, IPawnTableGrouped
@@ -244,6 +364,21 @@ namespace WildlifeTabAlt
         public float override_CalculateTotalRequiredHeight()
         {
             return impl.CalculateTotalRequiredHeight();
+        }
+
+        public float override_GetOptimalWidth(PawnColumnDef column)
+        {
+            return impl.GetOptimalWidth(column);
+        }
+
+        public float override_GetMinWidth(PawnColumnDef column)
+        {
+            return impl.GetMinWidth(column);
+        }
+
+        public float override_GetMaxWidth(PawnColumnDef column)
+        {
+            return impl.GetMaxWidth(column);
         }
     }
 

@@ -24,6 +24,7 @@ namespace WildlifeTabAlt
             while (e.MoveNext())
             {
                 TValue value2 = selector(e.Current);
+                //if (object.Equals(value, value2))
                 if (!EqualityComparer<TValue>.Default.Equals(value, value2))
                 {
                     return false;

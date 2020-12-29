@@ -14,7 +14,6 @@ namespace WildlifeTabAlt
         private PawnTable table;
         private PawnTableAccessor accessor;
 
-
         public CPawnListHeader(PawnTable table, PawnTableAccessor accessor)
         {
             this.table = table;
@@ -32,8 +31,8 @@ namespace WildlifeTabAlt
             var columns = table.ColumnsListForReading;
 
 
-            float width = BoundsRounded.width - 16f;
-            int x = 0;
+            float width = BoundsRounded.width - 16f - Metrics.TableLeftMargin;
+            int x = (int)(BoundsRounded.xMin + Metrics.TableLeftMargin);
             for (int headerColumnIndex = 0; headerColumnIndex < columns.Count; headerColumnIndex++)
             {
                 int columnWidth;
