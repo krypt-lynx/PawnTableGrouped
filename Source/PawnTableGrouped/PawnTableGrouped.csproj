@@ -31,19 +31,71 @@
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\1.1\Assemblies\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\1.2\Assemblies\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' " Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.1\Assemblies\0Cassowary.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' " Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.1\Assemblies\0RWLayout.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+	
+    <Reference Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' " Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0Cassowary.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\..\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' " Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0RWLayout.dll</HintPath>
+      <Private>False</Private>
+    </Reference>	
+
+    <Reference Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0Cassowary.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0RWLayout.dll</HintPath>
+      <Private>False</Private>
+    </Reference>	
+	
+	    <Reference Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0Cassowary.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0RWLayout.dll</HintPath>
+      <Private>False</Private>
+    </Reference>	
+	
+	<Reference Include="0Harmony">
+      <HintPath>D:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
