@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace WildlifeTabAlt
+namespace PawnTableGrouped
 {
     public class Settings : ModSettings
     {
@@ -78,7 +78,7 @@ namespace WildlifeTabAlt
 
         public override string SettingsCategory()
         {
-            return "Wildlife Tab Alt";
+            return "Grouped Pawns Lists";
         }
 
         public override void ConstructGui()

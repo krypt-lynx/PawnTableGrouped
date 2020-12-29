@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-	<name>Wildlife Tab (dev)</name>
+	<name>Grouped Pawns Lists (dev)</name>
 	<author>Krypt</author>
 	<supportedVersions>
 		<li>1.1</li>
 		<li>1.2</li>
 	</supportedVersions>
-	<packageId>name.krypt.rimworld.wildlifetab.dev</packageId>
-	<description>bla-bla-bla</description>
+	<packageId>name.krypt.rimworld.pawntablegrouped.dev</packageId>
+	<description>This mods adds grouping feature into lists of pawns UI.
+Currently supported tabs:
+- Animals
+- Wildlife</description>
 	<modDependencies>
 		<li>
 			<packageId>brrainz.harmony</packageId>

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace WildlifeTabAlt
+namespace PawnTableGrouped
 {
     public static class Metrics {
         public const float TableLeftMargin = 8;

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace WildlifeTabAlt
+namespace PawnTableGrouped
 {
     class CPawnListHeader : CElement
     {

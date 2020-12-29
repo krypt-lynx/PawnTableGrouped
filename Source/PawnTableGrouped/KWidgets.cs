@@ -8,7 +8,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace WildlifeTabAlt
+namespace PawnTableGrouped
 {
     public static class KWidgets
     {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace WildlifeTabAlt
+namespace PawnTableGrouped
 {
     class PawnTablePatches
     {

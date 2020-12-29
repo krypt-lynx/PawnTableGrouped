@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using WildlifeTabAlt.GroupColumns;
+using PawnTableGrouped.GroupColumns;
 
-namespace WildlifeTabAlt
+namespace PawnTableGrouped
 {
 	public abstract class GroupColumnWorker
     {

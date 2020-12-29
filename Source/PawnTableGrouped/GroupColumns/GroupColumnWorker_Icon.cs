@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace WildlifeTabAlt.GroupColumns
+namespace PawnTableGrouped.GroupColumns
 {
     class GroupColumnWorker_Icon : GroupColumnWorker
     {

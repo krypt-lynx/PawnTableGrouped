@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WildlifeTabAlt
+namespace PawnTableGrouped
 {
     public static class Linq
     {

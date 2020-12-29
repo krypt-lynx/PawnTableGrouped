@@ -5,8 +5,8 @@ $outputFormat   = '..\..\WildlifeTabAlt-{0}.zip'
 $internalPath   = 'WildlifeTabAlt'
 $pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', 'Steam', 'Dependencies', '1.1/Assemblies/*.pdb', '1.1/Assemblies/*.xml', '1.2/Assemblies/*.pdb', '1.2/Assemblies/*.xml'
 
-$packageId      = 'name.krypt.rimworld.wildlifetab'
-$packageName    = 'Wildlife Tab'
+$packageName    = 'Grouped Pawns Lists'
+$packageId      = 'name.krypt.rimworld.pawntablegrouped'
 
 [Console]::ResetColor()
 

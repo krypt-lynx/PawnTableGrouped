@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace WildlifeTabAlt
+namespace PawnTableGrouped
 {
     public class PawnTableGroup
     {

@@ -10,7 +10,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace WildlifeTabAlt
+namespace PawnTableGrouped
 {
     public class GroupColumnWorker_Checkbox : GroupColumnWorker
     {
