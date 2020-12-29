@@ -62,6 +62,7 @@ namespace WildlifeTabAlt.GroupColumns
 			}
             else
             {
+				// mostly decompiled code
 				var pawn  = group.Pawns.First();
 
 				Texture2D iconFor = GetIconFor(pawn);
@@ -72,7 +73,7 @@ namespace WildlifeTabAlt.GroupColumns
 					int num2 = Mathf.Max((int)((30f - iconSize.y) / 2f), 0);
 					Rect rect2 = new Rect(rect.x + num, rect.y + num2, iconSize.x, iconSize.y);
 					var color = GetIconColor(pawn);
-					color.a *= 0.4f;
+					color.a *= 0.4f; // adding transparency
 					GUI.color = color;
 					GUI.DrawTexture(rect2.ContractedBy(Padding()), iconFor);
 					GUI.color = Color.white;

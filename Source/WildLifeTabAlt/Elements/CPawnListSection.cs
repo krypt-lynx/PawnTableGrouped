@@ -23,7 +23,7 @@ namespace WildlifeTabAlt
 
         public override Vector2 tryFit(Vector2 size)
         {
-            return new Vector2(0, 30);
+            return new Vector2(0, Metrics.GroupHeaderHeight);
         }
 
         public Action<CElement> Action { get; set; }

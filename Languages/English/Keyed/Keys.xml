@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
+  <GroupedAnimalsTab>Grouped Animal tab:</GroupedAnimalsTab>
+  <GroupedWildlifeTab>Grouped Wildlife tab:</GroupedWildlifeTab>
   <InteractiveGroupHeader>Interactive group header (experimental):</InteractiveGroupHeader>
 </LanguageData>

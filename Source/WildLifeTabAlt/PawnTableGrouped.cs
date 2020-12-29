@@ -16,6 +16,7 @@ namespace WildlifeTabAlt
 {
     public static class Metrics {
         public const float TableLeftMargin = 8;
+        public const float GroupHeaderHeight = 30;
     }
 
     public interface IPawnTableGrouped
@@ -133,7 +134,7 @@ namespace WildlifeTabAlt
             float height = accessor.cachedHeaderHeight;
             foreach (var section in sections)
             {
-                height += 30;
+                height += Metrics.GroupHeaderHeight;
                 if (IsExpanded(section))
                 {
                     foreach (var pawn in section.Pawns)
