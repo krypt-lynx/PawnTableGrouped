@@ -15,10 +15,15 @@ namespace WildlifeTabAlt
 {
     public class Settings : ModSettings
     {
+        public bool groupedAnimalsTab = true;
+        public bool groupedWildlifeTab = true;
+        
         public bool interactiveGroupHeaderExperimental = false;
 
         public override void ExposeData()
         {
+            Scribe_Values.Look(ref groupedAnimalsTab, "groupedAnimalsTab", true);
+            Scribe_Values.Look(ref groupedWildlifeTab, "groupedWildlifeTab", true);
             Scribe_Values.Look(ref interactiveGroupHeaderExperimental, "interactiveGroupHeaderExperimental", false);
 
             base.ExposeData();
@@ -79,6 +84,20 @@ namespace WildlifeTabAlt
         public override void ConstructGui()
         {
             Gui.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
+             Gui.AddElement(new CCheckBox
+             {
+                 Title = "GroupedAnimalsTab".Translate(),
+                 Checked = Settings.groupedAnimalsTab,
+                 Changed = (_, value) => Settings.groupedAnimalsTab = value,
+             }),
+             2,
+             Gui.AddElement(new CCheckBox
+             {
+                 Title = "GroupedWildlifeTab".Translate(),
+                 Checked = Settings.groupedWildlifeTab,
+                 Changed = (_, value) => Settings.groupedWildlifeTab = value,
+             }),
+             10, 
              Gui.AddElement(new CCheckBox
              {
                  Title = "InteractiveGroupHeader".Translate(),

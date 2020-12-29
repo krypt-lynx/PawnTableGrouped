@@ -28,7 +28,8 @@ namespace WildlifeTabAlt
 
         static bool TryGetImplementation(PawnTable table, out PawnTableGroupedImpl implementation)
         {
-            if (table is PawnTable_Wildlife)
+            if ((table is PawnTable_Wildlife && Mod.Settings.groupedWildlifeTab) ||
+                (table is PawnTable_Animals && Mod.Settings.groupedAnimalsTab))
             {
                 if (!implementations.TryGetValue(table, out implementation)) 
                 {
