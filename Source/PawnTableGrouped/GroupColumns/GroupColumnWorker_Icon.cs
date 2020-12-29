@@ -85,14 +85,14 @@ namespace PawnTableGrouped.GroupColumns
 							TooltipHandler.TipRegion(rect2, iconTip);
 						}
 					}
-					if (Widgets.ButtonInvisible(rect2, false))
-					{
-						this.ClickedIcon(pawn);
-					}
-					if (Mouse.IsOver(rect2) && Input.GetMouseButton(0))
-					{
-						this.PaintedIcon(pawn);
-					}
+					//if (Widgets.ButtonInvisible(rect2, false))
+					//{
+					//	this.ClickedIcon(pawn);
+					//}
+					//if (Mouse.IsOver(rect2) && Input.GetMouseButton(0))
+					//{
+					//	this.PaintedIcon(pawn);
+					//}
 				}
 			}
         }

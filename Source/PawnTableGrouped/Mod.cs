@@ -97,7 +97,7 @@ namespace PawnTableGrouped
                  Checked = Settings.groupedWildlifeTab,
                  Changed = (_, value) => Settings.groupedWildlifeTab = value,
              }),
-             10, 
+             10,
              Gui.AddElement(new CCheckBox
              {
                  Title = "InteractiveGroupHeader".Translate(),
@@ -108,7 +108,7 @@ namespace PawnTableGrouped
             Gui.StackBottom(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
                 Gui.AddElement(new CLabel
                 {
-                    Title = $"WildlifeTabAlt version: {CommitInfo}",
+                    Title = $"Grouped Pawns Lists version: {CommitInfo}",
                     TextAlignment = TextAnchor.LowerRight,
                     Color = new Color(1, 1, 1, 0.5f),
                     Font = GameFont.Tiny

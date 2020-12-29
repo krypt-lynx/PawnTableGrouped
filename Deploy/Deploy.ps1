@@ -1,8 +1,8 @@
 # Configurable variables
 $repo           = '..'
 $packing        = 'packing'
-$outputFormat   = '..\..\WildlifeTabAlt-{0}.zip'
-$internalPath   = 'WildlifeTabAlt'
+$outputFormat   = '..\..\PawnTableGrouped-{0}.zip'
+$internalPath   = 'PawnTableGrouped'
 $pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', 'Steam', 'Dependencies', '1.1/Assemblies/*.pdb', '1.1/Assemblies/*.xml', '1.2/Assemblies/*.pdb', '1.2/Assemblies/*.xml'
 
 $packageName    = 'Grouped Pawns Lists'
