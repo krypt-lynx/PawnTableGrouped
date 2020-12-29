@@ -21,6 +21,11 @@ namespace WildlifeTabAlt
         private PawnTableAccessor accessor;
         public PawnTableGroup Group;
 
+        public override Vector2 tryFit(Vector2 size)
+        {
+            return new Vector2(0, 30);
+        }
+
         public Action<CElement> Action { get; set; }
         public CPawnListSection(PawnTable table, PawnTableAccessor accessor, PawnTableGroup group, bool expanded)
         {
