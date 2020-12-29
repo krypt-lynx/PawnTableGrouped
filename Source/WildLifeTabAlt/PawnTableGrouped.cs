@@ -32,13 +32,10 @@ namespace WildlifeTabAlt
         PawnTableAccessor accessor;
         PawnTable table; // todo: weak ref
         List<GroupColumnWorker> columnResolvers;
-        private PawnTableDef def;
 
-
-        public PawnTableGroupedImpl(PawnTable table, PawnTableDef def, Func<IEnumerable<Pawn>> pawnsGetter, int uiWidth, int uiHeight)
+        public PawnTableGroupedImpl(PawnTable table)
         {
             this.table = table;
-            this.def = def;
             columnResolvers = new List<GroupColumnWorker>();
             accessor = new PawnTableAccessor(table);
 
@@ -187,7 +184,7 @@ namespace WildlifeTabAlt
         }
     }
 
-
+    /*
     public class PawnTable_WildlifeGrouped : PawnTable_Wildlife, IPawnTableGrouped
     {
         PawnTableGroupedImpl impl;
@@ -237,5 +234,5 @@ namespace WildlifeTabAlt
             return impl.CalculateTotalRequiredHeight();
         }
     }
-
+    */
 }
