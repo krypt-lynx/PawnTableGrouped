@@ -124,7 +124,7 @@ namespace PawnTableGrouped
             columnResolvers.Clear();
             foreach (var column in table.ColumnsListForReading)
             {
-                var resolverDef = GroupColumnWorker.GetResolverSilentFail(column);
+                var resolverDef = GroupColumnDefResolver.GetResolverSilentFail(column);
                 columnResolvers.Add(resolverDef?.Worker);
             }
         }

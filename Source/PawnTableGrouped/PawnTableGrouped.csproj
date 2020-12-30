@@ -136,6 +136,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GroupColumnDefResolver.cs" />
     <Compile Include="Elements\CPawnListHeader.cs" />
     <Compile Include="Elements\CPawnListRow.cs" />
     <Compile Include="Elements\CPawnListSection.cs" />

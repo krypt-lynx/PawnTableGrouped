@@ -37,7 +37,8 @@
 		</mapping>
 	</PawnTableGrouped.ClassMappingDef>
 
-	<PawnTableGrouped.AllowedPawnLists>
+	<PawnTableGrouped.ListDef>
+		<defName>SupportedTables</defName>
 		<!-- Vanilla -->
 		<li>PawnTable_Animals</li>
 		<li>PawnTable_Wildlife</li>
