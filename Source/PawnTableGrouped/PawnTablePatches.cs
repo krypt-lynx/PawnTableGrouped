@@ -4,6 +4,7 @@ using RWLayout.alpha2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,47 +28,48 @@ namespace PawnTableGrouped
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "CalculateTotalRequiredHeight"),
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));
+
+            
         }
 
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl> implementations = new ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>();
 
-        static HashSet<Type> supportedTables = null;
-        static HashSet<Type> SupportedTables
+        static HashSet<string> supportedTables = null;
+        static HashSet<string> SupportedTables
         {
             get
             {
                 if (supportedTables == null)
                 {
-                    supportedTables = new HashSet<Type>();
-                    foreach (var typeName in DefDatabase<StringListDef>.GetNamed("SupportedTables").list)
-                    {
-                        var type = GenTypes.GetTypeInAnyAssembly(typeName);
-                        if (type != null)
-                        {
-                            supportedTables.Add(type);
-                        }
-                    }
+                    supportedTables = new HashSet<string>(DefDatabase<StringListDef>.GetNamed("SupportedTables").list);
                 }
                 return supportedTables;
             }
         }
 
-        static bool TryGetImplementation(PawnTable table, out PawnTableGroupedImpl implementation)
+        static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>.CreateValueCallback instantiateTableImpl = table =>
         {
-            if (SupportedTables.Contains(table.GetType()))
+            var def = GetPawnTableDef(table).defName;
+            if (SupportedTables.Contains(def))
             {
-                if (!implementations.TryGetValue(table, out implementation)) 
-                {
-                    implementation = new PawnTableGroupedImpl(table);
-                    implementations.Add(table, implementation);
-                }
-                return true;
+                return new PawnTableGroupedImpl(table);
             }
             else
             {
-                implementation = null;
-                return false;
+                return null;
             }
+        };
+
+        static PawnTableDef GetPawnTableDef(PawnTable table)
+        {
+            return (PawnTableDef)typeof(PawnTable).GetField("def", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(table);
+        }
+
+        static bool TryGetImplementation(PawnTable table, out PawnTableGroupedImpl implementation)
+        {
+            implementation = implementations.GetValue(table, instantiateTableImpl);
+
+            return implementation != null;
         }
 
         static bool PawnTableOnGUI_prefix(PawnTable __instance, Vector2 position)
