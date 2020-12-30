@@ -12,6 +12,11 @@ using Verse;
 
 namespace PawnTableGrouped
 {
+    public class StringListDef : Def
+    {
+        public List<string> list;
+    }
+
     class PawnTablePatches
     {
         public static void Patch(Harmony harmony)
@@ -26,10 +31,30 @@ namespace PawnTableGrouped
 
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl> implementations = new ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>();
 
+        static HashSet<Type> supportedTables = null;
+        static HashSet<Type> SupportedTables
+        {
+            get
+            {
+                if (supportedTables == null)
+                {
+                    supportedTables = new HashSet<Type>();
+                    foreach (var typeName in DefDatabase<StringListDef>.GetNamed("SupportedTables").list)
+                    {
+                        var type = GenTypes.GetTypeInAnyAssembly(typeName);
+                        if (type != null)
+                        {
+                            supportedTables.Add(type);
+                        }
+                    }
+                }
+                return supportedTables;
+            }
+        }
+
         static bool TryGetImplementation(PawnTable table, out PawnTableGroupedImpl implementation)
         {
-            if ((table is PawnTable_Wildlife && Mod.Settings.groupedWildlifeTab) ||
-                (table is PawnTable_Animals && Mod.Settings.groupedAnimalsTab))
+            if (SupportedTables.Contains(table.GetType()))
             {
                 if (!implementations.TryGetValue(table, out implementation)) 
                 {

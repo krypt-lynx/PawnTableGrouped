@@ -126,6 +126,8 @@ namespace PawnTableGrouped
             {
                 var resolverDef = GroupColumnDefResolver.GetResolverSilentFail(column);
                 columnResolvers.Add(resolverDef?.Worker);
+
+
             }
         }
 
