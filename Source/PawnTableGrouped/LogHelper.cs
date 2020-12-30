@@ -18,6 +18,7 @@ namespace PawnTableGrouped
 
         public static void Log(this string str, MessageType type = MessageType.Message)
         {
+            str = $"[PTG] {str}";
             switch (type)
             {
                 case MessageType.Message:

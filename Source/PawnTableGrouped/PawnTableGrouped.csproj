@@ -60,7 +60,6 @@
       <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.1\Assemblies\0RWLayout.dll</HintPath>
       <Private>False</Private>
     </Reference>
-	
     <Reference Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' " Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0Cassowary.dll</HintPath>
@@ -70,8 +69,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0RWLayout.dll</HintPath>
       <Private>False</Private>
-    </Reference>	
-
+    </Reference>
     <Reference Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0Cassowary.dll</HintPath>
@@ -81,9 +79,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0RWLayout.dll</HintPath>
       <Private>False</Private>
-    </Reference>	
-	
-	    <Reference Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    </Reference>
+    <Reference Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0Cassowary.dll</HintPath>
       <Private>False</Private>
@@ -92,9 +89,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\0RWLayout.dll</HintPath>
       <Private>False</Private>
-    </Reference>	
-	
-	<Reference Include="0Harmony">
+    </Reference>
+    <Reference Include="0Harmony">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -143,8 +139,10 @@
     <Compile Include="Elements\CPawnListHeader.cs" />
     <Compile Include="Elements\CPawnListRow.cs" />
     <Compile Include="Elements\CPawnListSection.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Checkbox.cs" />
+    <Compile Include="GroupColumns\GroupColumnWorker_Dummy.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Icon.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_MedicalCare.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Text.cs" />

@@ -17,6 +17,7 @@ namespace PawnTableGrouped
     {
         public bool groupedAnimalsTab = true;
         public bool groupedWildlifeTab = true;
+        public bool hideHeaderIfOnlyOneGroup = true;
         
         public bool interactiveGroupHeaderExperimental = false;
 
@@ -24,6 +25,7 @@ namespace PawnTableGrouped
         {
             Scribe_Values.Look(ref groupedAnimalsTab, "groupedAnimalsTab", true);
             Scribe_Values.Look(ref groupedWildlifeTab, "groupedWildlifeTab", true);
+            Scribe_Values.Look(ref hideHeaderIfOnlyOneGroup, "hideHeaderIfOnlyOneGroup", false);
             Scribe_Values.Look(ref interactiveGroupHeaderExperimental, "interactiveGroupHeaderExperimental", false);
 
             base.ExposeData();
@@ -36,13 +38,13 @@ namespace PawnTableGrouped
         public static string PackageIdOfMine = null;
         public static Settings Settings { get; private set; }
         public static string CommitInfo = null;
-        public static ModContentPack Content = null;
+        public static Verse.Mod Instance = null;
 
         public Mod(ModContentPack content) : base(content)
         {
             ReadModInfo(content);
             Settings = GetSettings<Settings>();
-            Content = content;
+            Instance = this;
 
             Harmony harmony = new Harmony(PackageIdOfMine);
 
@@ -97,6 +99,13 @@ namespace PawnTableGrouped
                  Checked = Settings.groupedWildlifeTab,
                  Changed = (_, value) => Settings.groupedWildlifeTab = value,
              }),
+             10,
+             Gui.AddElement(new CCheckBox
+             {
+                 Title = "HideHeaderIfOnlyOneGroup".Translate(),
+                 Checked = Settings.hideHeaderIfOnlyOneGroup,
+                 Changed = (_, value) => Settings.hideHeaderIfOnlyOneGroup = value,
+             }),             
              10,
              Gui.AddElement(new CCheckBox
              {

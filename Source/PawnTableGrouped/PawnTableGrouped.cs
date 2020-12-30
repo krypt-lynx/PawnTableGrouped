@@ -4,6 +4,7 @@ using RWLayout.alpha2;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -23,9 +24,7 @@ namespace PawnTableGrouped
     {
         void override_RecacheIfDirty();
         void override_PawnTableOnGUI(Vector2 position);
-
-        float override_CalculateTotalRequiredHeight();
-        
+        float override_CalculateTotalRequiredHeight();        
     }
 
     public class PawnTableGroupedImpl
@@ -59,23 +58,24 @@ namespace PawnTableGrouped
             host.StackTop((header, header.intrinsicHeight), list);
         }
 
-        private void PopulateList(IEnumerable<PawnTableGroup> groups)
+        private void PopulateList(IReadOnlyCollection<PawnTableGroup> groups)
         {
             list.ClearRows();
 
             foreach (var group in groups)
             {
-                var groupRow = new CPawnListSection(table, accessor, group, IsExpanded(group));
-                groupRow.Action = (sectionRow) =>
+                if (!Mod.Settings.hideHeaderIfOnlyOneGroup && groups.Count > 0)
                 {
-                    var g = ((CPawnListSection)sectionRow).Group;
-                    SetExpanded(g, !IsExpanded(g));
-                    table.SetDirty();
-                };
+                    var groupRow = (CPawnListSection)list.AppendRow(new CPawnListSection(table, accessor, group, IsExpanded(group)));
+                    groupRow.Action = (sectionRow) =>
+                    {
+                        var g = ((CPawnListSection)sectionRow).Group;
+                        SetExpanded(g, !IsExpanded(g));
+                        table.SetDirty();
+                    };
+                    groupRow.AddConstraint(groupRow.height ^ groupRow.intrinsicHeight);
 
-                list.AppendRow(groupRow);
-                groupRow.AddConstraint(groupRow.height ^ groupRow.intrinsicHeight);
-
+                }
                 if (IsExpanded(group))
                 {
                     foreach (var pawn in group.Pawns)

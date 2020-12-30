@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<PawnTableDef>
+		<defName>parsertest</defName>
+	</PawnTableDef>
+
+	<PawnTableGrouped.ClassMappingDef>
+		<defName>GroupHeadersMapping</defName>
+		<mapping>
+			<li>
+				<columnWorkerType>PawnColumnWorker_Checkbox</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Checkbox</groupWorkerType>
+				<isInteractive>true</isInteractive>
+			</li>
+			<li>
+				<columnWorkerType>PawnColumnWorker_Trainable</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Trainable</groupWorkerType>
+				<isInteractive>true</isInteractive>
+			</li>
+			<!--
+			<li>
+				<columnWorkerType>PawnColumnWorker_MedicalCare</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_MedicalCare</groupWorkerType>
+				<isInteractive>true</isInteractive>
+			</li>
+			-->
+			<li>
+				<columnWorkerType>PawnColumnWorker_Icon</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Icon</groupWorkerType>
+				<isInteractive>false</isInteractive>
+			</li>
+			<li>
+				<columnWorkerType>PawnColumnWorker_Text</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Text</groupWorkerType>
+				<isInteractive>false</isInteractive>
+			</li>
+		</mapping>
+	</PawnTableGrouped.ClassMappingDef>
+
+	<PawnTableGrouped.AllowedPawnLists>
+		<!-- Vanilla -->
+		<li>PawnTable_Animals</li>
+		<li>PawnTable_Wildlife</li>
+		<!-- Numbers -->
+		<li>Numbers_Animals</li>
+		<li>Numbers_WildAnimals</li>
+	</PawnTableGrouped.AllowedPawnLists>
+
+</Defs>

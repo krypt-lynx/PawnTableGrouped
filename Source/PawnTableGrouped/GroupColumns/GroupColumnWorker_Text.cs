@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace PawnTableGrouped.GroupColumns
+namespace PawnTableGrouped
 {
-    class GroupColumnWorker_Text : GroupColumnWorker
+    public class GroupColumnWorker_Text : GroupColumnWorker
     {
         public string GetTextFor(Pawn pawn)
         {

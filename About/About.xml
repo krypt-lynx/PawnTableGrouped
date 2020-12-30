@@ -7,7 +7,7 @@
 		<li>1.2</li>
 	</supportedVersions>
 	<packageId>name.krypt.rimworld.pawntablegrouped.dev</packageId>
-	<description>This mods adds grouping feature into lists of pawns UI.
+	<description>This mods adds grouping feature to lists of pawns UI.
 Currently supported tabs:
 - Animals
 - Wildlife</description>

@@ -7,45 +7,90 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using PawnTableGrouped.GroupColumns;
+using PawnTableGrouped;
 
 namespace PawnTableGrouped
 {
-	public abstract class GroupColumnWorker
+	public class ListGroupHeaderMapping
     {
+		public string columnWorkerType;
+		public string groupWorkerType;
+		public bool isInteractive;
+	}
+
+	public class ClassMappingDef : Def
+	{
+		public List<ListGroupHeaderMapping> mapping;
+
+
+		[Unsaved(false)]
+		private Dictionary<Type, Type> mapping_ = null;
+
+		public Dictionary<Type, Type> Mapping
+		{
+			get
+			{
+				if (mapping_ == null)
+				{
+					mapping_ = new Dictionary<Type, Type>();
+
+					foreach (var def in mapping)
+					{
+						// reading types manually to suppress parser error if supported mod is not present
+						var columnWorker = GenTypes.GetTypeInAnyAssembly(def.columnWorkerType);
+						var groupWorker = GenTypes.GetTypeInAnyAssembly(def.groupWorkerType);
+						if (columnWorker != null && groupWorker != null)
+						{
+							mapping_[columnWorker] = groupWorker;
+						}
+					}
+
+					$"Loaded {mapping_.Count} of {mapping.Count} table column mappings".Log();
+				}
+				return mapping_;
+			}
+		}
+	}
+
+	public abstract class GroupColumnWorker
+	{
+	
+
+			
+
 
 		public static GroupColumnWorkerDef GetResolverSilentFail(PawnColumnDef column)
         {
 			var resolverDef = DefDatabase<GroupColumnWorkerDef>.GetNamedSilentFail(column.defName);
 			if (resolverDef == null)
             {
-				if (Mod.Settings.interactiveGroupHeaderExperimental)
-				{
-					if (column.Worker is PawnColumnWorker_Checkbox)
+				var mapping = DefDatabase<ClassMappingDef>.GetNamed("GroupHeadersMapping");
+				var workerClass = column.workerClass;
+				Type headerType = null;
+
+				while (workerClass != null)
+                {
+					if (mapping.Mapping.TryGetValue(workerClass, out headerType) && headerType != null)
 					{
-						resolverDef = CreateGroupColumnDef(column, typeof(GroupColumnWorker_Checkbox));
+						resolverDef = CreateGroupColumnDef(column, headerType);
 					}
-					else if (column.Worker is PawnColumnWorker_Trainable)
-					{
-						resolverDef = CreateGroupColumnDef(column, typeof(GroupColumnWorker_Trainable));
-					}
-					else if (column.Worker is PawnColumnWorker_MedicalCare)
-					{
-						resolverDef = CreateGroupColumnDef(column, typeof(GroupColumnWorker_MedicalCare));
-					}
+
+					if (resolverDef != null)
+                    {
+						break;
+                    }
+					workerClass = workerClass.BaseType;
 				}
 
-				if (column.Worker is PawnColumnWorker_Icon)
-				{
-					resolverDef = CreateGroupColumnDef(column, typeof(GroupColumnWorker_Icon));
-				}
-				else if (column.Worker is PawnColumnWorker_Text)
-				{
-					resolverDef = CreateGroupColumnDef(column, typeof(GroupColumnWorker_Text));
-				}
+				if (resolverDef == null)
+                {
+					resolverDef = CreateGroupColumnDef(column, typeof(GroupColumnWorker_Dummy));
+                }
 
-
+				$"Header for column {column.defName}: {resolverDef.workerClass.FullName}".Log();
 			}
+
+
 			return resolverDef;
 		}
 
@@ -55,7 +100,7 @@ namespace PawnTableGrouped
             {
                 defName = column.defName,
                 workerClass = workerType,
-                modContentPack = Mod.Content
+                modContentPack = Mod.Instance.Content
             };
             DefGenerator.AddImpliedDef(resolverDef);
             return resolverDef;

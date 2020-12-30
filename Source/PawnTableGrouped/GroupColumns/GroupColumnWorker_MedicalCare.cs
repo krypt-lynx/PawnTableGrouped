@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace PawnTableGrouped.GroupColumns
+namespace PawnTableGrouped
 {
-    class GroupColumnWorker_MedicalCare : GroupColumnWorker
+    public class GroupColumnWorker_MedicalCare : GroupColumnWorker
     {
         public override bool IsUniform(IEnumerable<Pawn> pawns)
         {

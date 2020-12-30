@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace PawnTableGrouped.GroupColumns
+namespace PawnTableGrouped
 {
-    class GroupColumnWorker_Icon : GroupColumnWorker
+	public class GroupColumnWorker_Icon : GroupColumnWorker
     {
         public Texture2D GetIconFor(Pawn pawn)
         {
