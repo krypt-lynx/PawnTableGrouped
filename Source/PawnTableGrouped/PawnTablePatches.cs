@@ -27,9 +27,7 @@ namespace PawnTableGrouped
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"),
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "CalculateTotalRequiredHeight"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));
-
-            
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));            
         }
 
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl> implementations = new ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>();

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-	<PawnTableDef>
-		<defName>parsertest</defName>
-	</PawnTableDef>
 
 	<PawnTableGrouped.ClassMappingDef>
 		<defName>GroupHeadersMapping</defName>
@@ -49,5 +46,9 @@
 			<li>Numbers_WildAnimals</li>
 		</list>
 	</PawnTableGrouped.StringListDef>
-
+	<PawnTableGrouped.StringListDef>
+		<defName>IncompatibleTables</defName>
+		<list>
+		</list>
+	</PawnTableGrouped.StringListDef>
 </Defs>

@@ -38,8 +38,7 @@ namespace PawnTableGrouped
 
             int x = (int)(BoundsRounded.xMin + Metrics.TableLeftMargin);
             var columns = table.ColumnsListForReading;
-
-
+                        
             GUI.color = new Color(1f, 1f, 1f, 0.2f);
             Widgets.DrawLineHorizontal(BoundsRounded.xMin + Metrics.TableLeftMargin, BoundsRounded.yMin, BoundsRounded.width - Metrics.TableLeftMargin);
             GUI.color = Color.white;

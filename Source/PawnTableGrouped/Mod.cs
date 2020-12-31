@@ -85,45 +85,75 @@ namespace PawnTableGrouped
 
         public override void ConstructGui()
         {
-            Gui.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
-             Gui.AddElement(new CCheckBox
-             {
-                 Title = "GroupedAnimalsTab".Translate(),
-                 Checked = Settings.groupedAnimalsTab,
-                 Changed = (_, value) => Settings.groupedAnimalsTab = value,
-             }),
-             2,
-             Gui.AddElement(new CCheckBox
-             {
-                 Title = "GroupedWildlifeTab".Translate(),
-                 Checked = Settings.groupedWildlifeTab,
-                 Changed = (_, value) => Settings.groupedWildlifeTab = value,
-             }),
-             10,
-             Gui.AddElement(new CCheckBox
+            CElement hideHeader;
+            CElement interactiveHeader;
+            CListView tablesList;
+            CElement footer;
+            CFrame listFrame;
+
+            Gui.StackTop(
+             (Gui.AddElement(hideHeader = new CCheckBox
              {
                  Title = "HideHeaderIfOnlyOneGroup".Translate(),
                  Checked = Settings.hideHeaderIfOnlyOneGroup,
                  Changed = (_, value) => Settings.hideHeaderIfOnlyOneGroup = value,
-             }),             
+             }), hideHeader.intrinsicHeight),             
              10,
-             Gui.AddElement(new CCheckBox
+             (Gui.AddElement(interactiveHeader = new CCheckBox
              {
                  Title = "InteractiveGroupHeader".Translate(),
                  Checked = Settings.interactiveGroupHeaderExperimental,
                  Changed = (_, value) => Settings.interactiveGroupHeaderExperimental = value,
-             }));
-
-            Gui.StackBottom(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
-                Gui.AddElement(new CLabel
-                {
-                    Title = $"Grouped Pawns Lists version: {CommitInfo}",
-                    TextAlignment = TextAnchor.LowerRight,
-                    Color = new Color(1, 1, 1, 0.5f),
-                    Font = GameFont.Tiny
-                })
+             }), interactiveHeader.intrinsicHeight),
+             10,
+             Gui.AddElement(listFrame = new CFrame()),
+             10,
+             (Gui.AddElement(footer = new CLabel
+             {
+                 Title = $"Grouped Pawns Lists version: {CommitInfo}",
+                 TextAlignment = TextAnchor.LowerRight,
+                 Color = new Color(1, 1, 1, 0.5f),
+                 Font = GameFont.Tiny
+             }), footer.intrinsicHeight)
             );
+
+            tablesList = listFrame.AddElement(new CListView());
+            listFrame.Embed(tablesList, new EdgeInsets(3));
+
+            PopulateTablesList(tablesList);
+        }
+
+        private void PopulateTablesList(CListView tablesList)
+        {
+            var tables = DefDatabase<PawnTableDef>.AllDefs;
+            var supported = new HashSet<string>(DefDatabase<StringListDef>.GetNamed("SupportedTables").list);
+            var incompatible = new HashSet<string>(DefDatabase<StringListDef>.GetNamed("IncompatibleTables").list);
+            int index = 0;
+
+            foreach (var table in tables)
+            {
+                var row = new AlternatingBGRow();
+                row.IsOdd = index % 2 == 1;
+               /* var label = row.AddElement(new CLabel
+                {
+                    Title = table.defName,
+                    Color = supported.Contains(table.defName) ? Color.green : (incompatible.Contains(table.defName) ? Color.red : Color.white)
+                });*/
+                
+                var label = row.AddElement(new TablesListCheckbox
+                {
+                    Title = table.defName,
+                    Color = supported.Contains(table.defName) ? Color.green : (incompatible.Contains(table.defName) ? Color.red : Color.white),
+                });
+                
+                row.Embed(label, new EdgeInsets(0, 2, 0, 2));
+                label.AddConstraint(label.height ^ label.intrinsicHeight);
+
+                tablesList.AppendRow(row);
+                index++;
+            }
         }
     }
+
 
 }
