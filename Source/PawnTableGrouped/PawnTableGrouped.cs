@@ -49,7 +49,7 @@ namespace PawnTableGrouped
 
         void ConstructGUI()
         {
-            header = host.AddElement(new CPawnListHeader(table, accessor));
+            header = host.AddElement(new CPawnListHeader(table, accessor, magic));
             list = host.AddElement(new CListView
             {
                 ShowScrollBar = CScrollBarMode.Show
@@ -149,6 +149,8 @@ namespace PawnTableGrouped
             return height;
         }
 
+        int magic = 0;
+
         public void PawnTableOnGUI(Vector2 position)
         {
             if (Event.current.type == EventType.Layout)
@@ -156,6 +158,7 @@ namespace PawnTableGrouped
                 return;
             }
 
+            magic = NumbersWrapper.ReorderableGroup(table);
             accessor.RecacheIfDirty();
 
             host.InRect = new Rect((int)position.x, (int)position.y, (int)accessor.cachedSize.x, (int)accessor.cachedSize.y);

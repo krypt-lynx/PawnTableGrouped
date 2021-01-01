@@ -13,11 +13,13 @@ namespace PawnTableGrouped
     {
         private PawnTable table;
         private PawnTableAccessor accessor;
+        private int magic;
 
-        public CPawnListHeader(PawnTable table, PawnTableAccessor accessor)
+        public CPawnListHeader(PawnTable table, PawnTableAccessor accessor, int magic)
         {
             this.table = table;
             this.accessor = accessor;
+            this.magic = magic;
         }
 
         public override Vector2 tryFit(Vector2 size)
@@ -45,6 +47,8 @@ namespace PawnTableGrouped
                     columnWidth = (int)accessor.cachedColumnWidths[headerColumnIndex];
                 }
                 Rect rect = new Rect(BoundsRounded.xMin + x, BoundsRounded.yMin, columnWidth, BoundsRounded.height);
+
+                NumbersWrapper.CallReorderableWidget(magic, rect);
                 columns[headerColumnIndex].Worker.DoHeader(rect, table);
                 x += columnWidth;
             }

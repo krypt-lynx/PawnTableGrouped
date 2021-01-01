@@ -42,14 +42,76 @@ namespace PawnTableGrouped
         }
     }
 
+    public class NumbersWrapper
+    {
+        static bool disabled = true;
+        static Type numbersType = null;
+
+        public static int ReorderableGroup(PawnTable pawnTable)
+        {
+            if (disabled)
+            {
+                return 0;
+            }
+
+            try
+            {
+                return (int)numbersType.GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { pawnTable });
+            } 
+            catch
+            {
+                disabled = true;
+                return 0;
+            }
+        }
+
+        public static void CallReorderableWidget(int groupId, Rect rect)
+        {
+            if (disabled)
+            {
+                return;
+            }
+
+            try
+            {
+                numbersType.GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { groupId, rect });
+            }
+            catch
+            {
+                disabled = true;
+            }
+        }
+
+        public static void Resolve()
+        {
+            if (!Mod.ModNumbersActive)
+            {
+                disabled = true;
+            }
+
+            try
+            {
+                numbersType = GenTypes.GetTypeInAnyAssembly("Numbers.Numbers");
+                disabled = false;
+            }
+            catch
+            {
+                disabled = true;
+            }
+        }
+    }
 
     public class Mod : CMod
     {
         public static string PackageIdOfMine = null;
         public static Settings Settings { get; private set; }
         public static string CommitInfo = null;
+        public static bool ModNumbersActive = false;
+        
         public static Verse.Mod Instance = null;
-
+        
+        
+        
         public static Action ActiveTablesChanged = null;
 
         public Mod(ModContentPack content) : base(content)
@@ -61,6 +123,8 @@ namespace PawnTableGrouped
             Harmony harmony = new Harmony(PackageIdOfMine);
 
             ApplyPatches(harmony);
+
+            DetectMods();
         }
 
         private static void ApplyPatches(Harmony harmony)
@@ -87,6 +151,17 @@ namespace PawnTableGrouped
             {
                 CommitInfo = null;
             }
+        }
+
+        private static void DetectMods()
+        {
+            var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
+            if (loadedModIds.Contains("mehni.numbers"))
+            {
+                ModNumbersActive = true;
+            }
+
+            NumbersWrapper.Resolve();
         }
 
         public override string SettingsCategory()
