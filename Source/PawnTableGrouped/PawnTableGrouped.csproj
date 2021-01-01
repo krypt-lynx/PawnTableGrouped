@@ -137,7 +137,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GUI\AlternatingBGRow.cs" />
+    <Compile Include="Settings\GUI\AlternatingBGRow.cs" />
     <Compile Include="GroupColumnDefResolver.cs" />
     <Compile Include="Elements\CPawnListHeader.cs" />
     <Compile Include="Elements\CPawnListRow.cs" />
@@ -150,7 +150,7 @@
     <Compile Include="GroupColumns\GroupColumnWorker_MedicalCare.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Text.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Trainable.cs" />
-    <Compile Include="GUI\TablesListCheckbox.cs" />
+    <Compile Include="Settings\GUI\TablesListCheckbox.cs" />
     <Compile Include="KWidgets.cs" />
     <Compile Include="Linq.cs" />
     <Compile Include="LogHelper.cs" />
@@ -161,6 +161,7 @@
     <Compile Include="PawnTableGrouped.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\SettingsView.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="git.txt">

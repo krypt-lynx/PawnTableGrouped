@@ -30,25 +30,21 @@ namespace PawnTableGrouped
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));            
         }
 
-        static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl> implementations = new ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>();
-
-        static HashSet<string> supportedTables = null;
-        static HashSet<string> SupportedTables
+        static PawnTablePatches()
         {
-            get
+            ResetImplementationsCache();
+            Mod.ActiveTablesChanged = () =>
             {
-                if (supportedTables == null)
-                {
-                    supportedTables = new HashSet<string>(DefDatabase<StringListDef>.GetNamed("SupportedTables").list);
-                }
-                return supportedTables;
-            }
+                ResetImplementationsCache();
+            };
         }
+        
+        static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl> implementations;
 
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>.CreateValueCallback instantiateTableImpl = table =>
         {
             var def = GetPawnTableDef(table).defName;
-            if (SupportedTables.Contains(def))
+            if (Mod.Settings.pawnTablesEnabled.Contains(def))
             {
                 return new PawnTableGroupedImpl(table);
             }
@@ -57,6 +53,11 @@ namespace PawnTableGrouped
                 return null;
             }
         };
+
+        public static void ResetImplementationsCache()
+        {
+            implementations = new ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>();
+        }
 
         static PawnTableDef GetPawnTableDef(PawnTable table)
         {

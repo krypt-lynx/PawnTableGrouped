@@ -34,21 +34,35 @@
 		</mapping>
 	</PawnTableGrouped.ClassMappingDef>
 
-	<PawnTableGrouped.StringListDef>
-		<defName>SupportedTables</defName>
-		<list>
-			<!-- Vanilla -->
+
+		
+	<PawnTableGrouped.SupportInfoDef>
+		<defName>native</defName>
+		<packageId>ludeon.rimworld</packageId>
+		<tableNames>
 			<li>Animals</li>
 			<li>Wildlife</li>
-			
-			<!-- Numbers -->
+		</tableNames>
+	</PawnTableGrouped.SupportInfoDef>
+
+	<PawnTableGrouped.SupportInfoDef>
+		<defName>Numbers</defName>
+		<packageId>mehni.numbers</packageId>
+		<modName>Numbers</modName>
+		<tableNames>
 			<li>Numbers_Animals</li>
 			<li>Numbers_WildAnimals</li>
-		</list>
-	</PawnTableGrouped.StringListDef>
-	<PawnTableGrouped.StringListDef>
-		<defName>IncompatibleTables</defName>
-		<list>
-		</list>
-	</PawnTableGrouped.StringListDef>
+		</tableNames>
+	</PawnTableGrouped.SupportInfoDef>
+
+	<PawnTableGrouped.IncomaptibilityDef>
+		<defName>WorkTab</defName>
+		<packageId>fluffy.worktab</packageId>
+		<modName>Work Tab</modName>
+		<tableNames>
+			<li>Work</li>
+		</tableNames>
+		<hint>Fluffy's Work Tab mod is not compatible for time being.</hint>
+		<reason>tab render is broken</reason>
+	</PawnTableGrouped.IncomaptibilityDef>
 </Defs>
