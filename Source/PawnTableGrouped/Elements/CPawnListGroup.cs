@@ -96,7 +96,7 @@ namespace PawnTableGrouped
                 if (x >= rightTitleEdge.Value + Metrics.GroupTitleRightMargin) // hiding cells behind group title
                 {
                     var resolver = Group.ColumnResolvers[columnIndex];
-                    if (resolver != null && resolver.IsVisible(Group.Pawns))
+                    if (resolver != null && Group.IsVisible(columnIndex))
                     {
                         Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
                         resolver.DoCell(cellRect, Group, table, columnIndex);
