@@ -46,7 +46,7 @@ namespace PawnTableGrouped
                 {
                     Text.Font = GameFont.Small;
 
-                    if (NumbersWrapper.NumbersTableType.IsAssignableFrom(table.GetType()))
+                    if (NumbersWrapper.IsActive && NumbersWrapper.NumbersTableType.IsAssignableFrom(table.GetType()))
                     {
                         Text.Anchor = TextAnchor.MiddleCenter;
                     }

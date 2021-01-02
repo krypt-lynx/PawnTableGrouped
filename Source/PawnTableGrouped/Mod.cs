@@ -44,6 +44,14 @@ namespace PawnTableGrouped
         static Type numbersType = null;
         static Type pawnTableType = null;
 
+        public static bool IsActive
+        {
+            get
+            {
+                return !disabled;
+            }
+        }
+
         public static Type NumbersTableType { get
             {
                 if (disabled)
