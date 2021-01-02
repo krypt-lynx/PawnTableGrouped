@@ -39,7 +39,7 @@
 	<PawnTableGrouped.CompatibilityInfoDef>
 		<defName>native</defName>
 		<packageId>ludeon.rimworld</packageId>
-		<compatibility>Compatible</compatibility>
+		<compatibility>Supported</compatibility>
 		<tableNames>
 			<li>Animals</li>
 			<li>Wildlife</li>
@@ -49,7 +49,7 @@
 	<PawnTableGrouped.CompatibilityInfoDef>
 		<defName>Numbers</defName>
 		<packageId>mehni.numbers</packageId>
-		<compatibility>Compatible</compatibility>
+		<compatibility>Supported</compatibility>
 		<modName>Numbers</modName>
 		<tableNames>
 			<li>Numbers_Animals</li>
