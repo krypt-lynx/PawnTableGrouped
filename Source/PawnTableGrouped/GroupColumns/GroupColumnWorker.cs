@@ -13,8 +13,6 @@ namespace PawnTableGrouped
 {
 	public abstract class GroupColumnWorker
 	{
-
-
         public GroupColumnWorkerDef def;
 
 		private PawnColumnDef columnDef;

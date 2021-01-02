@@ -21,7 +21,10 @@ namespace PawnTableGrouped
 
         public override void SetValue(Pawn pawn, object value)
         {
-            typeof(PawnColumnWorker_Checkbox).GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Checkbox)ColumnDef.Worker, new object[] { pawn, value });
+            if (HasCheckbox(pawn))
+            {
+                typeof(PawnColumnWorker_Checkbox).GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Checkbox)ColumnDef.Worker, new object[] { pawn, value });
+            }
         }
 
         public bool HasCheckbox(Pawn pawn)
@@ -93,7 +96,7 @@ namespace PawnTableGrouped
 
         public override bool IsVisible(IEnumerable<Pawn> pawns)
         {
-            return Mod.Settings.interactiveGroupHeader;
+            return Mod.Settings.interactiveGroupHeader && pawns.Any(x => HasCheckbox(x));
         }
     }
 }
