@@ -44,8 +44,7 @@ namespace PawnTableGrouped
 
         public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
         {
-            base.DoCell(rect, group, table, columnIndex);
-            if (!group.InUniform(columnIndex))
+            if (!group.IsUniform(columnIndex))
             {
                 int dx = (int)((rect.width - 24f) / 2f);
                 int dy = 3;
@@ -89,7 +88,7 @@ namespace PawnTableGrouped
             return true;
         }
 
-        public override object DefaultValue()
+        public override object DefaultValue(IEnumerable<Pawn> pawns)
         {
             return true;
         }

@@ -51,16 +51,16 @@ namespace PawnTableGrouped
 		}
 
 		abstract public bool CanSetValues();
-		abstract public object DefaultValue();
+		abstract public object DefaultValue(IEnumerable<Pawn> pawns);
 		abstract public object GetValue(Pawn pawn);
 		abstract public void SetValue(Pawn pawn, object value);
 		abstract public bool IsVisible(IEnumerable<Pawn> pawns);
 
 		static Color mixedTextColor = new Color(1, 1, 1, 0.6f);
 
-		public virtual void DoCell(Rect cellRect, PawnTableGroup group, PawnTable table, int columnIndex)
+		public virtual void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
 		{
-
+			
         }
 
 		protected virtual void DoMixedValuesIcon(Rect cellRect)

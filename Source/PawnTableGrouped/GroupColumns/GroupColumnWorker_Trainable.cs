@@ -26,7 +26,7 @@ namespace PawnTableGrouped
 
         public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
         {
-            if (!group.InUniform(columnIndex))
+            if (!group.IsUniform(columnIndex))
             {
                 DoMixedValuesIcon(rect);
             }
@@ -72,7 +72,7 @@ namespace PawnTableGrouped
             return true;
         }
 
-        public override object DefaultValue()
+        public override object DefaultValue(IEnumerable<Pawn> pawns)
         {
             return true;
         }

@@ -16,7 +16,7 @@ namespace PawnTableGrouped
             return false;
         }
 
-        public override object DefaultValue()
+        public override object DefaultValue(IEnumerable<Pawn> pawns)
         {
             return null;
         }

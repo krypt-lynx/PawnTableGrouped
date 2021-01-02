@@ -14,13 +14,11 @@
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Trainable</groupWorkerType>
 				<isInteractive>true</isInteractive>
 			</li>
-			<!--
 			<li>
 				<columnWorkerType>PawnColumnWorker_MedicalCare</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_MedicalCare</groupWorkerType>
 				<isInteractive>true</isInteractive>
 			</li>
-			-->
 			<li>
 				<columnWorkerType>PawnColumnWorker_Icon</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Icon</groupWorkerType>

@@ -14,14 +14,9 @@ namespace PawnTableGrouped
         public string Title = null;
 
         public List<GroupColumnWorker> ColumnResolvers = null;
-        private List<bool> columnsIsUniform = null;
-        private List<object> columnValies = null;
-        private List<bool> columnVisible = null;
-
-        public PawnTableGroup()
-        {
-
-        }
+        private List<bool> columnsIsUniform = new List<bool>();
+        private List<object> columnValues = new List<object>();
+        private List<bool> columnVisible = new List<bool>();
 
         public PawnTableGroup(ThingDef race, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers)
         {
@@ -48,13 +43,23 @@ namespace PawnTableGrouped
 
         private void RecacheValues()
         {
+            columnsIsUniform.Clear();
+            columnValues.Clear();
+            columnVisible.Clear();
 
-            columnsIsUniform = ColumnResolvers.Select(r => r?.IsUniform(Pawns) ?? true).ToList();
-            columnValies = ColumnResolvers.Select(r => r?.GetGroupValue(Pawns)).ToList();
-            columnVisible = ColumnResolvers.Select(r => r?.IsVisible(Pawns) ?? false).ToList();
+            for (int i = 0; i < ColumnResolvers.Count; i++)
+            {
+                var uniform = ColumnResolvers[i]?.IsUniform(Pawns) ?? true;
+                var value = uniform ? ColumnResolvers[i]?.GetGroupValue(Pawns) : ColumnResolvers[i]?.DefaultValue(Pawns);
+                var visible = ColumnResolvers[i]?.IsVisible(Pawns) ?? false;
+
+                columnsIsUniform.Add(uniform);
+                columnValues.Add(value);
+                columnVisible.Add(visible);
+            }
         }
 
-        public bool InUniform(int columnIndex) {
+        public bool IsUniform(int columnIndex) {
             return columnsIsUniform[columnIndex]; 
         }
 
@@ -67,7 +72,7 @@ namespace PawnTableGrouped
 
         public object GetGroupValue(int columnIndex)
         {
-            return columnValies[columnIndex];
+            return columnValues[columnIndex];
         }
 
         public void SetGroupValue(int columnIndex, object value)
@@ -88,7 +93,7 @@ namespace PawnTableGrouped
 
         public object GetDefaultValue(int columnIndex)
         {
-            return ColumnResolvers[columnIndex]?.DefaultValue();
+            return ColumnResolvers[columnIndex]?.DefaultValue(Pawns);
         }
 
         public object GetValue(int columnIndex, Pawn pawn)
