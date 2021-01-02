@@ -16,11 +16,9 @@ namespace PawnTableGrouped
     public class Settings : ModSettings
     {
         public bool firstRun = true;
-        public bool groupedAnimalsTab = true;
-        public bool groupedWildlifeTab = true;
         public bool hideHeaderIfOnlyOneGroup = true;
         
-        public bool interactiveGroupHeaderExperimental = false;
+        public bool interactiveGroupHeader = true;
 
         public HashSet<string> pawnTablesEnabled = new HashSet<string>();
 
@@ -28,10 +26,8 @@ namespace PawnTableGrouped
         {
             Scribe_Values.Look(ref firstRun, "firstRun", true);
 
-            Scribe_Values.Look(ref groupedAnimalsTab, "groupedAnimalsTab", true);
-            Scribe_Values.Look(ref groupedWildlifeTab, "groupedWildlifeTab", true);
             Scribe_Values.Look(ref hideHeaderIfOnlyOneGroup, "hideHeaderIfOnlyOneGroup", false);
-            Scribe_Values.Look(ref interactiveGroupHeaderExperimental, "interactiveGroupHeaderExperimental", false);
+            Scribe_Values.Look(ref interactiveGroupHeader, "interactiveGroupHeader", true);
 
             Scribe_Collections.Look(ref pawnTablesEnabled, "pawnTablesEnabled");
             if (pawnTablesEnabled == null)

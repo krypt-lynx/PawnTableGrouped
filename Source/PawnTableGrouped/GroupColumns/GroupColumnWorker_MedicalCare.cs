@@ -52,7 +52,7 @@ namespace PawnTableGrouped
 
         public override bool IsVisible(IEnumerable<Pawn> pawns)
         {
-            return Mod.Settings.interactiveGroupHeaderExperimental;
+            return Mod.Settings.interactiveGroupHeader;
         }
 
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
   <HideHeaderIfOnlyOneGroup>Скрыть заголовок группы если в таблице всего одна группа</HideHeaderIfOnlyOneGroup>
-  <InteractiveGroupHeader>Интерактивные заголовки групп (экспериментальная фича)</InteractiveGroupHeader>
+  <InteractiveGroupHeader>Интерактивные заголовки групп</InteractiveGroupHeader>
 </LanguageData>

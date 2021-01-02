@@ -184,8 +184,8 @@ namespace PawnTableGrouped
                  (AddElement(interactiveHeader = new CCheckboxLabeled
                  {
                      Title = "InteractiveGroupHeader".Translate(),
-                     Checked = Mod.Settings.interactiveGroupHeaderExperimental,
-                     Changed = (_, value) => Mod.Settings.interactiveGroupHeaderExperimental = value,
+                     Checked = Mod.Settings.interactiveGroupHeader,
+                     Changed = (_, value) => Mod.Settings.interactiveGroupHeader = value,
                  }), interactiveHeader.intrinsicHeight),
                  10,
                  AddElement(listFrame = new CFrame()),
