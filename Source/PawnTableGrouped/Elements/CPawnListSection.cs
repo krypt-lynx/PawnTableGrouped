@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using Cassowary;
+using RimWorld;
 using RWLayout.alpha2;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace PawnTableGrouped
         private PawnTableAccessor accessor;
         public PawnTableGroup Group;
 
+        private ClVariable rightTitleEdge;
+        
         public override Vector2 tryFit(Vector2 size)
         {
             return new Vector2(0, Metrics.GroupHeaderHeight);
@@ -46,7 +49,7 @@ namespace PawnTableGrouped
                 TextAlignment = TextAnchor.MiddleLeft,
             });
 
-            this.StackLeft(StackOptions.Create(constrainSides: false), img, label);
+            this.StackLeft(StackOptions.Create(constrainSides: false, constrainEnd: false), img, (label, label.intrinsicWidth));
             img.MakeSizeIntristic();
 
             this.AddConstraints(
@@ -55,6 +58,7 @@ namespace PawnTableGrouped
                 label.height ^ label.intrinsicHeight
                 );
 
+            rightTitleEdge = label.right;
         }
 
         public override void DoContent()
@@ -88,11 +92,14 @@ namespace PawnTableGrouped
                 {
                     columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
                 }
-                var resolver = Group.ColumnResolvers[columnIndex];
-                if (resolver != null && resolver.IsVisible(Group.Pawns))
+                if (x >= rightTitleEdge.Value) // hiding cells behind group title
                 {
-                    Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
-                    resolver.DoCell(cellRect, Group, table, columnIndex);
+                    var resolver = Group.ColumnResolvers[columnIndex];
+                    if (resolver != null && resolver.IsVisible(Group.Pawns))
+                    {
+                        Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
+                        resolver.DoCell(cellRect, Group, table, columnIndex);
+                    }
                 }
                 x += columnWidth;
             }

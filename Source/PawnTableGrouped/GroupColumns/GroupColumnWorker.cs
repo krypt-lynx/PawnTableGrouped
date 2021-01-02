@@ -31,7 +31,6 @@ namespace PawnTableGrouped
         }
 
 
-
 		abstract public bool IsUniform(IEnumerable<Pawn> pawns);
 
 		public virtual object GetGroupValue(IEnumerable<Pawn> pawns)
@@ -81,7 +80,6 @@ namespace PawnTableGrouped
 
 	public class GroupColumnWorkerDef : Def
     {
-		// Token: 0x0400200D RID: 8205
 		[Unsaved(false)]
 		private GroupColumnWorker workerInt;
 

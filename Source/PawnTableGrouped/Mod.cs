@@ -46,6 +46,18 @@ namespace PawnTableGrouped
     {
         static bool disabled = true;
         static Type numbersType = null;
+        static Type pawnTableType = null;
+
+        public static Type NumbersTableType { get
+            {
+                if (disabled)
+                {
+                    return null;
+                }
+
+                return pawnTableType;
+            }
+        }
 
         public static int ReorderableGroup(PawnTable pawnTable)
         {
@@ -92,11 +104,25 @@ namespace PawnTableGrouped
             try
             {
                 numbersType = GenTypes.GetTypeInAnyAssembly("Numbers.Numbers");
+                pawnTableType = GenTypes.GetTypeInAnyAssembly("Numbers.PawnTable_NumbersMain");
                 disabled = false;
             }
             catch
             {
                 disabled = true;
+            }
+        }
+    }
+
+    [StaticConstructorOnStartup]
+    public static class ModPostInit
+    {
+        static ModPostInit()
+        {
+            if (Mod.Settings.firstRun)
+            {
+                Mod.Settings.firstRun = false;
+                Mod.Settings.pawnTablesEnabled.AddRange(DefDatabase<CompatibilityInfoDef>.AllDefs.Where(x => x.compatibility == TableCompatibility.Compatible).SelectMany(x => x.tableNames));
             }
         }
     }
@@ -109,8 +135,6 @@ namespace PawnTableGrouped
         public static bool ModNumbersActive = false;
         
         public static Verse.Mod Instance = null;
-        
-        
         
         public static Action ActiveTablesChanged = null;
 

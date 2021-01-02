@@ -64,7 +64,7 @@ namespace PawnTableGrouped
 
             foreach (var group in groups)
             {
-                if (!Mod.Settings.hideHeaderIfOnlyOneGroup && groups.Count > 0)
+                if (!Mod.Settings.hideHeaderIfOnlyOneGroup || groups.Count > 1)
                 {
                     var groupRow = (CPawnListSection)list.AppendRow(new CPawnListSection(table, accessor, group, IsExpanded(group)));
                     groupRow.Action = (sectionRow) =>
@@ -136,7 +136,10 @@ namespace PawnTableGrouped
             float height = accessor.cachedHeaderHeight;
             foreach (var section in sections)
             {
-                height += Metrics.GroupHeaderHeight;
+                if (!Mod.Settings.hideHeaderIfOnlyOneGroup || sections.Count > 1)
+                {
+                    height += Metrics.GroupHeaderHeight;
+                }
                 if (IsExpanded(section))
                 {
                     foreach (var pawn in section.Pawns)

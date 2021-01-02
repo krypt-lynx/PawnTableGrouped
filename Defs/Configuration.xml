@@ -36,33 +36,36 @@
 
 
 		
-	<PawnTableGrouped.SupportInfoDef>
+	<PawnTableGrouped.CompatibilityInfoDef>
 		<defName>native</defName>
 		<packageId>ludeon.rimworld</packageId>
+		<compatibility>Compatible</compatibility>
 		<tableNames>
 			<li>Animals</li>
 			<li>Wildlife</li>
 		</tableNames>
-	</PawnTableGrouped.SupportInfoDef>
+	</PawnTableGrouped.CompatibilityInfoDef>
 
-	<PawnTableGrouped.SupportInfoDef>
+	<PawnTableGrouped.CompatibilityInfoDef>
 		<defName>Numbers</defName>
 		<packageId>mehni.numbers</packageId>
+		<compatibility>Compatible</compatibility>
 		<modName>Numbers</modName>
 		<tableNames>
 			<li>Numbers_Animals</li>
 			<li>Numbers_WildAnimals</li>
 		</tableNames>
-	</PawnTableGrouped.SupportInfoDef>
+	</PawnTableGrouped.CompatibilityInfoDef>
 
-	<PawnTableGrouped.IncomaptibilityDef>
+	<PawnTableGrouped.CompatibilityInfoDef>
 		<defName>WorkTab</defName>
 		<packageId>fluffy.worktab</packageId>
 		<modName>Work Tab</modName>
+		<compatibility>Incompatible</compatibility>
 		<tableNames>
 			<li>Work</li>
 		</tableNames>
 		<hint>Fluffy's Work Tab mod is not compatible for time being.</hint>
-		<reason>tab render is broken</reason>
-	</PawnTableGrouped.IncomaptibilityDef>
+		<issues>tab render is broken</issues>
+	</PawnTableGrouped.CompatibilityInfoDef>
 </Defs>

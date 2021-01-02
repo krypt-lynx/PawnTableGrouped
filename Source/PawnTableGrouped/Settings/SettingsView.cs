@@ -11,32 +11,25 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class SupportInfoDef : Def
+    public class CompatibilityInfoDef : Def
     {
         public string packageId;
         public string modName;
         public List<string> tableNames;
         public string hint;
+        public string issues;
+        public TableCompatibility compatibility;
     }
 
-    public class IncomaptibilityDef : Def
+    public enum TableCompatibility
     {
-        public string packageId;
-        public string modName;
-        public List<string> tableNames;
-        public string hint;
-        public string reason;
+        Compatible,
+        Supported,
+        Incompatible,
     }
 
     public class TablesSettingsViewModel
     {
-        public enum TableCompatibility
-        {
-            Compatible,
-            Supported,        
-            Incompatible,
-        }
-
         public class TableData
         {
             public TableCompatibility compatibility;
@@ -71,40 +64,24 @@ namespace PawnTableGrouped
             var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
 
 
-            var supportedIndos = DefDatabase<SupportInfoDef>.AllDefs;
-            foreach (var supported in supportedIndos)
+            var info = DefDatabase<CompatibilityInfoDef>.AllDefs;
+
+
+            foreach (var compatibility in info)
             {
-                if (supported.packageId == null || loadedModIds.Contains(supported.packageId))
+                if (loadedModIds.Contains(compatibility.packageId))
                 {
-                    foreach (var tableName in supported.tableNames)
+                    foreach (var tableName in compatibility.tableNames)
                     {
                         TableData data = null;
                         if (defToTable.TryGetValue(tableName, out data))
                         {
-                            data.compatibility = TableCompatibility.Supported;
-                            data.modName = supported.modName;
-                            data.packageId = supported.packageId;
-                        }
-                    }
-                }
-            }
-
-
-            var incompatibilities = DefDatabase<IncomaptibilityDef>.AllDefs;
-
-            foreach (var incompatibility in incompatibilities)
-            {
-                if (loadedModIds.Contains(incompatibility.packageId))
-                {
-                    foreach (var tableName in incompatibility.tableNames)
-                    {
-                        TableData data = null;
-                        if (defToTable.TryGetValue(tableName, out data))
-                        {
-                            data.compatibility = TableCompatibility.Incompatible;
-                            data.modName = incompatibility.modName;
-                            data.tip = $"{incompatibility.hint}\n\nIssues: {incompatibility.reason}";
-                            data.packageId = incompatibility.packageId;
+                            data.compatibility = compatibility.compatibility;
+                            data.modName = compatibility.modName;
+                            data.tip = compatibility.issues == null
+                                ? compatibility.hint 
+                                : $"{compatibility.hint}\n\nIssues: {compatibility.issues}";
+                            data.packageId = compatibility.packageId;
                         }
                     }
                 }
@@ -248,11 +225,11 @@ namespace PawnTableGrouped
         {
             switch (tableData.compatibility)
             {
-                case TablesSettingsViewModel.TableCompatibility.Compatible:
+                case TableCompatibility.Compatible:
                     return Color.white;
-                case TablesSettingsViewModel.TableCompatibility.Incompatible:
+                case TableCompatibility.Incompatible:
                     return Color.red;
-                case TablesSettingsViewModel.TableCompatibility.Supported:
+                case TableCompatibility.Supported:
                     return Color.green;
                 default:
                     return Color.white;

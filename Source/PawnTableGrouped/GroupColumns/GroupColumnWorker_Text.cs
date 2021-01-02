@@ -29,6 +29,7 @@ namespace PawnTableGrouped
         }
 
         static Color textColor = new Color(1, 1, 1, 0.6f);
+
         public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
         {
             base.DoCell(rect, group, table, columnIndex);
@@ -44,7 +45,15 @@ namespace PawnTableGrouped
                 if (textFor != null)
                 {
                     Text.Font = GameFont.Small;
-                    Text.Anchor = TextAnchor.MiddleLeft;
+
+                    if (NumbersWrapper.NumbersTableType.IsAssignableFrom(table.GetType()))
+                    {
+                        Text.Anchor = TextAnchor.MiddleCenter;
+                    }
+                    else
+                    {
+                        Text.Anchor = TextAnchor.MiddleLeft;
+                    }
                     Text.WordWrap = false;
                     GuiTools.PushColor(textColor);
                     Widgets.Label(rect2, textFor);
