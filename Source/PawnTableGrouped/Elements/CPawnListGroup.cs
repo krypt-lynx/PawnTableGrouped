@@ -13,7 +13,7 @@ namespace PawnTableGrouped
 {
 
 
-    class CPawnListSection : CListingRow
+    class CPawnListGroup : CListingRow
     {
         static readonly Texture2D TexCollapse = ContentFinder<Texture2D>.Get("UI/Buttons/Dev/Collapse", true);
         static readonly Texture2D TexRevial = ContentFinder<Texture2D>.Get("UI/Buttons/Dev/Reveal", true);
@@ -30,7 +30,7 @@ namespace PawnTableGrouped
         }
 
         public Action<CElement> Action { get; set; }
-        public CPawnListSection(PawnTable table, PawnTableAccessor accessor, PawnTableGroup group, bool expanded)
+        public CPawnListGroup(PawnTable table, PawnTableAccessor accessor, PawnTableGroup group, bool expanded)
         {
             this.table = table;
             this.accessor = accessor;
@@ -92,6 +92,7 @@ namespace PawnTableGrouped
                 {
                     columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
                 }
+
                 if (x >= rightTitleEdge.Value + Metrics.GroupTitleRightMargin) // hiding cells behind group title
                 {
                     var resolver = Group.ColumnResolvers[columnIndex];
@@ -111,52 +112,4 @@ namespace PawnTableGrouped
             GUI.color = Color.white;
         }
     }   
-
-
-    /*
-
-        public override void DoContent()
-        {
-            base.DoContent();
-
-            int x = (int)BoundsRounded.xMin;
-            var columns = table.ColumnsListForReading;
-
-
-            GUI.color = new Color(1f, 1f, 1f, 0.2f);
-            Widgets.DrawLineHorizontal(BoundsRounded.xMin, BoundsRounded.yMin, BoundsRounded.width);
-            GUI.color = Color.white;
-            if (!accessor.CanAssignPawn(pawn))
-            {
-                GUI.color = Color.gray;
-            }
-
-            if (Mouse.IsOver(BoundsRounded))
-            {
-                GUI.DrawTexture(BoundsRounded, TexUI.HighlightTex);
-                target.Highlight(true, pawn.IsColonist, false);
-            }
-            for (int columnIndex = 0; columnIndex < columns.Count; columnIndex++)
-            {
-                int columnWidth;
-                if (columnIndex == columns.Count - 1)
-                {
-                    columnWidth = (int)(BoundsRounded.width - x);
-                }
-                else
-                {
-                    columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
-                }
-                Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
-                columns[columnIndex].Worker.DoCell(cellRect, pawn, table);
-                x += columnWidth;
-            }
-            if (pawn.Downed)
-            {
-                GUI.color = new Color(1f, 0f, 0f, 0.5f);
-                Widgets.DrawLineHorizontal(BoundsRounded.xMin, BoundsRounded.center.y, BoundsRounded.width);
-            }
-            GUI.color = Color.white;
-        }    
-    */
 }

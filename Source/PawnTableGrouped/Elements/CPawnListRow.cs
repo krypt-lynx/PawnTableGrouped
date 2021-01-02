@@ -84,7 +84,7 @@ namespace PawnTableGrouped
                 {
                     object newCellValue = group.GetValue(columnIndex, pawn);
 
-                    if (object.Equals(oldCellValue, newCellValue))
+                    if (!object.Equals(oldCellValue, newCellValue))
                     {
                         group.NotifyValueChanged(columnIndex);
                     }

@@ -141,7 +141,7 @@
     <Compile Include="GroupColumnDefResolver.cs" />
     <Compile Include="Elements\CPawnListHeader.cs" />
     <Compile Include="Elements\CPawnListRow.cs" />
-    <Compile Include="Elements\CPawnListSection.cs" />
+    <Compile Include="Elements\CPawnListGroup.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Checkbox.cs" />

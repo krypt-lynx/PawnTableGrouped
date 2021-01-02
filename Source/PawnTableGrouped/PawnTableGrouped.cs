@@ -67,10 +67,10 @@ namespace PawnTableGrouped
             {
                 if (!Mod.Settings.hideHeaderIfOnlyOneGroup || groups.Count > 1)
                 {
-                    var groupRow = (CPawnListSection)list.AppendRow(new CPawnListSection(table, accessor, group, IsExpanded(group)));
+                    var groupRow = (CPawnListGroup)list.AppendRow(new CPawnListGroup(table, accessor, group, IsExpanded(group)));
                     groupRow.Action = (sectionRow) =>
                     {
-                        var g = ((CPawnListSection)sectionRow).Group;
+                        var g = ((CPawnListGroup)sectionRow).Group;
                         SetExpanded(g, !IsExpanded(g));
                         table.SetDirty();
                     };
