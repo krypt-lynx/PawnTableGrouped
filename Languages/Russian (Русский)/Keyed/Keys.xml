@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-  <GroupedAnimalsTab>Группировать вкладку "Питомцы":</GroupedAnimalsTab>
-  <GroupedWildlifeTab>Группировать вкладку "Фауна":</GroupedWildlifeTab>
-  <InteractiveGroupHeader>Интерактивные заголовки групп (экспериментальная фича):</InteractiveGroupHeader>
+  <HideHeaderIfOnlyOneGroup>Скрыть заголовок группы если в таблице всего одна группа</HideHeaderIfOnlyOneGroup>
+  <InteractiveGroupHeader>Интерактивные заголовки групп (экспериментальная фича)</InteractiveGroupHeader>
 </LanguageData>
