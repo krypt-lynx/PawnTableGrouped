@@ -75,6 +75,8 @@ namespace PawnTableGrouped
 
         }
 
+        
+
         private void DoRowsSummary()
         {
             int x = (int)(BoundsRounded.xMin + Metrics.TableLeftMargin);

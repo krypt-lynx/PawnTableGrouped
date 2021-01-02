@@ -63,10 +63,8 @@ namespace PawnTableGrouped
             return columnsIsUniform[columnIndex]; 
         }
 
-        public void NotifyValueChanged(int columnIndex)
+        public void NotifyValueChanged()
         {
-            $"NotifyValueChanged in column {columnIndex}".Log();
-
             RecacheValues();
         }
 
@@ -77,15 +75,11 @@ namespace PawnTableGrouped
 
         public void SetGroupValue(int columnIndex, object value)
         {
-
-            $"SetGroupValue in column {columnIndex}".Log();
-
             var resolver = ColumnResolvers[columnIndex];
             if (resolver == null || !resolver.CanSetValues())
             {
                 return;
             }
-
 
             resolver.SetGroupValue(Pawns, value);
             RecacheValues();

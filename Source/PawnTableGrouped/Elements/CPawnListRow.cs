@@ -17,6 +17,7 @@ namespace PawnTableGrouped
         private Pawn pawn;
         PawnTableGroup group;
         private LookTargets target;
+        private object[] oldValues = null;
 
         public CPawnListRow(PawnTable table, PawnTableAccessor accessor, PawnTableGroup group, Pawn pawn)
         {
@@ -25,6 +26,7 @@ namespace PawnTableGrouped
             this.pawn = pawn;
             this.group = group;
             this.target = new LookTargets(pawn);
+            oldValues = new object[group.ColumnResolvers.Count];
         }
 
         public override Vector2 tryFit(Vector2 size)
@@ -52,6 +54,8 @@ namespace PawnTableGrouped
                 GUI.DrawTexture(BoundsRounded, TexUI.HighlightTex);
                 target.Highlight(true, pawn.IsColonist, false);
             }
+
+            bool needUpdateSectionHeader = false;
             for (int columnIndex = 0; columnIndex < columns.Count; columnIndex++)
             {
                 int columnWidth;
@@ -65,33 +69,27 @@ namespace PawnTableGrouped
                 }
                 Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
 
-                bool needValidateCellValue = Event.current.type != EventType.Repaint &&
-                        Event.current.type != EventType.Layout &&
-                        Event.current.type != EventType.Ignore &&
-                        Event.current.type != EventType.Used && 
-                        Mouse.IsOver(cellRect) &&
-                        group.IsInteractive(columnIndex);
 
-                object oldCellValue = null;
-                if (needValidateCellValue)
-                {
-                    oldCellValue = group.GetValue(columnIndex, pawn);
-                }
 
                 columns[columnIndex].Worker.DoCell(cellRect, pawn, table);
 
-                if (needValidateCellValue)
-                {
-                    object newCellValue = group.GetValue(columnIndex, pawn);
+                
+                object cellValue = group.GetValue(columnIndex, pawn);
 
-                    if (!object.Equals(oldCellValue, newCellValue))
-                    {
-                        group.NotifyValueChanged(columnIndex);
-                    }
-                }
+                if (!object.Equals(cellValue, oldValues[columnIndex]))
+                {
+                    oldValues[columnIndex] = cellValue;
+                    needUpdateSectionHeader = true;
+                }                
 
                 x += columnWidth;
             }
+
+            if (needUpdateSectionHeader)
+            {
+                group.NotifyValueChanged(); // todo: section header uodate in the same frame
+            }
+
             if (pawn.Downed)
             {
                 GUI.color = new Color(1f, 0f, 0f, 0.5f);
