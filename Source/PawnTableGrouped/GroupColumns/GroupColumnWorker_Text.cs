@@ -54,7 +54,7 @@ namespace PawnTableGrouped
                     {
                         Text.Anchor = TextAnchor.MiddleLeft;
                     }
-                    Text.WordWrap = false;
+                    Text.WordWrap = true;
                     GuiTools.PushColor(textColor);
                     Widgets.Label(rect2, textFor);
                     GuiTools.PopColor();

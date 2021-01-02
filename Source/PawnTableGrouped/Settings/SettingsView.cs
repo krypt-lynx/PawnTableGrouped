@@ -39,6 +39,12 @@ namespace PawnTableGrouped
             public string packageId;
             public bool selected;
             public string tip;
+            public Action<TableData> OnChanged;
+
+            public void DoChanged()
+            {
+                OnChanged?.Invoke(this);
+            }
         }
 
         public List<TableData> Tables;
@@ -89,7 +95,7 @@ namespace PawnTableGrouped
             }
         }
 
-        internal void SetSelected(TableData table, bool value)
+        public void SetSelected(TableData table, bool value)
         {
             table.selected = value;
             if (value)
@@ -99,6 +105,34 @@ namespace PawnTableGrouped
             {
                 Mod.Settings.pawnTablesEnabled.Remove(table.defName);
             }
+            Mod.DoActiveTablesChanged();
+        }
+
+        public void SelectAllAtLeast(TableCompatibility compatibility)
+        {
+            Mod.Settings.pawnTablesEnabled.Clear();
+
+            foreach (var table in Tables)
+            {
+                if (table.compatibility >= compatibility)
+                {
+                    Mod.Settings.pawnTablesEnabled.Add(table.defName);
+                }
+                table.DoChanged();
+            }
+
+            Mod.DoActiveTablesChanged();
+        }
+
+        public void SelectNone()
+        {
+            Mod.Settings.pawnTablesEnabled.Clear();
+
+            foreach (var table in Tables)
+            {
+                table.DoChanged();
+            }
+
             Mod.DoActiveTablesChanged();
         }
     }
@@ -171,36 +205,67 @@ namespace PawnTableGrouped
             CElement hideHeader;
             CElement interactiveHeader;
             CElement footer;
+            CElement actionsGroup;
             CFrame listFrame;
 
             this.StackTop(
-             (AddElement(hideHeader = new CCheckboxLabeled
-             {
-                 Title = "HideHeaderIfOnlyOneGroup".Translate(),
-                 Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
-                 Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
-             }), hideHeader.intrinsicHeight),
-                 10,
-                 (AddElement(interactiveHeader = new CCheckboxLabeled
-                 {
-                     Title = "InteractiveGroupHeader".Translate(),
-                     Checked = Mod.Settings.interactiveGroupHeader,
-                     Changed = (_, value) => Mod.Settings.interactiveGroupHeader = value,
-                 }), interactiveHeader.intrinsicHeight),
-                 10,
-                 AddElement(listFrame = new CFrame()),
-                 10,
-                 (AddElement(footer = new CLabel
-                 {
-                     Title = $"Grouped Pawns Lists version: {Mod.CommitInfo}",
-                     TextAlignment = TextAnchor.LowerRight,
-                     Color = new Color(1, 1, 1, 0.5f),
-                     Font = GameFont.Tiny
-                 }), footer.intrinsicHeight)
+                (AddElement(hideHeader = new CCheckboxLabeled
+                {
+                    Title = "HideHeaderIfOnlyOneGroup".Translate(),
+                    Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
+                    Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
+                }), hideHeader.intrinsicHeight),
+                10,
+                (AddElement(interactiveHeader = new CCheckboxLabeled
+                {
+                    Title = "InteractiveGroupHeader".Translate(),
+                    Checked = Mod.Settings.interactiveGroupHeader,
+                    Changed = (_, value) => Mod.Settings.interactiveGroupHeader = value,
+                }), interactiveHeader.intrinsicHeight),
+                10,
+                AddElement(listFrame = new CFrame()),
+                10,
+                (AddElement(footer = new CLabel
+                {
+                    Title = $"Grouped Pawns Lists version: {Mod.CommitInfo}",
+                    TextAlignment = TextAnchor.LowerRight,
+                    Color = new Color(1, 1, 1, 0.5f),
+                    Font = GameFont.Tiny
+                }), footer.intrinsicHeight)
+            );
+
+            actionsGroup = listFrame.AddElement(new CElement());
+            actionsGroup.StackLeft(
+                actionsGroup.AddElement(new CLabel
+                {
+                    Title = "Select:",
+                    TextAlignment = TextAnchor.MiddleLeft,
+                }),
+                10,
+                (actionsGroup.AddElement(new CButton
+                {
+                    Title = "none",
+                    Action = (_) => tablesModel.SelectNone(),
+                }), 200),
+                10,
+                (actionsGroup.AddElement(new CButton
+                {
+                    Title = "all supported",
+                    Action = (_) => tablesModel.SelectAllAtLeast(TableCompatibility.Supported),
+                }), 200),
+                10,
+                (actionsGroup.AddElement(new CButton
+                {
+                    Title = "all compatible",
+                    Action = (_) => tablesModel.SelectAllAtLeast(TableCompatibility.Compatible),
+                }), 200)
                 );
 
             tablesList = listFrame.AddElement(new CListView());
-            listFrame.Embed(tablesList, new EdgeInsets(3));
+            listFrame.StackTop(StackOptions.Create(insets: new EdgeInsets(3)), 
+                (actionsGroup, 30),
+                10, 
+                tablesList);
 
             columnGuide = new CVarListGuide();
             column0 = new Cassowary.ClVariable("column0");
@@ -216,7 +281,8 @@ namespace PawnTableGrouped
         {
             foreach (var row in tablesList.Rows)
             {
-                ((ColumnGuide)row.Guides[0]).UpdateColumnWidth(0, column0.Value);
+                var guide = (ColumnGuide)row.Guides[0];
+                guide.UpdateColumnWidth(0, column0.Value);
             }
 
             base.PostLayoutUpdate();
@@ -294,6 +360,12 @@ namespace PawnTableGrouped
                     column1.top ^ row.top, column1.bottom <= row.bottom);
 
                 tablesList.AppendRow(row);
+
+                table.OnChanged = (t) =>
+                {
+                    checkbox.Checked = t.selected;
+                };
+
                 index++;
             }
         }
