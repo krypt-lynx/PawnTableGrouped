@@ -150,7 +150,6 @@
     <Compile Include="GroupColumns\GroupColumnWorker_MedicalCare.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Text.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Trainable.cs" />
-    <Compile Include="Settings\GUI\TablesListCheckbox.cs" />
     <Compile Include="KWidgets.cs" />
     <Compile Include="Linq.cs" />
     <Compile Include="LogHelper.cs" />

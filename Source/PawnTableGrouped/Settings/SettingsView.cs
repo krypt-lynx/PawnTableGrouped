@@ -1,6 +1,7 @@
 ﻿using Cassowary;
 using RimWorld;
 using RWLayout.alpha2;
+using RWLayout.alpha2.Elements.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -247,22 +248,50 @@ namespace PawnTableGrouped
 
                 row.IsOdd = index % 2 == 1;
 
-                var label = row.AddElement(new TablesListCheckbox
+                var column0 = row.AddElement(new CElement
+                {
+                    Tip = table.tip,
+                });
+
+                var checkbox = row.AddElement(new CCheckbox
+                {
+                    Checked = table.selected,
+                    Changed = (_, value) => tablesModel.SetSelected(table, value),
+                    Paintable = true,
+                });
+                var title = row.AddElement(new CLabel
                 {
                     Title = table.defName,
                     Color = colorForPawnTable(table),
-                    Tip = table.tip,
-                    Checked = table.selected,
-                    Changed = (_, value) => tablesModel.SetSelected(table, value),
-                });
-                var description = row.AddElement(new CLabel
-                {
-                    Title = table.modName,
-                    Tip = table.packageId
                 });
 
-                row.StackLeft((label, ((ColumnGuide)row.Guides[0]).columns[0]), 2, description);
-                label.AddConstraint(label.height ^ label.intrinsicHeight);
+                var column1 = row.AddElement(new CElement
+                {
+                    Tip = table.packageId,
+                });
+
+                var description = column1.AddElement(new CLabel
+                {
+                    Title = table.modName,
+                });
+
+                column0.StackLeft(StackOptions.Create(constrainSides: false), 2, checkbox, 2, title);
+                title.AddConstraint(title.height ^ title.intrinsicHeight);
+
+                checkbox.MakeSizeIntristic();
+                column0.AddConstraint(column0.centerY ^ checkbox.centerY);
+                column0.AddConstraints(column0.top ^ title.top, column0.bottom ^ title.bottom);
+
+
+                column1.Embed(description, new EdgeInsets(0, 2, 0, 2));
+                column1.AddConstraint(description.height ^ description.intrinsicHeight);
+
+                row.StackLeft(StackOptions.Create(constrainSides: false),
+                    (column0, ((ColumnGuide)row.Guides[0]).columns[0]), 2, column1);
+
+                row.AddConstraints(
+                    column0.top ^ row.top, column0.bottom <= row.bottom,
+                    column1.top ^ row.top, column1.bottom <= row.bottom);
 
                 tablesList.AppendRow(row);
                 index++;
