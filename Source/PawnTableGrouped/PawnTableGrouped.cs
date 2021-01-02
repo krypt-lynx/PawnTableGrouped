@@ -18,6 +18,7 @@ namespace PawnTableGrouped
     public static class Metrics {
         public const float TableLeftMargin = 8;
         public const float GroupHeaderHeight = 30;
+        public const float GroupTitleRightMargin = 8;
     }
 
     public interface IPawnTableGrouped

@@ -92,7 +92,7 @@ namespace PawnTableGrouped
                 {
                     columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
                 }
-                if (x >= rightTitleEdge.Value) // hiding cells behind group title
+                if (x >= rightTitleEdge.Value + Metrics.GroupTitleRightMargin) // hiding cells behind group title
                 {
                     var resolver = Group.ColumnResolvers[columnIndex];
                     if (resolver != null && resolver.IsVisible(Group.Pawns))
