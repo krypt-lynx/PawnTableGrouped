@@ -79,7 +79,7 @@ namespace PawnTableGrouped
 					resolverDef = CreateGroupColumnDef(column, typeof(GroupColumnWorker_Dummy));
 				}
 
-				$"Header for column {column.defName}: {resolverDef.workerClass.FullName}".Log();
+				$"Header for column {column.defName} with worker {column.workerClass.FullName}: {resolverDef.workerClass.FullName}".Log();
 			}
 
 

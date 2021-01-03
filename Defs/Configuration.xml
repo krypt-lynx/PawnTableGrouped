@@ -77,4 +77,14 @@
 		<hint>Fluffy's Work Tab mod is not compatible for time being.</hint>
 		<issues>tab render is broken</issues>
 	</PawnTableGrouped.CompatibilityInfoDef>
+	
+	<PawnTableGrouped.CompatibilityInfoDef>
+		<defName>AnimalTab</defName>
+		<packageId>fluffy.animaltab</packageId>
+		<compatibility>Supported</compatibility>
+		<modName>Animal Tab</modName>
+		<tableNames>
+			<li>Animals</li>
+		</tableNames>
+	</PawnTableGrouped.CompatibilityInfoDef>
 </Defs>
