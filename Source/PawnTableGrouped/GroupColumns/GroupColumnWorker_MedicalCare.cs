@@ -30,7 +30,7 @@ namespace PawnTableGrouped
         {
             if (!group.IsUniform(columnIndex))
             {
-                DoMixedValuesWidget(rect, group, columnIndex);
+                DoMixedValuesWidget(rect, group, columnIndex); // todo:  Widgets.Dropdown, but need a texture
             }
             else
             {
@@ -77,7 +77,7 @@ namespace PawnTableGrouped
 
         public override object DefaultValue(IEnumerable<Pawn> pawns)
         {
-            var pawn = pawns.FirstOrDefault();
+            var pawn = GetRepresentingPawn(pawns);
 
             if (pawn != null) {
                 if (pawn.Faction == Faction.OfPlayer)

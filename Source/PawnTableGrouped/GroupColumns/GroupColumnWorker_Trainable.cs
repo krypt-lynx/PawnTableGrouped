@@ -53,7 +53,7 @@ namespace PawnTableGrouped
         {
             //bool learned = pawn.training.HasLearned(td);
 
-            bool wanted = (bool)GetValue(group.Pawns.First());
+            bool wanted = (bool)GetGroupValue(group.Pawns);
             bool oldWanted = wanted;
                 
             Widgets.Checkbox(rect.position, ref wanted, rect.width, !canTrain.Accepted, true);

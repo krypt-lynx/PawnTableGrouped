@@ -57,7 +57,7 @@ namespace PawnTableGrouped
             else
             {
 				// mostly decompiled code
-				var pawn  = group.Pawns.First();
+				var pawn  = GetRepresentingPawn(group.Pawns);
 
 				Texture2D iconFor = GetIconFor(pawn);
 				if (iconFor != null)

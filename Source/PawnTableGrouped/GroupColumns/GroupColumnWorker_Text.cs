@@ -33,7 +33,7 @@ namespace PawnTableGrouped
             }
             else
             {
-                var pawn = group.Pawns.First();
+                var pawn = GetRepresentingPawn(group.Pawns);
                 Rect rect2 = new Rect(rect.x, rect.y, rect.width, Mathf.Min(rect.height, 30f));
                 string textFor = GetTextFor(pawn);
                 if (textFor != null)
@@ -64,12 +64,6 @@ namespace PawnTableGrouped
                     }
                 }
             }
-        }
-
-        public override object GetGroupValue(IEnumerable<Pawn> pawns)
-        {
-            var pawn = pawns.FirstOrDefault();
-            return pawn != null ? GetTextFor(pawn) : null;
         }
 
         public override void SetGroupValue(IEnumerable<Pawn> pawns, object value)

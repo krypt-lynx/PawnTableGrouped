@@ -20,7 +20,7 @@ namespace PawnTableGrouped
             }
             else
             {
-                var pawn = group.Pawns.First();
+                var pawn = GetRepresentingPawn(group.Pawns);
                 GuiTools.PushFont(GameFont.Medium);
                 float x = rect.x + (rect.width - 25f) / 2f;
                 float y = rect.y + 2.5f;

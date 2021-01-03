@@ -29,6 +29,11 @@ namespace PawnTableGrouped
         }
 
 
+		public virtual Pawn GetRepresentingPawn(IEnumerable<Pawn> pawns)
+        {
+			return pawns.FirstOrDefault(p => IsVisible(p));
+        }
+
 		public virtual bool IsUniform(IEnumerable<Pawn> pawns)
 		{
 			return pawns.Where(p => IsVisible(p)).IsUniform(p => GetValue(p));
