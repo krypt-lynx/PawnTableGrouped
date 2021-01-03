@@ -35,7 +35,8 @@
 				<isInteractive>false</isInteractive>
 			</li>
 			<li>
-				<columnWorkerType>WorkTab.PawnColumnWorker_WorkType</columnWorkerType>
+				<!-- needed for Numbers + Work Tab -->
+				<columnWorkerType>WorkTab.PawnColumnWorker_WorkType</columnWorkerType> 
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
 				<isInteractive>false</isInteractive>
 			</li>
