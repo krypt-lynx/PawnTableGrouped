@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
+  <DebugOutput>Отладочный вывод</DebugOutput>
   <HideHeaderIfOnlyOneGroup>Скрыть заголовок группы если в таблице всего одна группа</HideHeaderIfOnlyOneGroup>
   <InteractiveGroupHeader>Интерактивные заголовки групп</InteractiveGroupHeader>
+  <EnableGroupingInTables>Включить группировку в таблицах:</EnableGroupingInTables>
+  <PTG_Select>Выбрать:</PTG_Select>
+  <PTG_None>ничего</PTG_None>
+  <PTG_AllSupported>все поддерживаемые</PTG_AllSupported>
+  <PTG_AllCompatible>все совместимые</PTG_AllCompatible>
 </LanguageData>

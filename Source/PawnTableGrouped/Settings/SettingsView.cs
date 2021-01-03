@@ -27,13 +27,14 @@ namespace PawnTableGrouped
             CElement debug;
             CElement hideHeader;
             CElement footer;
+            CElement listTitle;
+            CElement listFrame;
             CElement actionsGroup;
-            CFrame listFrame;
 
             this.StackTop(
                 (AddElement(debug = new CCheckboxLabeled
                 {
-                    Title = "HideHeaderIfOnlyOneGroup".Translate(),
+                    Title = "DebugOutput".Translate(),
                     Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
                     Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
                 }), debug.intrinsicHeight),
@@ -45,6 +46,10 @@ namespace PawnTableGrouped
                     Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
                 }), hideHeader.intrinsicHeight),
                 10,
+                (AddElement(listTitle = new CLabel {                    
+                    Title = "EnableGroupingInTables".Translate(),
+                }), listTitle.intrinsicHeight),
+                2,
                 AddElement(listFrame = new CFrame()),
                 10,
                 (AddElement(footer = new CLabel
@@ -60,25 +65,25 @@ namespace PawnTableGrouped
             actionsGroup.StackLeft(
                 actionsGroup.AddElement(new CLabel
                 {
-                    Title = "Select:",
+                    Title = "PTG_Select".Translate(),
                     TextAlignment = TextAnchor.MiddleLeft,
                 }),
                 10,
                 (actionsGroup.AddElement(new CButton
                 {
-                    Title = "none",
+                    Title = "PTG_None".Translate(),
                     Action = (_) => tablesModel.SelectNone(),
                 }), 200),
                 10,
                 (actionsGroup.AddElement(new CButton
                 {
-                    Title = "all supported",
+                    Title = "PTG_AllSupported".Translate(),
                     Action = (_) => tablesModel.SelectAllAtLeast(TableCompatibility.Supported),
                 }), 200),
                 10,
                 (actionsGroup.AddElement(new CButton
                 {
-                    Title = "all compatible",
+                    Title = "PTG_AllCompatible".Translate(),
                     Action = (_) => tablesModel.SelectAllAtLeast(TableCompatibility.Compatible),
                 }), 200)
                 );
