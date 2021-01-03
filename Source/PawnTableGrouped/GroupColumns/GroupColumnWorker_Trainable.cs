@@ -27,7 +27,7 @@ namespace PawnTableGrouped
             }
             else
             {
-                var pawn = group.Pawns.First();
+                var pawn = group.Pawns.First(p => IsVisible(p));
                 if (pawn.training == null)
                 {
                     return;
@@ -83,13 +83,6 @@ namespace PawnTableGrouped
             return pawn.training?.GetWanted(ColumnDef.trainable) ?? false;
         }
 
-        public override bool IsUniform(IEnumerable<Pawn> pawns)
-        {
-            return pawns
-                .Where(p => p.training?.CanAssignToTrain(ColumnDef.trainable).Accepted ?? false)
-                .IsUniform(p => GetValue(p));
-        }
-
         public override void SetValue(Pawn pawn, object value)
         {
             if (pawn.training != null && (pawn.training?.CanAssignToTrain(ColumnDef.trainable).Accepted ?? false))
@@ -98,9 +91,9 @@ namespace PawnTableGrouped
             }
         }
 
-        public override bool IsVisible(IEnumerable<Pawn> pawns)
+        public override bool IsVisible(Pawn pawn)
         {
-            return pawns.Any(p => p.training?.CanAssignToTrain(ColumnDef.trainable).Accepted ?? false);
+            return pawn.training?.CanAssignToTrain(ColumnDef.trainable).Accepted ?? false;
         }
     }
 }

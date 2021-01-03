@@ -37,11 +37,6 @@ namespace PawnTableGrouped
             return (string)typeof(PawnColumnWorker_Checkbox).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Checkbox)ColumnDef.Worker, new object[] { pawn });
         }
 
-        public override bool IsUniform(IEnumerable<Pawn> pawns)
-        {
-            return pawns.Where(p => HasCheckbox(p)).IsUniform(p => GetValue(p));
-        }
-
         public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
         {
             if (!group.IsUniform(columnIndex))
@@ -93,9 +88,9 @@ namespace PawnTableGrouped
             return true;
         }
 
-        public override bool IsVisible(IEnumerable<Pawn> pawns)
+        public override bool IsVisible(Pawn pawn)
         {
-            return pawns.Any(x => HasCheckbox(x));
+            return HasCheckbox(pawn);
         }
     }
 }

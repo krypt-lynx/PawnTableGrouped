@@ -24,7 +24,6 @@ namespace PawnTableGrouped
             tablesModel = new TablesSettingsViewModel();
 
             CElement hideHeader;
-            CElement interactiveHeader;
             CElement footer;
             CElement actionsGroup;
             CFrame listFrame;

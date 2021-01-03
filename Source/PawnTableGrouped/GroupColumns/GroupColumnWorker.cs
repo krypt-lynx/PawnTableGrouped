@@ -30,13 +30,13 @@ namespace PawnTableGrouped
 
 
 		public virtual bool IsUniform(IEnumerable<Pawn> pawns)
-        {
-			return pawns.IsUniform(p => GetValue(p));
-        }
+		{
+			return pawns.Where(p => IsVisible(p)).IsUniform(p => GetValue(p));
+		}
 
 		public virtual object GetGroupValue(IEnumerable<Pawn> pawns)
 		{
-			var pawn = pawns.FirstOrDefault();
+			var pawn = pawns.FirstOrDefault(p => IsVisible(p));
 			return pawn != null ? GetValue(pawn) : null;
 		}
 
@@ -49,7 +49,10 @@ namespace PawnTableGrouped
 
 			foreach (var pawn in pawns)
 			{
-				SetValue(pawn, value);
+				if (IsVisible(pawn))
+				{
+					SetValue(pawn, value);
+				}
 			}
 		}
 
@@ -63,14 +66,23 @@ namespace PawnTableGrouped
 		abstract public object DefaultValue(IEnumerable<Pawn> pawns);
 		abstract public object GetValue(Pawn pawn);
 		abstract public void SetValue(Pawn pawn, object value);
-		abstract public bool IsVisible(IEnumerable<Pawn> pawns);
 
-		static Color mixedTextColor = new Color(1, 1, 1, 0.6f);
+		public virtual bool IsVisible(Pawn pawn)
+        {
+			return true;
+        }
+
+		public virtual bool IsGroupVisible(IEnumerable<Pawn> pawns)
+        {
+			return pawns.Any(p => IsVisible(p));
+        }
 
 		public virtual void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
 		{
 			
         }
+
+		static Color mixedTextColor = new Color(1, 1, 1, 0.6f);
 
 		protected virtual void DoMixedValuesIcon(Rect rect)
 		{

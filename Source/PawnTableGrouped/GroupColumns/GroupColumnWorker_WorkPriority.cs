@@ -56,14 +56,10 @@ namespace PawnTableGrouped
             return pawn.workSettings.GetPriority(ColumnDef.workType);
         }
 
-        public override bool IsUniform(IEnumerable<Pawn> pawns)
-        {
-            return pawns.Where(p => !p.WorkTypeIsDisabled(ColumnDef.workType)).IsUniform(p => GetValue(p));
-        }
 
-        public override bool IsVisible(IEnumerable<Pawn> pawns)
+        public override bool IsVisible(Pawn pawn)
         {
-            return pawns.Any(p => !p.WorkTypeIsDisabled(ColumnDef.workType));
+            return !pawn.WorkTypeIsDisabled(ColumnDef.workType);
         }
 
         public override void SetValue(Pawn pawn, object value)

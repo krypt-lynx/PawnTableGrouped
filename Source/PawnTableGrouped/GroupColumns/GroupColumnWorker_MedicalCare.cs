@@ -124,7 +124,7 @@ namespace PawnTableGrouped
             }
         }
 
-        public override bool IsVisible(IEnumerable<Pawn> pawns)
+        public override bool IsVisible(Pawn pawn)
         {
             return true;
         }

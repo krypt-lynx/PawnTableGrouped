@@ -48,11 +48,6 @@ namespace PawnTableGrouped
 			return (int)typeof(PawnColumnWorker_Icon).GetProperty("Padding", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(ColumnDef.Worker);
 		}
 
-		public override bool IsUniform(IEnumerable<Pawn> pawns)
-        {
-            return pawns.IsUniform(p => GetIconFor(p));
-        }
-
 		public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
 		{
 			if (!group.IsUniform(columnIndex))
@@ -118,7 +113,7 @@ namespace PawnTableGrouped
 
         public override object GetValue(Pawn pawn)
         {
-			return null;
+			return GetIconFor(pawn);
         }
 
 		public override void SetValue(Pawn pawn, object value)
@@ -126,7 +121,7 @@ namespace PawnTableGrouped
 
 		}
 
-		public override bool IsVisible(IEnumerable<Pawn> pawns)
+		public override bool IsVisible(Pawn pawn)
 		{
 			return true;
 		}

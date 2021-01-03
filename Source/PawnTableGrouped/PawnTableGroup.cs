@@ -51,7 +51,7 @@ namespace PawnTableGrouped
             {
                 var uniform = ColumnResolvers[i]?.IsUniform(Pawns) ?? true;
                 var value = uniform ? ColumnResolvers[i]?.GetGroupValue(Pawns) : ColumnResolvers[i]?.DefaultValue(Pawns);
-                var visible = ColumnResolvers[i]?.IsVisible(Pawns) ?? false;
+                var visible = ColumnResolvers[i]?.IsGroupVisible(Pawns) ?? false;
 
                 columnsIsUniform.Add(uniform);
                 columnValues.Add(value);

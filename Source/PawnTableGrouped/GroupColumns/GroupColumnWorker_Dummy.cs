@@ -31,7 +31,12 @@ namespace PawnTableGrouped
             return true;
         }
 
-        public override bool IsVisible(IEnumerable<Pawn> pawns)
+        public override bool IsGroupVisible(IEnumerable<Pawn> pawns)
+        {
+            return false;
+        }
+
+        public override bool IsVisible(Pawn pawn)
         {
             return false;
         }
