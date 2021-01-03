@@ -39,7 +39,7 @@ namespace PawnTableGrouped
 
         public override bool IsUniform(IEnumerable<Pawn> pawns)
         {
-            return pawns.IsUniform(p => GetValue(p)) && pawns.All(p => HasCheckbox(p));
+            return pawns.Where(p => HasCheckbox(p)).IsUniform(p => GetValue(p));
         }
 
         public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
