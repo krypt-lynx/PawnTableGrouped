@@ -19,16 +19,25 @@ namespace PawnTableGrouped
         CVarListGuide columnGuide;
         CListView tablesList;
         ClVariable column0;
+
         public SettingsView() : base()
         {
             tablesModel = new TablesSettingsViewModel();
 
+            CElement debug;
             CElement hideHeader;
             CElement footer;
             CElement actionsGroup;
             CFrame listFrame;
 
             this.StackTop(
+                (AddElement(debug = new CCheckboxLabeled
+                {
+                    Title = "HideHeaderIfOnlyOneGroup".Translate(),
+                    Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
+                    Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
+                }), debug.intrinsicHeight),
+                10,
                 (AddElement(hideHeader = new CCheckboxLabeled
                 {
                     Title = "HideHeaderIfOnlyOneGroup".Translate(),

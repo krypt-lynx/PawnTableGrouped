@@ -16,7 +16,8 @@ namespace PawnTableGrouped
     public class Settings : ModSettings
     {
         public bool firstRun = true;
-        public bool hideHeaderIfOnlyOneGroup = true;        
+        public bool hideHeaderIfOnlyOneGroup = true;
+        public bool debug = false;
 
         public HashSet<string> pawnTablesEnabled = new HashSet<string>();
 
@@ -25,6 +26,7 @@ namespace PawnTableGrouped
             Scribe_Values.Look(ref firstRun, "firstRun", true);
 
             Scribe_Values.Look(ref hideHeaderIfOnlyOneGroup, "hideHeaderIfOnlyOneGroup", false);
+            Scribe_Values.Look(ref debug, "debug", false);
 
             Scribe_Collections.Look(ref pawnTablesEnabled, "pawnTablesEnabled");
             if (pawnTablesEnabled == null)
@@ -32,86 +34,6 @@ namespace PawnTableGrouped
                 pawnTablesEnabled = new HashSet<string>();
             }
             base.ExposeData();
-        }
-    }
-
-    public class NumbersWrapper
-    {
-        static bool disabled = true;
-        static Type numbersType = null;
-        static Type pawnTableType = null;
-
-        public static bool IsActive
-        {
-            get
-            {
-                return !disabled;
-            }
-        }
-
-        public static Type NumbersTableType { get
-            {
-                if (disabled)
-                {
-                    return null;
-                }
-
-                return pawnTableType;
-            }
-        }
-
-        public static int ReorderableGroup(PawnTable pawnTable)
-        {
-            if (disabled)
-            {
-                return 0;
-            }
-
-            try
-            {
-                return (int)numbersType.GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { pawnTable });
-            } 
-            catch
-            {
-                disabled = true;
-                return 0;
-            }
-        }
-
-        public static void CallReorderableWidget(int groupId, Rect rect)
-        {
-            if (disabled)
-            {
-                return;
-            }
-
-            try
-            {
-                numbersType.GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { groupId, rect });
-            }
-            catch
-            {
-                disabled = true;
-            }
-        }
-
-        public static void Resolve()
-        {
-            if (!Mod.ModNumbersActive)
-            {
-                disabled = true;
-            }
-
-            try
-            {
-                numbersType = GenTypes.GetTypeInAnyAssembly("Numbers.Numbers");
-                pawnTableType = GenTypes.GetTypeInAnyAssembly("Numbers.PawnTable_NumbersMain");
-                disabled = false;
-            }
-            catch
-            {
-                disabled = true;
-            }
         }
     }
 
@@ -132,6 +54,14 @@ namespace PawnTableGrouped
     {
         public static string PackageIdOfMine = null;
         public static Settings Settings { get; private set; }
+
+        private static bool debug = false;
+        public static bool Debug { get
+            {
+                return debug || Settings.debug;
+            }
+        }
+
         public static string CommitInfo = null;
         public static bool ModNumbersActive = false;
         
@@ -176,6 +106,8 @@ namespace PawnTableGrouped
             {
                 CommitInfo = null;
             }
+
+            debug = PackageIdOfMine.EndsWith(".dev");
         }
 
         private static void DetectMods()

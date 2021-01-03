@@ -120,6 +120,7 @@ namespace PawnTableGrouped
 		private GroupColumnWorker workerInt;
 
 		public Type workerClass = typeof(GroupColumnWorker);
+		public object workerConfig = null;
 
 		public GroupColumnWorker Worker
 		{

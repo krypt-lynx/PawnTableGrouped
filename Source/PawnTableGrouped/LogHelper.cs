@@ -11,17 +11,23 @@ namespace PawnTableGrouped
     {
         public enum MessageType
         {
+            Verbose,
             Message,
             Warning,
             Error,
         }
 
-        public static void Log(this string str, MessageType type = MessageType.Message)
+        public static void Log(this string str, MessageType type = MessageType.Verbose)
         {
-            return;
             str = $"[PTG] {str}";
             switch (type)
             {
+                case MessageType.Verbose:
+                    if (Mod.Debug)
+                    {
+                        Verse.Log.Message(str);
+                    }
+                    return;
                 case MessageType.Message:
                     Verse.Log.Message(str);
                     return;

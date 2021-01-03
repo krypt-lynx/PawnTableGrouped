@@ -12,8 +12,14 @@ namespace PawnTableGrouped
 	{
 		public string columnWorkerType;
 		public string groupWorkerType;
-		public bool isInteractive;
+		public object workerConfig;
 	}
+
+	public class WorkerTypeWithConfig
+    {
+		public Type type;
+		public object config;
+    }
 
 	public class ClassMappingDef : Def
 	{
@@ -21,15 +27,15 @@ namespace PawnTableGrouped
 
 
 		[Unsaved(false)]
-		private Dictionary<Type, Type> mapping_ = null;
+		private Dictionary<Type, WorkerTypeWithConfig> mapping_ = null;
 
-		public Dictionary<Type, Type> Mapping
+		public Dictionary<Type, WorkerTypeWithConfig> Mapping
 		{
 			get
 			{
 				if (mapping_ == null)
 				{
-					mapping_ = new Dictionary<Type, Type>();
+					mapping_ = new Dictionary<Type, WorkerTypeWithConfig>();
 
 					foreach (var def in mapping)
 					{
@@ -38,7 +44,11 @@ namespace PawnTableGrouped
 						var groupWorker = GenTypes.GetTypeInAnyAssembly(def.groupWorkerType);
 						if (columnWorker != null && groupWorker != null)
 						{
-							mapping_[columnWorker] = groupWorker;
+							mapping_[columnWorker] = new WorkerTypeWithConfig
+							{
+								type = groupWorker,
+								config = def.workerConfig,
+							};							
 						}
 					}
 
@@ -58,7 +68,7 @@ namespace PawnTableGrouped
 			{
 				var mapping = DefDatabase<ClassMappingDef>.GetNamed("GroupHeadersMapping");
 				var workerClass = column.workerClass;
-				Type headerType = null;
+				WorkerTypeWithConfig headerType = null;
 
 				while (workerClass != null)
 				{
@@ -76,7 +86,11 @@ namespace PawnTableGrouped
 
 				if (resolverDef == null)
 				{
-					resolverDef = CreateGroupColumnDef(column, typeof(GroupColumnWorker_Dummy));
+					resolverDef = CreateGroupColumnDef(column, new WorkerTypeWithConfig
+					{
+						type = typeof(GroupColumnWorker_Dummy),
+						config = null
+					});
 				}
 
 				$"Header for column {column.defName} with worker {column.workerClass.FullName}: {resolverDef.workerClass.FullName}".Log();
@@ -86,12 +100,13 @@ namespace PawnTableGrouped
 			return resolverDef;
 		}
 
-		private static GroupColumnWorkerDef CreateGroupColumnDef(PawnColumnDef column, Type workerType)
+		private static GroupColumnWorkerDef CreateGroupColumnDef(PawnColumnDef column, WorkerTypeWithConfig workerType)
 		{
 			GroupColumnWorkerDef resolverDef = new GroupColumnWorkerDef
 			{
 				defName = column.defName,
-				workerClass = workerType,
+				workerClass = workerType.type,
+				workerConfig = workerType.config,
 				modContentPack = Mod.Instance.Content
 			};
 			DefGenerator.AddImpliedDef(resolverDef);
