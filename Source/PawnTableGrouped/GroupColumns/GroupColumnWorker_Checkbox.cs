@@ -95,7 +95,7 @@ namespace PawnTableGrouped
 
         public override bool IsVisible(IEnumerable<Pawn> pawns)
         {
-            return Mod.Settings.interactiveGroupHeader && pawns.Any(x => HasCheckbox(x));
+            return pawns.Any(x => HasCheckbox(x));
         }
     }
 }

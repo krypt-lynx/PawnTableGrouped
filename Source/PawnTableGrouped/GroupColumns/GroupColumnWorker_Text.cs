@@ -23,11 +23,6 @@ namespace PawnTableGrouped
             return (string)typeof(PawnColumnWorker_Text).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Text)ColumnDef.Worker, new object[] { pawn });
         }
 
-        public override bool IsUniform(IEnumerable<Pawn> pawns)
-        {
-            return pawns.IsUniform(p => GetTextFor(p));
-        }
-
         static Color textColor = new Color(1, 1, 1, 0.6f);
 
         public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)

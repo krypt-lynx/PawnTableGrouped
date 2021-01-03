@@ -137,6 +137,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GroupColumns\GroupColumnWorker_WorkPriority.cs" />
     <Compile Include="Settings\GUI\AlternatingBGRow.cs" />
     <Compile Include="GroupColumnDefResolver.cs" />
     <Compile Include="Elements\CPawnListHeader.cs" />

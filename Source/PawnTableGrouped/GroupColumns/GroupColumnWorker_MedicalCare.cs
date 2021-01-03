@@ -30,7 +30,7 @@ namespace PawnTableGrouped
         {
             if (!group.IsUniform(columnIndex))
             {
-                DoMixedValuesIcon(rect);
+                DoMixedValuesWidget(rect, group, columnIndex);
             }
             else
             {
@@ -68,11 +68,6 @@ namespace PawnTableGrouped
                 num = i;
             }
             yield break;
-        }
-
-        public override bool IsUniform(IEnumerable<Pawn> pawns)
-        {
-            return pawns.IsUniform(p => p?.playerSettings?.medCare);
         }
 
         public override bool CanSetValues()
@@ -131,7 +126,7 @@ namespace PawnTableGrouped
 
         public override bool IsVisible(IEnumerable<Pawn> pawns)
         {
-            return Mod.Settings.interactiveGroupHeader;
+            return true;
         }
 
     }

@@ -37,13 +37,6 @@ namespace PawnTableGrouped
                     Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
                 }), hideHeader.intrinsicHeight),
                 10,
-                (AddElement(interactiveHeader = new CCheckboxLabeled
-                {
-                    Title = "InteractiveGroupHeader".Translate(),
-                    Checked = Mod.Settings.interactiveGroupHeader,
-                    Changed = (_, value) => Mod.Settings.interactiveGroupHeader = value,
-                }), interactiveHeader.intrinsicHeight),
-                10,
                 AddElement(listFrame = new CFrame()),
                 10,
                 (AddElement(footer = new CLabel

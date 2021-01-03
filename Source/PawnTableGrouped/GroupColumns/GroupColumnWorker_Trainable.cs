@@ -13,11 +13,6 @@ namespace PawnTableGrouped
 {
     public class GroupColumnWorker_Trainable : GroupColumnWorker
     {
-        public override bool IsUniform(IEnumerable<Pawn> pawns)
-        {
-            return pawns.IsUniform(p => p.training.GetWanted(ColumnDef.trainable));
-        }
-
         private static void DoTrainableTooltip(Rect rect, Pawn pawn, TrainableDef td, AcceptanceReport canTrain)
         {
             typeof(TrainingCardUtility).GetMethod("DoTrainableTooltip", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { rect, pawn, td, canTrain });
@@ -28,7 +23,7 @@ namespace PawnTableGrouped
         {
             if (!group.IsUniform(columnIndex))
             {
-                DoMixedValuesIcon(rect);
+                DoMixedValuesWidget(rect, group, columnIndex);
             }
             else
             {
@@ -37,22 +32,28 @@ namespace PawnTableGrouped
                 {
                     return;
                 }
-                bool visible;
-                AcceptanceReport canTrain = pawn.training.CanAssignToTrain(ColumnDef.trainable, out visible);
+                bool visible = false;
+                AcceptanceReport canTrain = pawn.training?.CanAssignToTrain(ColumnDef.trainable, out visible) ?? false;
                 if (!visible || !canTrain.Accepted)
                 {
                     return;
                 }
                 int dx = (int)((rect.width - 24f) / 2f);
                 int dy = 3;
-                DoTrainableCheckbox(new Rect(rect.x + dx, rect.y + dy, 24f, 24f), pawn, ColumnDef.trainable, canTrain);
+                DoTrainableCheckbox(new Rect(rect.x + dx, rect.y + dy, 24f, 24f), group, columnIndex, ColumnDef.trainable, canTrain);
+            }
+
+            if (Event.current.type == EventType.MouseUp && Mouse.IsOver(rect))
+            {
+                Event.current.Use();
             }
         }
 
-        private static void DoTrainableCheckbox(Rect rect, Pawn pawn, TrainableDef td, AcceptanceReport canTrain)
+        private void DoTrainableCheckbox(Rect rect, PawnTableGroup group, int columnIndex, TrainableDef td, AcceptanceReport canTrain)
         {
             //bool learned = pawn.training.HasLearned(td);
-            bool wanted = pawn.training.GetWanted(td);
+
+            bool wanted = (bool)GetValue(group.Pawns.First());
             bool oldWanted = wanted;
                 
             Widgets.Checkbox(rect.position, ref wanted, rect.width, !canTrain.Accepted, true);
@@ -60,10 +61,10 @@ namespace PawnTableGrouped
             if (wanted != oldWanted)
             {
                 PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.AnimalTraining, KnowledgeAmount.Total);
-                pawn.training.SetWantedRecursive(td, wanted);
+                group.SetGroupValue(columnIndex, wanted);
             }
 
-            DoTrainableTooltip(rect, pawn, td, canTrain);           
+            //DoTrainableTooltip(rect, pawn, td, canTrain);           
         }
 
 
@@ -82,20 +83,24 @@ namespace PawnTableGrouped
             return pawn.training?.GetWanted(ColumnDef.trainable) ?? false;
         }
 
+        public override bool IsUniform(IEnumerable<Pawn> pawns)
+        {
+            return pawns
+                .Where(p => p.training?.CanAssignToTrain(ColumnDef.trainable).Accepted ?? false)
+                .IsUniform(p => GetValue(p));
+        }
+
         public override void SetValue(Pawn pawn, object value)
         {
-            pawn.training?.SetWantedRecursive(ColumnDef.trainable, (bool)value);
+            if (pawn.training != null && (pawn.training?.CanAssignToTrain(ColumnDef.trainable).Accepted ?? false))
+            {
+                pawn.training?.SetWantedRecursive(ColumnDef.trainable, (bool)value);
+            }
         }
 
         public override bool IsVisible(IEnumerable<Pawn> pawns)
         {
-            return Mod.Settings.interactiveGroupHeader &&
-                pawns.All(p =>
-                {
-                    bool visible;
-                    p.training.CanAssignToTrain(ColumnDef.trainable, out visible);
-                    return visible;
-                });
+            return pawns.Any(p => p.training?.CanAssignToTrain(ColumnDef.trainable).Accepted ?? false);
         }
     }
 }

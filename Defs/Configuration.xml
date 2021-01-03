@@ -29,6 +29,16 @@
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Text</groupWorkerType>
 				<isInteractive>false</isInteractive>
 			</li>
+			<li>
+				<columnWorkerType>PawnColumnWorker_WorkPriority</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
+				<isInteractive>false</isInteractive>
+			</li>
+			<li>
+				<columnWorkerType>WorkTab.PawnColumnWorker_WorkType</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
+				<isInteractive>false</isInteractive>
+			</li>
 		</mapping>
 	</PawnTableGrouped.ClassMappingDef>
 
