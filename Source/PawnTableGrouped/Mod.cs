@@ -123,7 +123,7 @@ namespace PawnTableGrouped
             if (Mod.Settings.firstRun)
             {
                 Mod.Settings.firstRun = false;
-                Mod.Settings.pawnTablesEnabled.AddRange(DefDatabase<CompatibilityInfoDef>.AllDefs.Where(x => x.compatibility == TableCompatibility.Compatible).SelectMany(x => x.tableNames));
+                Mod.Settings.pawnTablesEnabled.AddRange(DefDatabase<CompatibilityInfoDef>.AllDefs.Where(x => x.compatibility == TableCompatibility.Supported).SelectMany(x => x.tableNames));
             }
         }
     }
