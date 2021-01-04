@@ -28,17 +28,25 @@ namespace PawnTableGrouped
         float override_CalculateTotalRequiredHeight();        
     }
 
+
+
     public class PawnTableGroupedImpl
     {
         PawnTableAccessor accessor;
         PawnTable table; // todo: weak ref
+        PawnTableDef def;
         List<GroupColumnWorker> columnResolvers;
 
-        public PawnTableGroupedImpl(PawnTable table)
+        public PawnTableGroupedImpl(PawnTable table, PawnTableDef def)
         {
             this.table = table;
+            this.def = def;
             columnResolvers = new List<GroupColumnWorker>();
             accessor = new PawnTableAccessor(table);
+            miscGroupers = new List<GroupWorker>();
+
+            miscGroupers.Add(new GroupWorker_ByRace());
+            activeGrouper = miscGroupers.First();
 
             table.SetDirty();
             ConstructGUI();
@@ -48,6 +56,8 @@ namespace PawnTableGrouped
         CListView list;
         CElement header;
 
+        
+
         void ConstructGUI()
         {
             header = host.AddElement(new CPawnListHeader(table, accessor, magic));
@@ -55,8 +65,35 @@ namespace PawnTableGrouped
             {
                 ShowScrollBar = CScrollBarMode.Show
             });
+            var btn = host.AddElement(new CWidget
+            {
+                //Title = "#",
+                //Action = (sender) =>
+                DoWidgetContent = (_, bounds) =>
+                {
+                    Widgets.Dropdown(bounds, activeGrouper, g => g,
+                    t =>
+                    {
+                        return AllGroupers.Select(g =>
+                            new Widgets.DropdownMenuElement<GroupWorker>
+                            {
+                                option = new FloatMenuOption(g.MenuItemTitle(), () =>
+                                {
+                                    activeGrouper = g;
+                                    table.SetDirty();
+                                })
+                            });
+                    });
+                }
+            });
 
-            host.StackTop((header, header.intrinsicHeight), list);
+
+            host.AddConstraints(header.left ^ host.left, header.top ^ host.top, header.right ^ btn.left, header.height ^ header.intrinsicHeight,
+                btn.top >= host.top, btn.right ^ host.right, btn.bottom ^ header.bottom, btn.width ^ 16,
+                list.left ^ host.left, list.top ^ header.bottom, list.right ^ host.right, list.bottom ^ host.bottom);
+            host.AddConstraint(btn.height ^ 30, ClStrength.Weak);
+
+            //host.StackTop((header, header.intrinsicHeight), list);
         }
 
         private void PopulateList(IReadOnlyCollection<PawnTableGroup> groups)
@@ -94,6 +131,12 @@ namespace PawnTableGrouped
         Dictionary<string, bool> ExpandedState = new Dictionary<string, bool>();
         bool IsExpanded(PawnTableGroup group)
         {
+            if (group?.Title == null)
+            {
+                $"trying to get expanded flag for group with 'null' title".Log(LogHelper.MessageType.Warning);
+                return true;
+            }
+
             if (ExpandedState.ContainsKey(group.Title))
             {
                 return ExpandedState[group.Title];
@@ -106,18 +149,97 @@ namespace PawnTableGrouped
 
         void SetExpanded(PawnTableGroup group, bool expanded)
         {
+            if (group?.Title == null)
+            {
+                $"trying to set expanded flag for group with 'null' title".Log(LogHelper.MessageType.Warning);
+                return;
+            }
+
             ExpandedState[group.Title] = expanded;
+        }
+
+        /*
+        class ByColumnComparer : IComparer<Pawn>
+        {
+            private PawnColumnDef pawnColumnDef;
+
+            public ByColumnComparer(PawnColumnDef pawnColumnDef)
+            {
+                this.pawnColumnDef = pawnColumnDef;
+            }
+
+            public int Compare(Pawn x, Pawn y)
+            {
+                return pawnColumnDef.Worker.Compare(x, y);
+            }
+        }
+        */
+
+        List<GroupWorker> miscGroupers;
+        GroupWorker activeGrouper;
+
+        IEnumerable<GroupWorker> AllGroupers
+        {
+            get
+            {
+                return miscGroupers.Concat(columnResolvers.Select(x => x.GroupWorker).Where(x => x != null));
+            }
+        }
+
+        public void RecacheGroupers()
+        {
+
         }
 
         public void RecacheGroups()
         {
-            //  IEqualityComparer
-            // var groups = PawnsListForReading.GroupBy(x => x, new ByColumnComparer(DefDatabase<PawnColumnDef>.GetNamed("Label")));
+            var groups = table.PawnsListForReading
+                .GroupBy(p => p, activeGrouper.GroupingEqualityComparer);
 
-            // return input.OrderByDescending((Pawn p) => p.RaceProps.baseBodySize).ThenBy((Pawn p) => p.def.label);
+            sections = new List<PawnTableGroup>();
+            foreach (var group in groups)
+            {
+                var pawns = accessor.LabelSortFunction(group).ToList();
+                if (accessor.sortByColumn != null)
+                {
+                    if (accessor.sortDescending)
+                    {
+                        pawns.SortStable(new Func<Pawn, Pawn, int>(accessor.sortByColumn.Worker.Compare));
+                    }
+                    else
+                    {
+                        pawns.SortStable((Pawn a, Pawn b) => accessor.sortByColumn.Worker.Compare(b, a));
+                    }
+                }
+                //var pawns2 = accessor.PrimarySortFunction(pawns);
+                sections.Add(new PawnTableGroup(activeGrouper.TitleForGroup(group, group.Key), group.Key, pawns, columnResolvers));
+            }
 
-            var groups = table.PawnsListForReading.GroupBy(p => p.kindDef.race).OrderByDescending(g => g.Key.race.baseBodySize).ThenBy(g => g.Key.label);
-            sections = groups.Select(x => new PawnTableGroup(x.Key, x, columnResolvers)).ToList();
+            sections.Sort(activeGrouper.GroupsSortingComparer);
+            
+            
+
+            /*
+            var groups = table.PawnsListForReading
+                .GroupBy(p => p, new ByRaceComparer())
+                .OrderByDescending(g => g.Key.kindDef.race.race.baseBodySize)
+                .ThenBy(g => g.Key.kindDef.race.label)
+                ;
+            */
+            //var test = table.PawnsListForReading.OrderBy(p => p, new ByColumnComparer(def.columns[8]));
+
+            /*
+            var groups = table.PawnsListForReading
+                .GroupBy(p => p.kindDef.race)
+                .OrderByDescending(g => g.Key.race.baseBodySize)
+                .ThenBy(g => g.Key.label);
+            */
+
+            /*
+
+            sections = groups
+                .Select(x => new PawnTableGroup(x.Key.kindDef.race.label.CapitalizeFirst() ?? "<unknown race>", x, columnResolvers)).ToList();
+            */
         }
 
         public void RecacheColumnResolvers()
@@ -178,6 +300,7 @@ namespace PawnTableGrouped
             }
             accessor.dirty = false;
             RecacheColumnResolvers();
+            RecacheGroupers();
             accessor.RecachePawns();
             RecacheGroups();
 
@@ -194,55 +317,4 @@ namespace PawnTableGrouped
         }
     }
 
-    /*
-    public class PawnTable_WildlifeGrouped : PawnTable_Wildlife, IPawnTableGrouped
-    {
-        PawnTableGroupedImpl impl;
-
-        public PawnTable_WildlifeGrouped(PawnTableDef def, Func<IEnumerable<Pawn>> pawnsGetter, int uiWidth, int uiHeight) : base(def, pawnsGetter, uiWidth, uiHeight)
-        {
-            impl = new PawnTableGroupedImpl(this, def, pawnsGetter, uiWidth, uiHeight);
-        }
-
-        public void override_PawnTableOnGUI(Vector2 position)
-        {
-            impl.PawnTableOnGUI(position);
-        }
-
-        public void override_RecacheIfDirty()
-        {
-            impl.RecacheIfDirty();
-        }
-  
-        public float override_CalculateTotalRequiredHeight()
-        {
-            return impl.CalculateTotalRequiredHeight();
-        }
-    }
-
-    public class PawnTable_AnimalsGrouped : PawnTable_Animals, IPawnTableGrouped
-    {
-        PawnTableGroupedImpl impl;
-
-        public PawnTable_AnimalsGrouped(PawnTableDef def, Func<IEnumerable<Pawn>> pawnsGetter, int uiWidth, int uiHeight) : base(def, pawnsGetter, uiWidth, uiHeight)
-        {
-            impl = new PawnTableGroupedImpl(this, def, pawnsGetter, uiWidth, uiHeight);
-        }
-
-        public void override_PawnTableOnGUI(Vector2 position)
-        {
-            impl.PawnTableOnGUI(position);
-        }
-
-        public void override_RecacheIfDirty()
-        {
-            impl.RecacheIfDirty();
-        }
-
-        public float override_CalculateTotalRequiredHeight()
-        {
-            return impl.CalculateTotalRequiredHeight();
-        }
-    }
-    */
 }

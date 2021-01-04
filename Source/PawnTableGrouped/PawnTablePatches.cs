@@ -43,10 +43,10 @@ namespace PawnTableGrouped
 
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>.CreateValueCallback instantiateTableImpl = table =>
         {
-            var def = GetPawnTableDef(table).defName;
-            if (Mod.Settings.pawnTablesEnabled.Contains(def))
+            var def = GetPawnTableDef(table);
+            if (Mod.Settings.pawnTablesEnabled.Contains(def.defName))
             {
-                return new PawnTableGroupedImpl(table);
+                return new PawnTableGroupedImpl(table, def);
             }
             else
             {

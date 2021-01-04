@@ -23,7 +23,7 @@ namespace PawnTableGrouped
 
         public override object GetValue(Pawn pawn)
         {
-            return null;
+            return "Oops";
         }
 
         public override bool IsUniform(IEnumerable<Pawn> pawns)
@@ -49,6 +49,11 @@ namespace PawnTableGrouped
         public override void DoCell(Rect cellRect, PawnTableGroupColumn column, PawnTable table)
         {
             
+        }
+
+        public override bool IsDummy()
+        {
+            return true;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace PawnTableGrouped
                 float y = rect.y + 2.5f;
                 var incapable = false;
                 WidgetsWork.DrawWorkBoxFor(x, y, pawn, ColumnDef.workType, incapable);
-                CopyToGroup(pawn, column);
+                CopyToGroup(pawn, column.Group.Pawns);
                 Rect rect2 = new Rect(x, y, 25f, 25f);
                 if (Mouse.IsOver(rect2))
                 {

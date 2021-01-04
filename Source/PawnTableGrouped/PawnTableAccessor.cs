@@ -154,6 +154,30 @@ namespace PawnTableGrouped
         }
 
 
+        public PawnColumnDef sortByColumn
+        {
+            get
+            {
+                return (PawnColumnDef)typeof(PawnTable).GetField("sortByColumn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
+            }
+            set
+            {
+                typeof(PawnTable).GetField("sortByColumn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
+            }
+        }
+
+        public bool sortDescending
+        {
+            get
+            {
+                return (bool)typeof(PawnTable).GetField("sortDescending", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
+            }
+            set
+            {
+                typeof(PawnTable).GetField("sortDescending", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
+            }
+        }
+
         public void RecachePawns()
         {
             typeof(PawnTable).GetMethod("RecachePawns", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });
@@ -194,6 +218,17 @@ namespace PawnTableGrouped
         {
             typeof(PawnTable).GetMethod("RecacheIfDirty", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { });
         }
+
+        public IEnumerable<Pawn> LabelSortFunction(IEnumerable<Pawn> input)
+        {
+           return (IEnumerable<Pawn>)typeof(PawnTable).GetMethod("LabelSortFunction", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { input  });
+        }
+
+        public IEnumerable<Pawn> PrimarySortFunction(IEnumerable<Pawn> input)
+        {
+            return (IEnumerable<Pawn>)typeof(PawnTable).GetMethod("PrimarySortFunction", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { input });
+        }
+
     }
 
 }

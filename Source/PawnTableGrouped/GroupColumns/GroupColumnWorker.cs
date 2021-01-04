@@ -15,6 +15,24 @@ namespace PawnTableGrouped
 	{
         public GroupColumnWorkerDef def;
 
+		private bool needCreateGroupWorker = true;
+		public GroupWorker_ByColumn groupWorker = null;
+		public GroupWorker_ByColumn GroupWorker
+        {
+			get
+            {
+				if (needCreateGroupWorker && groupWorker == null)
+                {
+					needCreateGroupWorker = false;
+					if (ColumnDef.sortable && !IsDummy())
+					{
+						groupWorker = new GroupWorker_ByColumn(this);
+					}
+                }
+				return groupWorker;
+            }
+        }
+
 		private PawnColumnDef columnDef;
 		public PawnColumnDef ColumnDef
         {
@@ -65,10 +83,10 @@ namespace PawnTableGrouped
 			}
 		}
 
-		public virtual void CopyToGroup(Pawn pawn, PawnTableGroupColumn column)
+		public virtual void CopyToGroup(Pawn pawn, IEnumerable<Pawn> pawns)
         {
 			var value = GetValue(pawn);
-			column.SetGroupValue(value);
+			SetGroupValue(pawns, value);
         }
 
 		public virtual bool IsVisible(Pawn pawn)
@@ -111,6 +129,11 @@ namespace PawnTableGrouped
 				Event.current.Use();
 			}
 		}
+
+		public virtual bool IsDummy()
+        {
+			return false;
+        }
 	}
 
 	public class GroupColumnWorkerDef : Def

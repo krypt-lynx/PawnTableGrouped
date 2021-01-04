@@ -82,6 +82,7 @@ namespace PawnTableGrouped
     public class PawnTableGroup
     {
         public List<Pawn> Pawns = null;
+        public Pawn KeyPawn = null;
         public string Title = null;
 
         public List<GroupColumnWorker> ColumnResolvers = null;
@@ -98,12 +99,13 @@ namespace PawnTableGrouped
             }
         }
 
-        public PawnTableGroup(string title, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers)
+        public PawnTableGroup(string title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers)
         {
-            this.ColumnResolvers = columnResolvers;
-            this.Pawns = pawns.ToList();
-            columns = columnResolvers.Select((r, i) => new PawnTableGroupColumn(this, i)).ToList();
             Title = title;
+            KeyPawn = keyPawn;
+            ColumnResolvers = columnResolvers;
+            Pawns = pawns.ToList();
+            columns = columnResolvers.Select((r, i) => new PawnTableGroupColumn(this, i)).ToList();
             RecacheValues();
         }
 
