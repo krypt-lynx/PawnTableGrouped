@@ -35,6 +35,8 @@ namespace PawnTableGrouped
 			{
 				if (mapping_ == null)
 				{
+					$"Loading mappings...".Log();
+
 					mapping_ = new Dictionary<Type, WorkerTypeWithConfig>();
 
 					foreach (var def in mapping)
@@ -44,11 +46,16 @@ namespace PawnTableGrouped
 						var groupWorker = GenTypes.GetTypeInAnyAssembly(def.groupWorkerType);
 						if (columnWorker != null && groupWorker != null)
 						{
+							$"{def.columnWorkerType} => {def.groupWorkerType} - Ok".Log();
 							mapping_[columnWorker] = new WorkerTypeWithConfig
 							{
 								type = groupWorker,
 								config = def.workerConfig,
 							};							
+						} 
+						else
+                        {
+							$"{def.columnWorkerType} => {def.groupWorkerType} - Failed".Log();
 						}
 					}
 
@@ -93,7 +100,7 @@ namespace PawnTableGrouped
 					});
 				}
 
-				$"Header for column {column.defName} with worker {column.workerClass.FullName}: {resolverDef.workerClass.FullName}".Log();
+				$"Generated: column: {column.defName}; worker {column.workerClass.FullName} => {resolverDef.workerClass.FullName}".Log();
 			}
 
 
@@ -107,7 +114,8 @@ namespace PawnTableGrouped
 				defName = column.defName,
 				workerClass = workerType.type,
 				workerConfig = workerType.config,
-				modContentPack = Mod.Instance.Content
+				modContentPack = Mod.Instance.Content,
+				generated = true,
 			};
 			DefGenerator.AddImpliedDef(resolverDef);
 			return resolverDef;

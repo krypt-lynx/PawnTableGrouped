@@ -11,6 +11,12 @@ using Verse;
 
 namespace PawnTableGrouped
 {
+    public class GCW_Trainable_Config
+    {
+        public GraphicData Checked = null;
+        public GraphicData Unchecked = null;
+    }
+
     public class GroupColumnWorker_Trainable : GroupColumnWorker
     {
         private static void DoTrainableTooltip(Rect rect, Pawn pawn, TrainableDef td, AcceptanceReport canTrain)
@@ -55,8 +61,12 @@ namespace PawnTableGrouped
 
             bool wanted = (bool)GetGroupValue(column.Group.Pawns);
             bool oldWanted = wanted;
-                
-            Widgets.Checkbox(rect.position, ref wanted, rect.width, !canTrain.Accepted, true);
+
+            var config = GetWorkerConfig<GCW_Trainable_Config>();
+
+            Widgets.Checkbox(rect.position, ref wanted, rect.width, !canTrain.Accepted, true,
+                    (Texture2D)config.Checked?.Graphic?.MatSingle?.mainTexture,
+                    (Texture2D)config.Unchecked?.Graphic?.MatSingle?.mainTexture);
 
             if (wanted != oldWanted)
             {

@@ -33,11 +33,50 @@
 				<columnWorkerType>WorkTab.PawnColumnWorker_WorkType</columnWorkerType> 
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
 			</li>
+			<li>
+				<columnWorkerType>GroupColumnWorker_AllowedAreaWide</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.PawnColumnWorker_AllowedArea</groupWorkerType>
+			</li>			
 		</mapping>
 	</PawnTableGrouped.ClassMappingDef>
 
-
+	<!-- 
+		available config classes:
 		
+		PawnTableGrouped.GroupColumnWorker_Text:		
+				<workerConfig Class="PawnTableGrouped.GCW_Text_Config">
+					<textAlignment></textAlignment> of type: UnityEngine.TextAnchor
+				</workerConfig>
+			
+		PawnTableGrouped.GroupColumnWorker_Checkbox:
+				<workerConfig Class="PawnTableGrouped.GCW_Checkbox_Config">
+					<Checked></Checked> of type: UnityEngine.GraphicData
+					<Unchecked></Unchecked> of type: UnityEngine.GraphicData
+				</workerConfig>
+			
+		PawnTableGrouped.GroupColumnWorker_Trainable:
+				<workerConfig Class="PawnTableGrouped.GCW_Trainable_Config">
+					<Checked></Checked> of type: UnityEngine.GraphicData
+					<Unchecked></Unchecked> of type: UnityEngine.GraphicData
+				</workerConfig>
+
+
+	-->
+
+<!--
+	<PawnTableGrouped.GroupColumnWorkerDef>
+		<defName>Trainable_Tameness</defName>
+		<workerClass>PawnTableGrouped.GroupColumnWorker_Trainable</workerClass>
+		<workerConfig Class="PawnTableGrouped.GCW_Trainable_Config">
+			<Checked>			
+				<texPath>UI/Icons/Animal/CheckOnWhite</texPath>
+				<graphicClass>Graphic_Single</graphicClass>
+				<drawSize>0.66666</drawSize>
+			</Checked>
+		</workerConfig>
+	</PawnTableGrouped.GroupColumnWorkerDef>
+	-->	
+
 	<PawnTableGrouped.CompatibilityInfoDef>
 		<defName>native</defName>
 		<packageId>ludeon.rimworld</packageId>

@@ -20,8 +20,6 @@ namespace PawnTableGrouped
 
     public class GroupColumnWorker_Text : GroupColumnWorker
     {
-        GCW_Text_Config defaultConfig = new GCW_Text_Config();
-
         public string GetTextFor(Pawn pawn)
         {
             return (string)typeof(PawnColumnWorker_Text).GetMethod("GetTextFor", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Text)ColumnDef.Worker, new object[] { pawn });
@@ -47,7 +45,7 @@ namespace PawnTableGrouped
                 string textFor = GetTextFor(pawn);
                 if (textFor != null)
                 {
-                    var config = (def.workerConfig as GCW_Text_Config) ?? defaultConfig;
+                    var config = GetWorkerConfig<GCW_Text_Config>();
 
                     Text.Font = GameFont.Small;
 

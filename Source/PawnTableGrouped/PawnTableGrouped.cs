@@ -45,7 +45,9 @@ namespace PawnTableGrouped
             accessor = new PawnTableAccessor(table);
             miscGroupers = new List<GroupWorker>();
 
+            miscGroupers.Add(new GroupWorker_AllInOne());
             miscGroupers.Add(new GroupWorker_ByRace());
+            miscGroupers.Add(new GroupWorker_ByGender());
             activeGrouper = miscGroupers.First();
 
             table.SetDirty();

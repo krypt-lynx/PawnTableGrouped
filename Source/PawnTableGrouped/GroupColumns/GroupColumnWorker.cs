@@ -15,6 +15,13 @@ namespace PawnTableGrouped
 	{
         public GroupColumnWorkerDef def;
 
+		private object defaultConfig = null;
+
+		public T GetWorkerConfig<T>() where T : class, new()
+		{
+				return (def.workerConfig as T) ?? (T)defaultConfig ?? (T)(defaultConfig = new T());
+		}
+
 		private bool needCreateGroupWorker = true;
 		public GroupWorker_ByColumn groupWorker = null;
 		public GroupWorker_ByColumn GroupWorker
@@ -140,9 +147,12 @@ namespace PawnTableGrouped
     {
 		[Unsaved(false)]
 		private GroupColumnWorker workerInt;
+		[Unsaved(false)]
+		private bool generated = false;
 
 		public Type workerClass = typeof(GroupColumnWorker);
 		public object workerConfig = null;
+
 
 		public GroupColumnWorker Worker
 		{

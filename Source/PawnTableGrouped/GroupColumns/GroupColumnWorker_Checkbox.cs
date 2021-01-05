@@ -12,6 +12,12 @@ using Verse.Sound;
 
 namespace PawnTableGrouped
 {
+    public class GCW_Checkbox_Config
+    {
+        public GraphicData Checked = null;
+        public GraphicData Unchecked = null;
+    }
+
     public class GroupColumnWorker_Checkbox : GroupColumnWorker
     {
         public override object GetValue(Pawn pawn)
@@ -63,8 +69,11 @@ namespace PawnTableGrouped
                 Vector2 vector = new Vector2(rect.x + dx, rect.y + dy);
 
                 bool oldValue = value;
+                var config = GetWorkerConfig<GCW_Checkbox_Config>();
 
-                Widgets.Checkbox(vector, ref value, 24f, false, ColumnDef.paintable);
+                Widgets.Checkbox(vector, ref value, 24f, false, ColumnDef.paintable,
+                    (Texture2D)config.Checked?.Graphic?.MatSingle?.mainTexture,
+                    (Texture2D)config.Unchecked?.Graphic?.MatSingle?.mainTexture );
 
                 if (value != oldValue)
                 {
