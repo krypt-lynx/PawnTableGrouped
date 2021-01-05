@@ -19,6 +19,11 @@ namespace PawnTableGrouped
         public const float TableLeftMargin = 8;
         public const float GroupHeaderHeight = 30;
         public const float GroupTitleRightMargin = 8;
+
+        public const float GroupHeaderOpacityIcon = 0.4f;
+        public const float GroupHeaderOpacityText = 0.6f;
+        public readonly static Color GroupHeaderOpacityIconColor = new Color(1, 1, 1, GroupHeaderOpacityIcon);
+        public readonly static Color GroupHeaderOpacityColor = new Color(1, 1, 1, GroupHeaderOpacityText);
     }
 
     public interface IPawnTableGrouped

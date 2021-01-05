@@ -76,11 +76,6 @@ namespace PawnTableGrouped
 
 		public virtual void SetGroupValue(IEnumerable<Pawn> pawns, object value)
 		{
-			if (value == null)
-			{
-				return;
-			}
-
 			foreach (var pawn in pawns)
 			{
 				if (IsVisible(pawn))
@@ -111,17 +106,13 @@ namespace PawnTableGrouped
 			
         }
 
-		static Color mixedTextColor = new Color(1, 1, 1, 0.6f);
-
 		protected virtual void DoMixedValuesIcon(Rect rect)
 		{
-			GuiTools.PushColor(mixedTextColor);
 			GuiTools.PushTextAnchor(TextAnchor.MiddleCenter);
 			GuiTools.PushFont(GameFont.Small);
 			Widgets.Label(rect, "...");
 			GuiTools.PopFont();
 			GuiTools.PopTextAnchor();
-			GuiTools.PopColor();
 		}
 
 		protected virtual void DoMixedValuesWidget(Rect rect, PawnTableGroupColumn column)

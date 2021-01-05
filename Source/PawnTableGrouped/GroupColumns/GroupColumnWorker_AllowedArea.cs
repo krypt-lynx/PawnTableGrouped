@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using RWLayout.alpha2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +8,19 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace PawnTableGrouped.GroupColumns
+namespace PawnTableGrouped
 {
     class GroupColumnWorker_AllowedArea : GroupColumnWorker
     {
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
-            if (!column.IsUniform())
+            GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
+            KWidgets.DoAllowedAreaSelectors(rect, column);
+            GuiTools.PopColor();
+
+            if (Event.current.type == EventType.MouseUp && Mouse.IsOver(rect))
             {
-                DoMixedValuesWidget(rect, column);
-            }
-            else
-            {
-                var pawn = GetRepresentingPawn(column.Group.Pawns);
-                ColumnDef.Worker.DoCell(rect, pawn, table);
-                CopyToGroup(pawn, column.Group.Pawns);
+                Event.current.Use();
             }
         }
 
@@ -47,6 +46,11 @@ namespace PawnTableGrouped.GroupColumns
             }*/
             return pawn.playerSettings?.AreaRestriction;
 
+        }
+
+        public override bool IsVisible(Pawn pawn)
+        {
+            return pawn.Faction == Faction.OfPlayer;
         }
 
         public override void SetValue(Pawn pawn, object value)

@@ -45,6 +45,7 @@ namespace PawnTableGrouped
 
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
+            GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
             if (!column.IsUniform())
             {
                 int dx = (int)((rect.width - 24f) / 2f);
@@ -70,7 +71,6 @@ namespace PawnTableGrouped
 
                 bool oldValue = value;
                 var config = GetWorkerConfig<GCW_Checkbox_Config>();
-
                 Widgets.Checkbox(vector, ref value, 24f, false, ColumnDef.paintable,
                     (Texture2D)config.Checked?.Graphic?.MatSingle?.mainTexture,
                     (Texture2D)config.Unchecked?.Graphic?.MatSingle?.mainTexture );
@@ -80,6 +80,7 @@ namespace PawnTableGrouped
                     column.SetGroupValue(value);
                 }
             }
+            GuiTools.PopColor();
 
             if (Event.current.type == EventType.MouseUp && Mouse.IsOver(rect))
             {

@@ -30,13 +30,13 @@ namespace PawnTableGrouped
             return (string)typeof(PawnColumnWorker_Text).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Text)ColumnDef.Worker, new object[] { pawn });
         }
 
-        static Color textColor = new Color(1, 1, 1, 0.6f);
-
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
             if (!column.IsUniform())
             {
+                GuiTools.PushColor(Metrics.GroupHeaderOpacityColor);
                 DoMixedValuesIcon(rect);
+                GuiTools.PopColor();
             }
             else
             {
@@ -58,7 +58,7 @@ namespace PawnTableGrouped
                         Text.Anchor = config.textAlignment;
                     }
                     Text.WordWrap = config.wordWrap;
-                    GuiTools.PushColor(textColor);
+                    GuiTools.PushColor(Metrics.GroupHeaderOpacityColor);
                     Widgets.Label(rect2, textFor);
                     GuiTools.PopColor();
                     Text.WordWrap = true;

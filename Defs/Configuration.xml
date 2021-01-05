@@ -3,7 +3,14 @@
 
 	<PawnTableGrouped.ClassMappingDef>
 		<defName>GroupHeadersMapping</defName>
+		<!-- 
+		Mapper checks column worker class recursivelly.
+		Even if there is no exact match for column worker class, it can use group worker made for its base class.
+		Because of this order in this list does matter:
+		Group workers of derived types should go before group workers of base types
+		-->
 		<mapping>
+			<!-- checkboxes -->
 			<li>
 				<columnWorkerType>PawnColumnWorker_Checkbox</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Checkbox</groupWorkerType>
@@ -12,10 +19,12 @@
 				<columnWorkerType>PawnColumnWorker_Trainable</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Trainable</groupWorkerType>
 			</li>
+			<!-- misc -->
 			<li>
 				<columnWorkerType>PawnColumnWorker_MedicalCare</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_MedicalCare</groupWorkerType>
 			</li>
+			<!-- static -->
 			<li>
 				<columnWorkerType>PawnColumnWorker_Icon</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Icon</groupWorkerType>
@@ -24,6 +33,7 @@
 				<columnWorkerType>PawnColumnWorker_Text</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Text</groupWorkerType>
 			</li>
+			<!-- work priority -->
 			<li>
 				<columnWorkerType>PawnColumnWorker_WorkPriority</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
@@ -33,10 +43,17 @@
 				<columnWorkerType>WorkTab.PawnColumnWorker_WorkType</columnWorkerType> 
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
 			</li>
+			<!-- allowed area -->	
 			<li>
-				<columnWorkerType>GroupColumnWorker_AllowedAreaWide</columnWorkerType>
-				<groupWorkerType>PawnTableGrouped.PawnColumnWorker_AllowedArea</groupWorkerType>
+				<columnWorkerType>PawnColumnWorker_AllowedArea</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_AllowedArea</groupWorkerType>
 			</li>			
+			<li>
+				<columnWorkerType>AnimalTab.PawnColumnWorker_AllowedArea</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_AllowedArea</groupWorkerType>
+			</li>
+			
+			
 		</mapping>
 	</PawnTableGrouped.ClassMappingDef>
 

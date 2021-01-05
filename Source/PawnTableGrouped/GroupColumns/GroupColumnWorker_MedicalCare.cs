@@ -28,15 +28,19 @@ namespace PawnTableGrouped
 
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
+            GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
+
             if (!column.IsUniform())
             {
                 DoMixedValuesWidget(rect, column); // todo:  Widgets.Dropdown, but need a texture
             }
             else
             {
+
                 Widgets.Dropdown(rect, column, (c) => (MedicalCareCategory)c.GetGroupValue(), (c) => MedicalCareSelectButton_GenerateMenu(c), null, careTextures[(int)(MedicalCareCategory)column.GetGroupValue()], null, null, null, true);
             }
 
+            GuiTools.PopColor();
             if (Event.current.type == EventType.MouseUp && Mouse.IsOver(rect))
             {
                 Event.current.Use();

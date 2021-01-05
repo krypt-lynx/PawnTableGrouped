@@ -27,6 +27,7 @@ namespace PawnTableGrouped
 
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
+            GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
             if (!column.IsUniform())
             {
                 DoMixedValuesWidget(rect, column);
@@ -48,6 +49,8 @@ namespace PawnTableGrouped
                 int dy = 3;
                 DoTrainableCheckbox(new Rect(rect.x + dx, rect.y + dy, 24f, 24f), column, ColumnDef.trainable, canTrain);
             }
+
+            GuiTools.PopColor();
 
             if (Event.current.type == EventType.MouseUp && Mouse.IsOver(rect))
             {
