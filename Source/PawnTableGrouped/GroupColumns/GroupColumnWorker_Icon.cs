@@ -48,16 +48,16 @@ namespace PawnTableGrouped
 			return (int)typeof(PawnColumnWorker_Icon).GetProperty("Padding", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(ColumnDef.Worker);
 		}
 
-		public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
+		public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
 		{
-			if (!group.IsUniform(columnIndex))
+			if (!column.IsUniform())
 			{
 				DoMixedValuesIcon(rect);
 			}
             else
             {
 				// mostly decompiled code
-				var pawn  = GetRepresentingPawn(group.Pawns);
+				var pawn  = GetRepresentingPawn(column.Group.Pawns);
 
 				Texture2D iconFor = GetIconFor(pawn);
 				if (iconFor != null)

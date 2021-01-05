@@ -19,15 +19,15 @@ namespace PawnTableGrouped
         }
 
 
-        public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
+        public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
-            if (!group.IsUniform(columnIndex))
+            if (!column.IsUniform())
             {
-                DoMixedValuesWidget(rect, group, columnIndex);
+                DoMixedValuesWidget(rect, column);
             }
             else
             {
-                var pawn = group.Pawns.First(p => IsVisible(p));
+                var pawn = GetRepresentingPawn(column.Group.Pawns);
                 if (pawn.training == null)
                 {
                     return;
@@ -40,7 +40,7 @@ namespace PawnTableGrouped
                 }
                 int dx = (int)((rect.width - 24f) / 2f);
                 int dy = 3;
-                DoTrainableCheckbox(new Rect(rect.x + dx, rect.y + dy, 24f, 24f), group, columnIndex, ColumnDef.trainable, canTrain);
+                DoTrainableCheckbox(new Rect(rect.x + dx, rect.y + dy, 24f, 24f), column, ColumnDef.trainable, canTrain);
             }
 
             if (Event.current.type == EventType.MouseUp && Mouse.IsOver(rect))
@@ -49,11 +49,11 @@ namespace PawnTableGrouped
             }
         }
 
-        private void DoTrainableCheckbox(Rect rect, PawnTableGroup group, int columnIndex, TrainableDef td, AcceptanceReport canTrain)
+        private void DoTrainableCheckbox(Rect rect, PawnTableGroupColumn column, TrainableDef td, AcceptanceReport canTrain)
         {
             //bool learned = pawn.training.HasLearned(td);
 
-            bool wanted = (bool)GetGroupValue(group.Pawns);
+            bool wanted = (bool)GetGroupValue(column.Group.Pawns);
             bool oldWanted = wanted;
                 
             Widgets.Checkbox(rect.position, ref wanted, rect.width, !canTrain.Accepted, true);
@@ -61,7 +61,7 @@ namespace PawnTableGrouped
             if (wanted != oldWanted)
             {
                 PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.AnimalTraining, KnowledgeAmount.Total);
-                group.SetGroupValue(columnIndex, wanted);
+                column.SetGroupValue(wanted);
             }
 
             //DoTrainableTooltip(rect, pawn, td, canTrain);           

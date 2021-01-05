@@ -12,21 +12,21 @@ namespace PawnTableGrouped
 {
     class GroupColumnWorker_WorkPriority : GroupColumnWorker
     {
-        public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
+        public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
-            if (!group.IsUniform(columnIndex))
+            if (!column.IsUniform())
             {
-                DoMixedValuesWidget(rect, group, columnIndex);
+                DoMixedValuesWidget(rect, column);
             }
             else
             {
-                var pawn = GetRepresentingPawn(group.Pawns);
+                var pawn = GetRepresentingPawn(column.Group.Pawns);
                 GuiTools.PushFont(GameFont.Medium);
                 float x = rect.x + (rect.width - 25f) / 2f;
                 float y = rect.y + 2.5f;
                 var incapable = false;
                 WidgetsWork.DrawWorkBoxFor(x, y, pawn, ColumnDef.workType, incapable);
-                CopyToGroup(pawn, group);
+                CopyToGroup(pawn, column);
                 Rect rect2 = new Rect(x, y, 25f, 25f);
                 if (Mouse.IsOver(rect2))
                 {

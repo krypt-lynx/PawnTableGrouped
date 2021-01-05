@@ -165,6 +165,7 @@
     <Compile Include="Settings\GUI\ColumnGuide.cs" />
     <Compile Include="Settings\SettingsView.cs" />
     <Compile Include="Settings\TablesSettingsViewModel.cs" />
+    <Compile Include="GroupingProviders\GroupingProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="git.txt">

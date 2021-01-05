@@ -28,6 +28,10 @@ namespace PawnTableGrouped
             }
         }
 
+		abstract public bool CanSetValues();
+		abstract public object DefaultValue(IEnumerable<Pawn> pawns);
+		abstract public object GetValue(Pawn pawn);
+		abstract public void SetValue(Pawn pawn, object value);
 
 		public virtual Pawn GetRepresentingPawn(IEnumerable<Pawn> pawns)
         {
@@ -61,16 +65,11 @@ namespace PawnTableGrouped
 			}
 		}
 
-		public virtual void CopyToGroup(Pawn pawn, PawnTableGroup group)
+		public virtual void CopyToGroup(Pawn pawn, PawnTableGroupColumn column)
         {
 			var value = GetValue(pawn);
-			SetGroupValue(group.Pawns, value);
+			column.SetGroupValue(value);
         }
-
-		abstract public bool CanSetValues();
-		abstract public object DefaultValue(IEnumerable<Pawn> pawns);
-		abstract public object GetValue(Pawn pawn);
-		abstract public void SetValue(Pawn pawn, object value);
 
 		public virtual bool IsVisible(Pawn pawn)
         {
@@ -82,7 +81,7 @@ namespace PawnTableGrouped
 			return pawns.Any(p => IsVisible(p));
         }
 
-		public virtual void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
+		public virtual void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
 		{
 			
         }
@@ -100,12 +99,12 @@ namespace PawnTableGrouped
 			GuiTools.PopColor();
 		}
 
-		protected virtual void DoMixedValuesWidget(Rect rect, PawnTableGroup group, int columnIndex)
+		protected virtual void DoMixedValuesWidget(Rect rect, PawnTableGroupColumn column)
         {
 			DoMixedValuesIcon(rect);
 			if (Widgets.ButtonInvisible(rect, false))
 			{
-				group.SetGroupValue(columnIndex, group.GetDefaultValue(columnIndex));
+				column.SetGroupValue(column.GetDefaultValue());
 			}
 			if (Event.current.type == EventType.MouseUp && Mouse.IsOver(rect))
 			{

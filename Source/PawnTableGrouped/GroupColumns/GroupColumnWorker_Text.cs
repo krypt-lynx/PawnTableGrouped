@@ -34,15 +34,15 @@ namespace PawnTableGrouped
 
         static Color textColor = new Color(1, 1, 1, 0.6f);
 
-        public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
+        public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
-            if (!group.IsUniform(columnIndex))
+            if (!column.IsUniform())
             {
                 DoMixedValuesIcon(rect);
             }
             else
             {
-                var pawn = GetRepresentingPawn(group.Pawns);
+                var pawn = GetRepresentingPawn(column.Group.Pawns);
                 Rect rect2 = new Rect(rect.x, rect.y, rect.width, Mathf.Min(rect.height, 30f));
                 string textFor = GetTextFor(pawn);
                 if (textFor != null)

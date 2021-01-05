@@ -26,15 +26,15 @@ namespace PawnTableGrouped
             });
         }
 
-        public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
+        public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
-            if (!group.IsUniform(columnIndex))
+            if (!column.IsUniform())
             {
-                DoMixedValuesWidget(rect, group, columnIndex); // todo:  Widgets.Dropdown, but need a texture
+                DoMixedValuesWidget(rect, column); // todo:  Widgets.Dropdown, but need a texture
             }
             else
             {
-                Widgets.Dropdown(rect, group, (g) => (MedicalCareCategory)g.GetGroupValue(columnIndex), (g) => MedicalCareSelectButton_GenerateMenu(g, columnIndex), null, careTextures[(int)(MedicalCareCategory)group.GetGroupValue(columnIndex)], null, null, null, true);
+                Widgets.Dropdown(rect, column, (c) => (MedicalCareCategory)c.GetGroupValue(), (c) => MedicalCareSelectButton_GenerateMenu(c), null, careTextures[(int)(MedicalCareCategory)column.GetGroupValue()], null, null, null, true);
             }
 
             if (Event.current.type == EventType.MouseUp && Mouse.IsOver(rect))
@@ -51,7 +51,7 @@ namespace PawnTableGrouped
 
         // Token: 0x06004A50 RID: 19024 RVA: 0x00192AC2 File Offset: 0x00190CC2
 
-        private static IEnumerable<Widgets.DropdownMenuElement<MedicalCareCategory>> MedicalCareSelectButton_GenerateMenu(PawnTableGroup group, int columnIndex)
+        private static IEnumerable<Widgets.DropdownMenuElement<MedicalCareCategory>> MedicalCareSelectButton_GenerateMenu(PawnTableGroupColumn column)
         {
             int num;
             for (int i = 0; i < 5; i = num + 1)
@@ -61,7 +61,7 @@ namespace PawnTableGrouped
                 {
                     option = new FloatMenuOption(mc.GetLabel(), delegate ()
                     {
-                        group.SetGroupValue(columnIndex, mc);
+                        column.SetGroupValue(mc);
                     }, MenuOptionPriority.Default, null, null, 0f, null, null),
                     payload = mc
                 };

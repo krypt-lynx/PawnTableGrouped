@@ -37,9 +37,9 @@ namespace PawnTableGrouped
             return (string)typeof(PawnColumnWorker_Checkbox).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Checkbox)ColumnDef.Worker, new object[] { pawn });
         }
 
-        public override void DoCell(Rect rect, PawnTableGroup group, PawnTable table, int columnIndex)
+        public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
-            if (!group.IsUniform(columnIndex))
+            if (!column.IsUniform())
             {
                 int dx = (int)((rect.width - 24f) / 2f);
                 int dy = 3;
@@ -48,15 +48,15 @@ namespace PawnTableGrouped
                 DoMixedValuesIcon(rect);
 
                 bool value;
-                if (KWidgets.DraggableSource(rect2, (bool)group.GetDefaultValue(columnIndex), out value))
+                if (KWidgets.DraggableSource(rect2, (bool)column.GetDefaultValue(), out value))
                 {
-                    group.SetGroupValue(columnIndex, value);
+                    column.SetGroupValue(value);
                 }
 
             }
             else
             {
-                var value = (bool)group.GetGroupValue(columnIndex);
+                var value = (bool)column.GetGroupValue();
 
                 int dx = (int)((rect.width - 24f) / 2f);
                 int dy = 3;
@@ -68,7 +68,7 @@ namespace PawnTableGrouped
 
                 if (value != oldValue)
                 {
-                    group.SetGroupValue(columnIndex, value);
+                    column.SetGroupValue(value);
                 }
             }
 

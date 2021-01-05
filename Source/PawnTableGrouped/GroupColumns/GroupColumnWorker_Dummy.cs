@@ -46,7 +46,7 @@ namespace PawnTableGrouped
             
         }
 
-        public override void DoCell(Rect cellRect, PawnTableGroup group, PawnTable table, int columnIndex)
+        public override void DoCell(Rect cellRect, PawnTableGroupColumn column, PawnTable table)
         {
             
         }

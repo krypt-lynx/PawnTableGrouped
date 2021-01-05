@@ -101,7 +101,7 @@ namespace PawnTableGrouped
                     if (resolver != null && Group.IsVisible(columnIndex))
                     {
                         Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
-                        resolver.DoCell(cellRect, Group, table, columnIndex);
+                        resolver.DoCell(cellRect, Group.Columns[columnIndex], table);
                     }
                 }
                 x += columnWidth;
