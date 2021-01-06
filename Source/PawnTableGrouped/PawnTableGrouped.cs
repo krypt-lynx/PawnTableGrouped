@@ -24,6 +24,8 @@ namespace PawnTableGrouped
         public const float GroupHeaderOpacityText = 0.6f;
         public readonly static Color GroupHeaderOpacityIconColor = new Color(1, 1, 1, GroupHeaderOpacityIcon);
         public readonly static Color GroupHeaderOpacityColor = new Color(1, 1, 1, GroupHeaderOpacityText);
+
+        public const float PawnTableFooterHeight = 30;
     }
 
     public interface IPawnTableGrouped
@@ -32,7 +34,6 @@ namespace PawnTableGrouped
         void override_PawnTableOnGUI(Vector2 position);
         float override_CalculateTotalRequiredHeight();        
     }
-
 
 
     public class PawnTableGroupedImpl
@@ -60,19 +61,26 @@ namespace PawnTableGrouped
         }
 
         CGuiRoot host = new CGuiRoot();
+        CCheckbox collapseBtn;
         CListView list;
         CElement header;
 
-        
+        float extendedArea = 30;
+        float fotterBtnOffset = 0;
 
         void ConstructGUI()
         {
+            CElement footer;
+
             header = host.AddElement(new CPawnListHeader(table, accessor, magic));
             list = host.AddElement(new CListView
             {
                 ShowScrollBar = CScrollBarMode.Show
             });
-            var btn = host.AddElement(new CWidget
+            footer = host.AddElement(new CElement());
+
+            Texture2D img1 = new Resource<Texture2D>("UI/Settings_Ask_Wiris_Permition_To_Use");
+            var GroupBtn = footer.AddElement(new CWidget
             {
                 //Title = "#",
                 //Action = (sender) =>
@@ -90,20 +98,52 @@ namespace PawnTableGrouped
                                     table.SetDirty();
                                 })
                             });
-                    });
+                    }, null, img1);
                 }
             });
+            var DecendingSortBtn = footer.AddElement(new CCheckbox
+            {
+                TextureChecked = new Resource<Texture2D>("UI/OrderDec"),
+                TextureUnchecked = new Resource<Texture2D>("UI/OrderAsc"),
+                Checked = sortDecending,
+                Changed = (_, value) =>
+                {
+                    sortDecending = value;
+                    SortGroups();
+                    PopulateList();
+                },
+            });
+            collapseBtn = footer.AddElement(new CCheckbox
+            {
+                TextureChecked = new Resource<Texture2D>("UI/Expand"),
+                TextureUnchecked = new Resource<Texture2D>("UI/Collapse"),
+                Changed = (sender, _) =>
+                {
+                    bool needToExpand = true;
+                    foreach (var group in groups)
+                    {
+                        if (IsExpanded(group))
+                        {
+                            needToExpand = false;
+                        }
+                    }
+                    foreach (var group in groups)
+                    {
+                        SetExpanded(group, needToExpand, false);
+                    }
+                    sender.Checked = !needToExpand;
 
+                    table.SetDirty();
+                },
+            });
 
-            host.AddConstraints(header.left ^ host.left, header.top ^ host.top, header.right ^ btn.left, header.height ^ header.intrinsicHeight,
-                btn.top >= host.top, btn.right ^ host.right, btn.bottom ^ header.bottom, btn.width ^ 16,
-                list.left ^ host.left, list.top ^ header.bottom, list.right ^ host.right, list.bottom ^ host.bottom);
-            host.AddConstraint(btn.height ^ 30, ClStrength.Weak);
-
-            //host.StackTop((header, header.intrinsicHeight), list);
+            host.StackTop((header, header.intrinsicHeight), list);
+            host.AddConstraints(footer.top ^ list.bottom, footer.left ^ list.left, footer.right ^ list.right, footer.height ^ Metrics.PawnTableFooterHeight);
+            //fotterBtnOffset = 50;
+            footer.StackRight(StackOptions.Create(constrainEnd:false), 16, fotterBtnOffset, (GroupBtn, 30), (DecendingSortBtn, 30), (collapseBtn, 30));
         }
 
-        private void PopulateList(IReadOnlyCollection<PawnTableGroup> groups)
+        private void PopulateList()
         {
             list.ClearRows();
 
@@ -134,7 +174,9 @@ namespace PawnTableGrouped
         }
 
 
-        List<PawnTableGroup> sections;
+        List<PawnTableGroup> groups;
+        bool sortDecending = false;
+
         Dictionary<string, bool> ExpandedState = new Dictionary<string, bool>();
         bool IsExpanded(PawnTableGroup group)
         {
@@ -154,7 +196,7 @@ namespace PawnTableGrouped
             }
         }
 
-        void SetExpanded(PawnTableGroup group, bool expanded)
+        void SetExpanded(PawnTableGroup group, bool expanded, bool updateBtnState = true)
         {
             if (group?.Title == null)
             {
@@ -163,24 +205,17 @@ namespace PawnTableGrouped
             }
 
             ExpandedState[group.Title] = expanded;
+
+            if (updateBtnState)
+            {
+                UpdateCollapseBtnState();
+            }
         }
 
-        /*
-        class ByColumnComparer : IComparer<Pawn>
+        private void UpdateCollapseBtnState()
         {
-            private PawnColumnDef pawnColumnDef;
-
-            public ByColumnComparer(PawnColumnDef pawnColumnDef)
-            {
-                this.pawnColumnDef = pawnColumnDef;
-            }
-
-            public int Compare(Pawn x, Pawn y)
-            {
-                return pawnColumnDef.Worker.Compare(x, y);
-            }
+            collapseBtn.Checked = !groups.Any(x => IsExpanded(x));
         }
-        */
 
         List<GroupWorker> miscGroupers;
         GroupWorker activeGrouper;
@@ -200,11 +235,11 @@ namespace PawnTableGrouped
 
         public void RecacheGroups()
         {
-            var groups = table.PawnsListForReading
+            var pawnGroups = table.PawnsListForReading
                 .GroupBy(p => p, activeGrouper.GroupingEqualityComparer);
 
-            sections = new List<PawnTableGroup>();
-            foreach (var group in groups)
+            groups = new List<PawnTableGroup>();
+            foreach (var group in pawnGroups)
             {
                 var pawns = accessor.LabelSortFunction(group).ToList();
                 if (accessor.sortByColumn != null)
@@ -219,12 +254,11 @@ namespace PawnTableGrouped
                     }
                 }
                 //var pawns2 = accessor.PrimarySortFunction(pawns);
-                sections.Add(new PawnTableGroup(activeGrouper.TitleForGroup(group, group.Key), group.Key, pawns, columnResolvers));
+                groups.Add(new PawnTableGroup(activeGrouper.TitleForGroup(group, group.Key), group.Key, pawns, columnResolvers));
             }
 
-            sections.Sort(activeGrouper.GroupsSortingComparer);
-            
-            
+            SortGroups();
+
 
             /*
             var groups = table.PawnsListForReading
@@ -249,6 +283,18 @@ namespace PawnTableGrouped
             */
         }
 
+        private void SortGroups()
+        {
+            if (sortDecending)
+            {
+                groups.Sort((a, b) => activeGrouper.GroupsSortingComparer.Compare(b, a));
+            }
+            else
+            {
+                groups.Sort(activeGrouper.GroupsSortingComparer);
+            }
+        }
+
         public void RecacheColumnResolvers()
         {
             columnResolvers.Clear();
@@ -264,9 +310,9 @@ namespace PawnTableGrouped
         public float CalculateTotalRequiredHeight()
         {
             float height = accessor.cachedHeaderHeight;
-            foreach (var section in sections)
+            foreach (var section in groups)
             {
-                if (!Mod.Settings.hideHeaderIfOnlyOneGroup || sections.Count > 1)
+                if (!Mod.Settings.hideHeaderIfOnlyOneGroup || groups.Count > 1)
                 {
                     height += Metrics.GroupHeaderHeight;
                 }
@@ -278,8 +324,9 @@ namespace PawnTableGrouped
                     }
                 }
             }
+            height += Metrics.PawnTableFooterHeight;
 
-            return height;
+            return height - extendedArea;
         }
 
         int magic = 0;
@@ -320,7 +367,8 @@ namespace PawnTableGrouped
             accessor.RecacheColumnWidths();
             accessor.RecacheLookTargets();
 
-            PopulateList(sections);
+            PopulateList();
+            UpdateCollapseBtnState();
         }
     }
 

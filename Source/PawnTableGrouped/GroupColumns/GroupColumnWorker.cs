@@ -138,8 +138,6 @@ namespace PawnTableGrouped
     {
 		[Unsaved(false)]
 		private GroupColumnWorker workerInt;
-		[Unsaved(false)]
-		private bool generated = false;
 
 		public Type workerClass = typeof(GroupColumnWorker);
 		public object workerConfig = null;

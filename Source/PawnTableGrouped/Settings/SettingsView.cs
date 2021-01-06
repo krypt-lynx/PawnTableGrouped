@@ -1,7 +1,6 @@
 ﻿using Cassowary;
 using RimWorld;
 using RWLayout.alpha2;
-using RWLayout.alpha2.Elements.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
