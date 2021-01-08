@@ -17,6 +17,7 @@ namespace PawnTableGrouped
         public abstract string TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn);
 
         public abstract string MenuItemTitle();
+        public abstract string Key();
     }
 
 

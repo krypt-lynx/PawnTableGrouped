@@ -76,6 +76,11 @@ namespace PawnTableGrouped
         {
             return $"by column: {resolver.Target?.ColumnDef?.defName}";
         }
+
+        public override string Key()
+        {
+            return $"column_{resolver?.Target?.ColumnDef.defName ?? ""}";
+        }
     }
 
 }

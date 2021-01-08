@@ -48,6 +48,11 @@ namespace PawnTableGrouped
         {
             return "all in one";
         }
+
+        public override string Key()
+        {
+            return "all";
+        }
     }
 
 }

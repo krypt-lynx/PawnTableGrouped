@@ -11,26 +11,22 @@ namespace PawnTableGrouped
 {
     class CPawnListHeader : CElement
     {
-        private PawnTable table;
-        private PawnTableAccessor accessor;
-        private int magic;
+        private PawnTableGroupedModel model;
 
-        public CPawnListHeader(PawnTable table, PawnTableAccessor accessor, int magic)
+        public CPawnListHeader(PawnTableGroupedModel model)
         {
-            this.table = table;
-            this.accessor = accessor;
-            this.magic = magic;
+            this.model = model;
         }
 
         public override Vector2 tryFit(Vector2 size)
         {
-            return new Vector2(accessor.cachedHeightNoScrollbar, accessor.cachedHeaderHeight);
+            return new Vector2(model.accessor.cachedHeightNoScrollbar, model.accessor.cachedHeaderHeight);
         }
 
         public override void DoContent()
         {
             base.DoContent();
-            var columns = table.ColumnsListForReading;
+            var columns = model.Table.ColumnsListForReading;
 
 
             float width = BoundsRounded.width - 16f - Metrics.TableLeftMargin;
@@ -44,12 +40,12 @@ namespace PawnTableGrouped
                 }
                 else
                 {
-                    columnWidth = (int)accessor.cachedColumnWidths[headerColumnIndex];
+                    columnWidth = (int)model.accessor.cachedColumnWidths[headerColumnIndex];
                 }
                 Rect rect = new Rect(BoundsRounded.xMin + x, BoundsRounded.yMin, columnWidth, BoundsRounded.height);
 
-                NumbersWrapper.CallReorderableWidget(magic, rect);
-                columns[headerColumnIndex].Worker.DoHeader(rect, table);
+                NumbersWrapper.CallReorderableWidget(model.NumbersMagic, rect);
+                columns[headerColumnIndex].Worker.DoHeader(rect, model.Table);
                 x += columnWidth;
             }
         }

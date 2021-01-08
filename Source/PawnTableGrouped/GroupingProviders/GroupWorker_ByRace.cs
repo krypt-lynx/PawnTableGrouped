@@ -48,6 +48,11 @@ namespace PawnTableGrouped
         {
             return "by race";
         }
+
+        public override string Key()
+        {
+            return "race";
+        }
     }
 
 }
