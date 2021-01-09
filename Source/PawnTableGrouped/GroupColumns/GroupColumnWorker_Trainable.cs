@@ -108,5 +108,10 @@ namespace PawnTableGrouped
         {
             return pawn.training?.CanAssignToTrain(ColumnDef.trainable).Accepted ?? false;
         }
+
+        public override string GetStringValue(Pawn pawn)
+        {
+            return (bool)GetValue(pawn) ? "Yes" : "No";
+        }
     }
 }

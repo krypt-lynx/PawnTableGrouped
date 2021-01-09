@@ -53,23 +53,7 @@ namespace PawnTableGrouped
 
         public override string TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
         {
-            var value = resolver.Target?.GetValue(keyPawn);
-            if (value == null)
-            {
-                return "";
-            }
-            else if (value is Texture2D tex)
-            {
-                return tex.name;
-            }
-            else if (value is bool flag)
-            {
-                return flag ? "Yes".Translate() : "No".Translate();
-            }
-            else
-            {
-                return value.ToString();
-            }
+            return resolver.Target?.GetStringValue(keyPawn) ?? "";
         }
 
         public override string MenuItemTitle()

@@ -129,5 +129,10 @@ namespace PawnTableGrouped
 			return true;
 		}
 
+		public override string GetStringValue(Pawn pawn)
+		{
+			return GetIconFor(pawn)?.name ?? "";
+		}
+
 	}
 }

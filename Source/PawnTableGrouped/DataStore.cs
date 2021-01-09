@@ -81,12 +81,6 @@ namespace PawnTableGrouped
             "DataStore created".Log();
         }
 
-        public override void LoadedGame()
-        {
-            base.LoadedGame();
-
-            "DataStore LoadedGame".Log();
-        }
 
         List<Verse.WeakReference<IDataOwner>> dataOwners = new List<Verse.WeakReference<IDataOwner>>();
         Dictionary<string, Dictionary<string, IExposable>> storedData = new Dictionary<string, Dictionary<string, IExposable>>();
@@ -108,19 +102,43 @@ namespace PawnTableGrouped
             dataOwners.Add(new Verse.WeakReference<IDataOwner>(pawnTableGroupedModel));
         }
 
+        public void UpdateData(string key, Dictionary<string, IExposable> data)
+        {
+            storedData[key] = data;
+        }
+
+        private void TrimDataOwners()
+        {
+            int index = 0;
+            while (index < dataOwners.Count)
+            {
+                if (dataOwners[index].IsAlive)
+                {
+                    index++;
+                } 
+                else
+                {
+                    dataOwners.RemoveAt(index);
+                }
+            }
+        }
+
         public override void ExposeData()
         {
-            $"DataStore ExposeData mode {Scribe.mode}".Log();
-
             base.ExposeData();
 
             if (Scribe.mode == LoadSaveMode.Saving)
             {
+                TrimDataOwners();
+
                 foreach (var dataOwner in dataOwners)
                 {
-                    string key = null;
-                    var value = dataOwner.Target?.SaveData(out key);
-                    storedData[key] = value;
+                    if (dataOwner.IsAlive)
+                    {
+                        string key = null;
+                        var value = dataOwner.Target?.SaveData(out key);
+                        storedData[key] = value;
+                    }
                 }
             }
 

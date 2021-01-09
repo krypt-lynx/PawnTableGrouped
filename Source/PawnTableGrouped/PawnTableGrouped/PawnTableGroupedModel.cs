@@ -43,11 +43,20 @@ namespace PawnTableGrouped
             miscGroupers.Add(new GroupWorker_AllInOne());
             miscGroupers.Add(new GroupWorker_ByRace());
             miscGroupers.Add(new GroupWorker_ByGender());
+            miscGroupers.Add(new GroupWorker_ByFaction());
 
             ActiveGrouper = AllGroupers.First();
 
             LoadData(def);
         }
+
+        ~PawnTableGroupedModel() 
+        {
+            $"~PawnTableGroupedModel {def.defName}".Log();
+            ForceSaveData();
+        }
+
+        #region Save/Load
 
         private void LoadData(PawnTableDef def)
         {
@@ -76,6 +85,15 @@ namespace PawnTableGrouped
             }
         }
 
+        private void ForceSaveData()
+        {
+            var store = Current.Game.GetComponent<DataStore>();
+
+            string key;
+            var data = SaveData(out key);
+            store.UpdateData(key, data);
+        }
+
         public Dictionary<string, IExposable> SaveData(out string Key)
         {
             Key = def.defName;
@@ -86,6 +104,8 @@ namespace PawnTableGrouped
             data["groupingBy"] = (ValueContainer<string>)ActiveGrouper.Key();
             return data;
         }
+
+        #endregion
 
         public List<PawnTableGroup> Groups;
         public bool SortDecending = false;

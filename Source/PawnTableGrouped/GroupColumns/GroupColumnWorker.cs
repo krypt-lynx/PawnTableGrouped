@@ -56,6 +56,7 @@ namespace PawnTableGrouped
 		abstract public bool CanSetValues();
 		abstract public object DefaultValue(IEnumerable<Pawn> pawns);
 		abstract public object GetValue(Pawn pawn);
+
 		abstract public void SetValue(Pawn pawn, object value);
 
 		public virtual Pawn GetRepresentingPawn(IEnumerable<Pawn> pawns)
@@ -100,6 +101,11 @@ namespace PawnTableGrouped
         {
 			return pawns.Any(p => IsVisible(p));
         }
+
+		public virtual string GetStringValue(Pawn pawn)
+		{
+			return GetValue(pawn).ToString();
+		}
 
 		public virtual void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
 		{

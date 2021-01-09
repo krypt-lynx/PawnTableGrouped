@@ -60,5 +60,10 @@ namespace PawnTableGrouped
                 pawn.playerSettings.AreaRestriction = (Area)value;
             }
         }
+
+        public override string GetStringValue(Pawn pawn)
+        {
+            return ((Area)GetValue(pawn))?.Label ?? "Unrestricted";
+        }
     }
 }

@@ -102,5 +102,10 @@ namespace PawnTableGrouped
         {
             return HasCheckbox(pawn);
         }
+
+        public override string GetStringValue(Pawn pawn)
+        {
+            return (bool)GetValue(pawn) ? "Yes" : "No";
+        }
     }
 }
