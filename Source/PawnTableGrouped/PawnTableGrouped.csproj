@@ -137,13 +137,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataStore.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_AllowedArea.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_WorkPriority.cs" />
     <Compile Include="GroupingProviders\GroupWorker_AllInOne.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByColumn.cs" />
+    <Compile Include="GroupingProviders\GroupWorker_ByFaction.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByGender.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByRace.cs" />
     <Compile Include="ModCompatibility\Numbers.cs" />
+    <Compile Include="PawnTableGrouped\PawnTableGrouped.cs" />
+    <Compile Include="PawnTableGrouped\PawnTableGroupedModel.cs" />
+    <Compile Include="PawnTableGrouped\PawnTableGroupedView.cs" />
     <Compile Include="Settings\GUI\AlternatingBGRow.cs" />
     <Compile Include="GroupColumnDefResolver.cs" />
     <Compile Include="Elements\CPawnListHeader.cs" />
@@ -164,7 +169,6 @@
     <Compile Include="PawnTableGroup.cs" />
     <Compile Include="PawnTablePatches.cs" />
     <Compile Include="PawnTableGroupDef.cs" />
-    <Compile Include="PawnTableGrouped.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\GUI\ColumnGuide.cs" />

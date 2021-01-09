@@ -60,11 +60,13 @@ namespace PawnTableGrouped
 
         private void LoadData(PawnTableDef def)
         {
+            // trying to access data saved in savegame
             var store = Current.Game.GetComponent<DataStore>();
             store.RegisterModel(this);
             var data = store.GetData(def.defName);
             if (data != null)
             {
+                // have data, reading it
                 IExposable value = null;
                 if (data.TryGetValue("groupsState", out value))
                 {
@@ -81,6 +83,19 @@ namespace PawnTableGrouped
                     {
                         ActiveGrouper = AllGroupers.FirstOrDefault(x => groupingKey == x.Key()) ?? AllGroupers.First();
                     }
+                }
+            } 
+            else
+            {
+                // have no data, using defaults
+                string groupingKey = null;
+                if (Mod.DefaultTableConfig.TryGetValue(def.defName, out groupingKey))
+                {
+                    ActiveGrouper = AllGroupers.FirstOrDefault(x => groupingKey == x.Key()) ?? AllGroupers.First();
+                } 
+                else
+                {
+                    ActiveGrouper = AllGroupers.First();
                 }
             }
         }

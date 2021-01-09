@@ -8,19 +8,31 @@ using Verse;
 
 namespace PawnTableGrouped
 {
+    public class TableSettings
+    {
+        public string name;
+        public TableCompatibility compatibility;
+        public string defaultGrouping;
+        public string hint;
+        public string issues;
+    }
+
     public class CompatibilityInfoDef : Def
+    {
+        public List<ModCompatibility> compatibilityList;
+    }
+
+    public class ModCompatibility
     {
         public string packageId;
         public string modName;
-        public List<string> tableNames;
-        public string hint;
-        public string issues;
-        public TableCompatibility compatibility;
+        public List<TableSettings> tables;
     }
 
     public enum TableCompatibility
     {
         Incompatible,
+        Issues,
         Compatible,
         Supported,
     }
@@ -68,24 +80,23 @@ namespace PawnTableGrouped
             var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
 
 
-            var info = DefDatabase<CompatibilityInfoDef>.AllDefs;
+            var info = DefDatabase<CompatibilityInfoDef>.GetNamed("ModCompatibility");
 
 
-            foreach (var compatibility in info)
+            foreach (var modInfo in info.compatibilityList)
             {
-                if (loadedModIds.Contains(compatibility.packageId))
+                if (loadedModIds.Contains(modInfo.packageId))
                 {
-                    foreach (var tableName in compatibility.tableNames)
+                    foreach (var tableInfo in modInfo.tables)
                     {
                         TableData data = null;
-                        if (defToTable.TryGetValue(tableName, out data))
+
+                        if (defToTable.TryGetValue(tableInfo.name, out data))
                         {
-                            data.compatibility = compatibility.compatibility;
-                            data.modName = compatibility.modName;
-                            data.tip = compatibility.issues == null
-                                ? compatibility.hint
-                                : $"{compatibility.hint}\n\nIssues: {compatibility.issues}";
-                            data.packageId = compatibility.packageId;
+                            data.modName = modInfo.modName;
+                            data.packageId = modInfo.packageId;
+                            data.compatibility = tableInfo.compatibility;
+                            data.tip = tableInfo.hint;
                         }
                     }
                 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
   <DebugOutput>Debug output</DebugOutput>
-  <HideHeaderIfOnlyOneGroup>Hide group section if only one section exists</HideHeaderIfOnlyOneGroup>
+  <HideHeaderIfOnlyOneGroup>Hide group header if only one section exists</HideHeaderIfOnlyOneGroup>
   <InteractiveGroupHeader>Interactive group header</InteractiveGroupHeader>
   <EnableGroupingInTables>Enable grouping in tables:</EnableGroupingInTables>
   <PTG_Select>Select:</PTG_Select>

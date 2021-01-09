@@ -52,8 +52,8 @@
 				<columnWorkerType>AnimalTab.PawnColumnWorker_AllowedArea</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_AllowedArea</groupWorkerType>
 			</li>
-			
-			
+
+
 		</mapping>
 	</PawnTableGrouped.ClassMappingDef>
 
@@ -76,64 +76,95 @@
 					<Checked></Checked> of type: UnityEngine.GraphicData
 					<Unchecked></Unchecked> of type: UnityEngine.GraphicData
 				</workerConfig>
-
-
 	-->
 
-<!--
-	<PawnTableGrouped.GroupColumnWorkerDef>
-		<defName>Trainable_Tameness</defName>
-		<workerClass>PawnTableGrouped.GroupColumnWorker_Trainable</workerClass>
-		<workerConfig Class="PawnTableGrouped.GCW_Trainable_Config">
-			<Checked>			
-				<texPath>UI/Icons/Animal/CheckOnWhite</texPath>
-				<graphicClass>Graphic_Single</graphicClass>
-				<drawSize>0.66666</drawSize>
-			</Checked>
-		</workerConfig>
-	</PawnTableGrouped.GroupColumnWorkerDef>
-	-->	
 
 	<PawnTableGrouped.CompatibilityInfoDef>
-		<defName>native</defName>
-		<packageId>ludeon.rimworld</packageId>
-		<compatibility>Supported</compatibility>
-		<tableNames>
-			<li>Animals</li>
-			<li>Wildlife</li>
-		</tableNames>
-	</PawnTableGrouped.CompatibilityInfoDef>
+		<defName>ModCompatibility</defName>
+		<compatibilityList>
+			<li>
+				<packageId>ludeon.rimworld</packageId>
+				<tables>
+					<li>
+						<name>Work</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+					<li>
+						<name>Assign</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+					<li>
+						<name>Restrict</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+					<li>
+						<name>Animals</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>race</defaultGrouping>
+					</li>
+					<li>
+						<name>Wildlife</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>race</defaultGrouping>
+					</li>
+				</tables>
+			</li>
+			<li>
+				<packageId>mehni.numbers</packageId>
+				<modName>Numbers</modName>
+				<tables>
+					<li>
+						<name>Numbers_Animals</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>race</defaultGrouping>
+					</li>
+					<li>
+						<name>Numbers_WildAnimals</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>race</defaultGrouping>
+					</li>
+				</tables>
+			</li>
+			<li>
+				<packageId>orion.hospitality</packageId>	
+				<modName>Hospitality</modName>
+				<tables>
+					<li>
+						<name>Guests</name>
+						<compatibility>Supported</compatibility>	
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+				</tables>
+			</li>
+			<li>
+				<packageId>fluffy.worktab</packageId>
+				<modName>Work Tab</modName>
+				<tables>
+					<li>
+						<name>Work</name>
+						<compatibility>Incompatible</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+						<hint>Fluffy's Work Tab mod is not compatible for time being.
+Issues: tab render is broken</hint>
+					</li>
+				</tables>
+			</li>
+			<li>		
+				<packageId>fluffy.animaltab</packageId>
+				<modName>Animal Tab</modName>
+				<tables>
+					<li>
+						<name>Animals</name>
+						<compatibility>Issues</compatibility>
+						<hint>Filter button overlaps with settings buttons</hint>
+						<defaultGrouping>race</defaultGrouping>
+					</li>
+				</tables>
+			</li>
+		</compatibilityList>
 
-	<PawnTableGrouped.CompatibilityInfoDef>
-		<defName>Numbers</defName>
-		<packageId>mehni.numbers</packageId>
-		<compatibility>Supported</compatibility>
-		<modName>Numbers</modName>
-		<tableNames>
-			<li>Numbers_Animals</li>
-			<li>Numbers_WildAnimals</li>
-		</tableNames>
-	</PawnTableGrouped.CompatibilityInfoDef>
-
-	<PawnTableGrouped.CompatibilityInfoDef>
-		<defName>WorkTab</defName>
-		<packageId>fluffy.worktab</packageId>
-		<modName>Work Tab</modName>
-		<compatibility>Incompatible</compatibility>
-		<tableNames>
-			<li>Work</li>
-		</tableNames>
-		<hint>Fluffy's Work Tab mod is not compatible for time being.</hint>
-		<issues>tab render is broken</issues>
-	</PawnTableGrouped.CompatibilityInfoDef>
-	
-	<PawnTableGrouped.CompatibilityInfoDef>
-		<defName>AnimalTab</defName>
-		<packageId>fluffy.animaltab</packageId>
-		<compatibility>Supported</compatibility>
-		<modName>Animal Tab</modName>
-		<tableNames>
-			<li>Animals</li>
-		</tableNames>
 	</PawnTableGrouped.CompatibilityInfoDef>
 </Defs>

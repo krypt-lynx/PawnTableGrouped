@@ -76,7 +76,7 @@ namespace PawnTableGrouped
                 (actionsGroup.AddElement(new CButton
                 {
                     Title = "PTG_AllCompatible".Translate(),
-                    Action = (_) => tablesModel.SelectAllAtLeast(TableCompatibility.Compatible),
+                    Action = (_) => tablesModel.SelectAllAtLeast(TableCompatibility.Issues),
                 }), 200)
                 );
 
@@ -125,12 +125,14 @@ namespace PawnTableGrouped
         {
             switch (tableData.compatibility)
             {
-                case TableCompatibility.Compatible:
-                    return Color.white;
-                case TableCompatibility.Incompatible:
-                    return Color.red;
                 case TableCompatibility.Supported:
                     return Color.green;
+                case TableCompatibility.Compatible:
+                    return Color.white;
+                case TableCompatibility.Issues:
+                    return Color.yellow;
+                case TableCompatibility.Incompatible:
+                    return Color.red;
                 default:
                     return Color.white;
             }

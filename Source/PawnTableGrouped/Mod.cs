@@ -42,10 +42,24 @@ namespace PawnTableGrouped
     {
         static ModPostInit()
         {
+            var info = DefDatabase<CompatibilityInfoDef>.GetNamed("ModCompatibility");
+            var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
+
+            Mod.DefaultTableConfig.Clear();
+
+            foreach (var tableInfo in info.compatibilityList.Where(x => loadedModIds.Contains(x.packageId)).SelectMany(x => x.tables))
+            {
+                Mod.DefaultTableConfig[tableInfo.name] = tableInfo.defaultGrouping;
+            }
+
             if (Mod.Settings.firstRun)
             {
                 Mod.Settings.firstRun = false;
-                Mod.Settings.pawnTablesEnabled.AddRange(DefDatabase<CompatibilityInfoDef>.AllDefs.Where(x => x.compatibility == TableCompatibility.Supported).SelectMany(x => x.tableNames));
+                Mod.Settings.pawnTablesEnabled.AddRange(
+                    info.compatibilityList
+                    .SelectMany(x => x.tables)
+                    .Where(x => x.compatibility == TableCompatibility.Supported)
+                    .Select(x => x.name));
             }
         }
     }
@@ -54,6 +68,7 @@ namespace PawnTableGrouped
     {
         public static string PackageIdOfMine = null;
         public static Settings Settings { get; private set; }
+        public static Dictionary<string, string> DefaultTableConfig = new Dictionary<string, string>();
 
         private static bool debug = false;
         public static bool Debug { get
