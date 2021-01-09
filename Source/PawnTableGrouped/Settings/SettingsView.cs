@@ -25,6 +25,7 @@ namespace PawnTableGrouped
 
             CElement debug;
             CElement hideHeader;
+            CElement primarySort;
             CElement byColumn;
             CElement footer;
             CElement listTitle;
@@ -44,6 +45,13 @@ namespace PawnTableGrouped
                     Title = "HideHeaderIfOnlyOneGroup".Translate(),
                     Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
                     Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
+                }), hideHeader.intrinsicHeight),
+                10,
+                (AddElement(primarySort = new CCheckboxLabeled
+                {
+                    Title = "UsePrimarySortFunction".Translate(),
+                    Checked = Mod.Settings.usePrimarySortFunction,
+                    Changed = (_, value) => Mod.Settings.usePrimarySortFunction = value,
                 }), hideHeader.intrinsicHeight),
                 10,
                 (AddElement(byColumn = new CCheckboxLabeled

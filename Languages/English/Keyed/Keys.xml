@@ -2,8 +2,9 @@
 <LanguageData>
   <DebugOutput>Debug output</DebugOutput>
   <HideHeaderIfOnlyOneGroup>Hide group header if only one section exists</HideHeaderIfOnlyOneGroup>
-  <GroupByColumnExperimental>Grouping by column values (experimental)</GroupByColumnExperimental>
+  <UsePrimarySortFunction>Use primary sort function</UsePrimarySortFunction>
   <EnableGroupingInTables>Enable grouping in tables:</EnableGroupingInTables>
+  <GroupByColumnExperimental>Grouping by column values (experimental)</GroupByColumnExperimental>
   <PTG_Select>Select:</PTG_Select>
   <PTG_None>none</PTG_None>
   <PTG_AllSupported>all supported</PTG_AllSupported>

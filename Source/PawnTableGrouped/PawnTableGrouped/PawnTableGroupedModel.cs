@@ -226,7 +226,10 @@ namespace PawnTableGrouped
                         pawns.SortStable((Pawn a, Pawn b) => accessor.sortByColumn.Worker.Compare(b, a));
                     }
                 }
-                //var pawns2 = accessor.PrimarySortFunction(pawns);
+                if (Mod.Settings.usePrimarySortFunction)
+                {
+                    pawns = accessor.PrimarySortFunction(pawns).ToList();
+                }
                 Groups.Add(new PawnTableGroup(ActiveGrouper.TitleForGroup(group, group.Key), group.Key, pawns, columnResolvers));
             }
 

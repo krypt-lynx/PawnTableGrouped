@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimWorld;
 using RWLayout.alpha2;
 using System;
@@ -18,6 +18,7 @@ namespace PawnTableGrouped
         public bool firstRun = true;
         public bool debug = false;
         public bool hideHeaderIfOnlyOneGroup = false;
+        public bool usePrimarySortFunction = true;
         public bool groupByColumnExperimental = false;
 
         public HashSet<string> pawnTablesEnabled = new HashSet<string>();
@@ -28,6 +29,7 @@ namespace PawnTableGrouped
 
             Scribe_Values.Look(ref debug, "debug", false);  
             Scribe_Values.Look(ref hideHeaderIfOnlyOneGroup, "hideHeaderIfOnlyOneGroup", false);
+            Scribe_Values.Look(ref usePrimarySortFunction, "usePrimarySortFunction", true);
             Scribe_Values.Look(ref groupByColumnExperimental, "groupByColumnExperimental", false);
 
             Scribe_Collections.Look(ref pawnTablesEnabled, "pawnTablesEnabled");

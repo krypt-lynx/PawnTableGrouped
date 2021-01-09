@@ -2,8 +2,9 @@
 <LanguageData>
   <DebugOutput>Отладочный вывод</DebugOutput>
   <HideHeaderIfOnlyOneGroup>Скрыть заголовок группы если в таблице всего одна группа</HideHeaderIfOnlyOneGroup>
-  <GroupByColumnExperimental>Группировка по значению столбца таблицы (экспериментальня фича)</GroupByColumnExperimental>
+  <UsePrimarySortFunction>Использовать первичную сортировку</UsePrimarySortFunction>
   <EnableGroupingInTables>Включить группировку в таблицах:</EnableGroupingInTables>
+  <GroupByColumnExperimental>Группировка по значению столбца таблицы (экспериментальня фича)</GroupByColumnExperimental>
   <PTG_Select>Выбрать:</PTG_Select>
   <PTG_None>ничего</PTG_None>
   <PTG_AllSupported>все поддерживаемые</PTG_AllSupported>
