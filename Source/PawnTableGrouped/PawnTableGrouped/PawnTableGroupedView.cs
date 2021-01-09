@@ -40,7 +40,7 @@ namespace PawnTableGrouped
             });
             footer = host.AddElement(new CElement());
 
-            Texture2D img1 = new Resource<Texture2D>("UI/Settings_Ask_Wiris_Permition_To_Use");
+            Texture2D img1 = new Resource<Texture2D>("UI/Settings");
             var GroupBtn = footer.AddElement(new CWidget
             {
                 //Title = "#",
