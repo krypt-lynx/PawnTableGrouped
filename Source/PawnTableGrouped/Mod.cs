@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using RimWorld;
 using RWLayout.alpha2;
 using System;
@@ -59,11 +59,15 @@ namespace PawnTableGrouped
             if (Mod.Settings.firstRun)
             {
                 Mod.Settings.firstRun = false;
+
+                Dictionary<string, TableCompatibility> compatibility = new Dictionary<string, TableCompatibility>();
+                foreach (var tableInfo in info.compatibilityList.Where(x => loadedModIds.Contains(x.packageId)).SelectMany(x => x.tables))
+                {
+                    compatibility[tableInfo.name] = tableInfo.compatibility;
+                }
+
                 Mod.Settings.pawnTablesEnabled.AddRange(
-                    info.compatibilityList
-                    .SelectMany(x => x.tables)
-                    .Where(x => x.compatibility == TableCompatibility.Supported)
-                    .Select(x => x.name));
+                    compatibility.Where(kvp => kvp.Value == TableCompatibility.Supported).Select(kvp => kvp.Key));
             }
         }
     }
