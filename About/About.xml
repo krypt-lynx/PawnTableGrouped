@@ -8,9 +8,7 @@
 	</supportedVersions>
 	<packageId>name.krypt.rimworld.pawntablegrouped.dev</packageId>
 	<description>This mods adds grouping feature to lists of pawns UI.
-Currently supported tabs:
-- Animals
-- Wildlife</description>
+All vanilla tabs are supported.</description>
 	<modDependencies>
 		<li>
 			<packageId>brrainz.harmony</packageId>
@@ -22,7 +20,7 @@ Currently supported tabs:
 			<packageId>name.krypt.rimworld.rwlayout.alpha2</packageId>
 			<displayName>RWLayout</displayName>
 			<steamWorkshopUrl>steam://url/CommunityFilePage/2209393954</steamWorkshopUrl>
-			<!-- <downloadUrl></downloadUrl> -->
+			<downloadUrl>https://github.com/krypt-lynx/RWLayout/releases/latest</downloadUrl>
 		</li>
 	</modDependencies>
 	<loadAfter>
