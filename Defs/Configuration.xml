@@ -117,6 +117,31 @@
 				<modName>Numbers</modName>
 				<tables>
 					<li>
+						<name>Numbers_MainTable</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+					<li>
+						<name>Numbers_Enemies</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+					<li>
+						<name>Numbers_Prisoners</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+					<li>
+						<name>Numbers_Corpses</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>race</defaultGrouping>
+					</li>
+					<li>
+						<name>Numbers_Guests</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+					<li>
 						<name>Numbers_Animals</name>
 						<compatibility>Supported</compatibility>
 						<defaultGrouping>race</defaultGrouping>
@@ -126,6 +151,27 @@
 						<compatibility>Supported</compatibility>
 						<defaultGrouping>race</defaultGrouping>
 					</li>
+					<li>
+						<name>Numbers_AnimalCorpses</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>race</defaultGrouping>
+					</li>
+					<li>
+						<name>Numbers_CombatPreset</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+					<li>
+						<name>Numbers_WorkTabPlusPreset</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>					
+					<li>
+						<name>Numbers_ColonistNeedsPreset</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>faction</defaultGrouping>
+					</li>
+					
 				</tables>
 			</li>
 			<li>
