@@ -4,54 +4,91 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace PawnTableGrouped
 {
-    class GroupWorker_ByFaction : GroupWorker
+	class GroupWorker_ByFaction : GroupWorker
     {
         class PawnComparer : IEqualityComparer<Pawn>
         {
-            IEqualityComparer<Faction> innerComparer = EqualityComparer<Faction>.Default;
             public bool Equals(Pawn x, Pawn y)
             {
-                var xf = x.FactionOrExtraMiniOrHomeFaction;
-                var yf = y.FactionOrExtraMiniOrHomeFaction;
+                var xFaction = GetPawnFaction(x);
+                var yFaction = GetPawnFaction(y);
 
-                return innerComparer.Equals(xf, yf);
+				if (xFaction == null && yFaction == null)
+				{
+					var xLabel = GetPawnLabel(x);
+					var yLabel = GetPawnLabel(y);
+					return EqualityComparer<string>.Default.Equals(xLabel, yLabel);
+				}
+				else
+				{
+					return EqualityComparer<Faction>.Default.Equals(xFaction, yFaction);
+				}
             }
 
             public int GetHashCode(Pawn obj)
-            {
-                return innerComparer.GetHashCode(obj.FactionOrExtraMiniOrHomeFaction);
+			{
+				var faction = GetPawnFaction(obj);
+				if (faction != null)
+				{
+					return EqualityComparer<Faction>.Default.GetHashCode(faction);
+				} 
+				else
+				{
+					var label = GetPawnLabel(obj);
+					return EqualityComparer<string>.Default.GetHashCode(label);
+				}
             }
         }
 
         class GroupComparer : IComparer<PawnTableGroup>
         {
-            public int Compare(PawnTableGroup x, PawnTableGroup y)
-            {
-                var xf = x.KeyPawn.FactionOrExtraMiniOrHomeFaction;
-                var yf = y.KeyPawn.FactionOrExtraMiniOrHomeFaction;
+			public int Compare(PawnTableGroup x, PawnTableGroup y)
+			{
+				var xFaction = GetPawnFaction(x.KeyPawn);
+				var yFaction = GetPawnFaction(y.KeyPawn);
 
-                var xp = xf?.IsPlayer ?? false;
-                var yp = yf?.IsPlayer ?? false;
+				var xHasFaction = xFaction == null;
+				var yHasFaction = yFaction == null;
 
-                var xo = xf?.def.listOrderPriority ?? 0;
-                var yo = yf?.def.listOrderPriority ?? 0;
 
-                if (xp != yp)
-                {
-                    return Math.Sign(Convert.ToInt32(yp) - Convert.ToInt32(xp));
-                }
-                else
-                {
-                    return Math.Sign(yo - xo);
-                }
-
-            }
-        }
+				if (xHasFaction != yHasFaction)
+				{
+					// pawns with no faction at the bottom
+					return -Math.Sign(Convert.ToInt32(yHasFaction) - Convert.ToInt32(xHasFaction));
+				}
+				else if (xHasFaction)
+				{
+					var xPlayer = xFaction?.IsPlayer ?? false;
+					var yPlayer = yFaction?.IsPlayer ?? false;
+					if (xPlayer != yPlayer)
+					{
+						// player's faction at the top
+						return Math.Sign(Convert.ToInt32(yPlayer) - Convert.ToInt32(xPlayer));
+					}
+					else
+					{
+						var xOrder = xFaction?.def.listOrderPriority ?? 0;
+						var yOrder = yFaction?.def.listOrderPriority ?? 0;
+						// ingame faction order
+						return Math.Sign(yOrder - xOrder);
+					}
+				}
+				else
+				{
+					// sort by label if no faction
+					var xLabel = GetPawnLabel(x.KeyPawn);
+					var yLabel = GetPawnLabel(y.KeyPawn);
+					return Comparer<string>.Default.Compare(xLabel, yLabel);
+				}
+			}
+		}
 
         public override IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
         public override IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
@@ -62,12 +99,34 @@ namespace PawnTableGrouped
             GroupsSortingComparer = new GroupComparer();
         }
 
-        public override string TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
+		static private Faction GetPawnFaction(Pawn pawn)
         {
-            return keyPawn.FactionOrExtraMiniOrHomeFaction?.Name ?? "";
+			return pawn?.FactionOrExtraMiniOrHomeFaction;
+		}
+
+		static private string GetPawnLabel(Pawn pawn)
+        {
+			return pawn?.kindDef?.label;
         }
 
-        public override string MenuItemTitle()
+        public override TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
+        {
+			var faction = GetPawnFaction(keyPawn);
+			if (faction == null)
+            {
+				return GetPawnLabel(keyPawn).CapitalizeFirst();
+            }
+			if (faction.Color == null)
+            {
+				return faction.Name;
+            }
+			else
+            {
+				return faction.Name.Colorize(faction.Color);
+			}
+		}
+
+		public override string MenuItemTitle()
         {
             return "by faction";
         }

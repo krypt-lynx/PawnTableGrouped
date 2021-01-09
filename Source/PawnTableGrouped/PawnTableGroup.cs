@@ -83,7 +83,7 @@ namespace PawnTableGrouped
     {
         public List<Pawn> Pawns = null;
         public Pawn KeyPawn = null;
-        public string Title = null;
+        public TaggedString Title = null;
 
         public List<GroupColumnWorker> ColumnResolvers = null;
         private List<bool> columnsIsUniform = new List<bool>();
@@ -99,7 +99,7 @@ namespace PawnTableGrouped
             }
         }
 
-        public PawnTableGroup(string title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers)
+        public PawnTableGroup(TaggedString title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers)
         {
             Title = title;
             KeyPawn = keyPawn;

@@ -14,7 +14,7 @@ namespace PawnTableGrouped
         public abstract IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
         public abstract IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
 
-        public abstract string TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn);
+        public abstract TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn);
 
         public abstract string MenuItemTitle();
         public abstract string Key();

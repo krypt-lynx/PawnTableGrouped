@@ -35,7 +35,7 @@ namespace PawnTableGrouped
         {
             public int Compare(PawnTableGroup x, PawnTableGroup y)
             {
-                return x.Title.CompareTo(y.Title);
+                return x.Title.RawText.CompareTo(y.Title.RawText);
             }
         }
 
@@ -51,7 +51,7 @@ namespace PawnTableGrouped
             GroupsSortingComparer = new ByColumnGroupComparer();
         }
 
-        public override string TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
+        public override TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
         {
             return resolver.Target?.GetStringValue(keyPawn) ?? "";
         }

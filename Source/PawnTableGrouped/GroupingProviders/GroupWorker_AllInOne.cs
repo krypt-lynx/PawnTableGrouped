@@ -39,7 +39,7 @@ namespace PawnTableGrouped
             GroupsSortingComparer = new GroupComparer();
         }
 
-        public override string TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
+        public override TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
         {
             return "All";
         }
