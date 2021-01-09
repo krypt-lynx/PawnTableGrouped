@@ -50,14 +50,7 @@ namespace PawnTableGrouped
                 }), listTitle.intrinsicHeight),
                 2,
                 AddElement(listFrame = new CFrame()),
-                10,
-                (AddElement(footer = new CLabel
-                {
-                    Title = $"Grouped Pawns Lists version: {Mod.CommitInfo}",
-                    TextAlignment = TextAnchor.LowerRight,
-                    Color = new Color(1, 1, 1, 0.5f),
-                    Font = GameFont.Tiny
-                }), footer.intrinsicHeight)
+                7
             );
 
             actionsGroup = listFrame.AddElement(new CElement());
@@ -99,6 +92,20 @@ namespace PawnTableGrouped
 
             tablesList.AddGuide(columnGuide);
             tablesList.AddConstraint(column0 ^ tablesList.width * 0.45);
+
+            footer = AddElement(new CLabel
+            {
+                Title = $"Grouped Pawns Lists version: {Mod.CommitInfo}",
+                TextAlignment = TextAnchor.LowerRight,
+                Color = new Color(1, 1, 1, 0.5f),
+                Font = GameFont.Tiny
+            });
+
+            this.AddConstraints(
+                footer.top ^ this.bottom + 3,
+                footer.width ^ footer.intrinsicWidth,
+                footer.right ^ this.right,
+                footer.height ^ footer.intrinsicHeight);
 
             PopulateTablesList(tablesList);
         }
