@@ -25,6 +25,7 @@ namespace PawnTableGrouped
 
             CElement debug;
             CElement hideHeader;
+            CElement byColumn;
             CElement footer;
             CElement listTitle;
             CElement listFrame;
@@ -44,6 +45,13 @@ namespace PawnTableGrouped
                     Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
                     Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
                 }), hideHeader.intrinsicHeight),
+                10,
+                (AddElement(byColumn = new CCheckboxLabeled
+                {
+                    Title = "GroupByColumnExperimental".Translate(),
+                    Checked = Mod.Settings.groupByColumnExperimental,
+                    Changed = (_, value) => Mod.Settings.groupByColumnExperimental = value,
+                }), byColumn.intrinsicHeight),
                 10,
                 (AddElement(listTitle = new CLabel {                    
                     Title = "EnableGroupingInTables".Translate(),

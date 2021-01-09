@@ -16,17 +16,19 @@ namespace PawnTableGrouped
     public class Settings : ModSettings
     {
         public bool firstRun = true;
-        public bool hideHeaderIfOnlyOneGroup = true;
         public bool debug = false;
+        public bool hideHeaderIfOnlyOneGroup = false;
+        public bool groupByColumnExperimental = false;
 
         public HashSet<string> pawnTablesEnabled = new HashSet<string>();
 
         public override void ExposeData()
         {
-            Scribe_Values.Look(ref firstRun, "firstRun", true);
+            Scribe_Values.Look(ref firstRun, "firstRun2", true);
 
+            Scribe_Values.Look(ref debug, "debug", false);  
             Scribe_Values.Look(ref hideHeaderIfOnlyOneGroup, "hideHeaderIfOnlyOneGroup", false);
-            Scribe_Values.Look(ref debug, "debug", false);
+            Scribe_Values.Look(ref groupByColumnExperimental, "groupByColumnExperimental", false);
 
             Scribe_Collections.Look(ref pawnTablesEnabled, "pawnTablesEnabled");
             if (pawnTablesEnabled == null)
@@ -47,11 +49,13 @@ namespace PawnTableGrouped
 
             Mod.DefaultTableConfig.Clear();
 
+            // default table config
             foreach (var tableInfo in info.compatibilityList.Where(x => loadedModIds.Contains(x.packageId)).SelectMany(x => x.tables))
             {
                 Mod.DefaultTableConfig[tableInfo.name] = tableInfo.defaultGrouping;
             }
 
+            // enabling supported tables if first run
             if (Mod.Settings.firstRun)
             {
                 Mod.Settings.firstRun = false;

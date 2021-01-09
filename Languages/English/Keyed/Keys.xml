@@ -2,7 +2,7 @@
 <LanguageData>
   <DebugOutput>Debug output</DebugOutput>
   <HideHeaderIfOnlyOneGroup>Hide group header if only one section exists</HideHeaderIfOnlyOneGroup>
-  <InteractiveGroupHeader>Interactive group header</InteractiveGroupHeader>
+  <GroupByColumnExperimental>Grouping by column values (experimental)</GroupByColumnExperimental>
   <EnableGroupingInTables>Enable grouping in tables:</EnableGroupingInTables>
   <PTG_Select>Select:</PTG_Select>
   <PTG_None>none</PTG_None>

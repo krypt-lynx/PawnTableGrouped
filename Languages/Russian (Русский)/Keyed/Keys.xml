@@ -2,7 +2,7 @@
 <LanguageData>
   <DebugOutput>Отладочный вывод</DebugOutput>
   <HideHeaderIfOnlyOneGroup>Скрыть заголовок группы если в таблице всего одна группа</HideHeaderIfOnlyOneGroup>
-  <InteractiveGroupHeader>Интерактивные заголовки групп</InteractiveGroupHeader>
+  <GroupByColumnExperimental>Группировка по значению столбца таблицы (экспериментальня фича)</GroupByColumnExperimental>
   <EnableGroupingInTables>Включить группировку в таблицах:</EnableGroupingInTables>
   <PTG_Select>Выбрать:</PTG_Select>
   <PTG_None>ничего</PTG_None>

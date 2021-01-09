@@ -261,7 +261,14 @@ namespace PawnTableGrouped
         {
             get
             {
-                return miscGroupers.Concat(columnResolvers.Select(x => x.GroupWorker).Where(x => x != null));
+                if (Mod.Settings.groupByColumnExperimental)
+                {
+                    return miscGroupers.Concat(columnResolvers.Select(x => x.GroupWorker).Where(x => x != null));
+                }
+                else
+                {
+                    return miscGroupers;
+                }
             }
         }
 
