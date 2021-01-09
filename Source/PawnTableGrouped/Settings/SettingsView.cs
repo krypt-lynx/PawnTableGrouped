@@ -77,19 +77,19 @@ namespace PawnTableGrouped
                     TextAlignment = TextAnchor.MiddleLeft,
                 }),
                 10,
-                (actionsGroup.AddElement(new CButton
+                (actionsGroup.AddElement(new CButtonText
                 {
                     Title = "PTG_None".Translate(),
                     Action = (_) => tablesModel.SelectNone(),
                 }), 200),
                 10,
-                (actionsGroup.AddElement(new CButton
+                (actionsGroup.AddElement(new CButtonText
                 {
                     Title = "PTG_AllSupported".Translate(),
                     Action = (_) => tablesModel.SelectAllAtLeast(TableCompatibility.Supported),
                 }), 200),
                 10,
-                (actionsGroup.AddElement(new CButton
+                (actionsGroup.AddElement(new CButtonText
                 {
                     Title = "PTG_AllCompatible".Translate(),
                     Action = (_) => tablesModel.SelectAllAtLeast(TableCompatibility.Issues),

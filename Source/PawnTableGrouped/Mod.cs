@@ -1,4 +1,16 @@
-﻿using HarmonyLib;
+﻿// #if rw_1_1
+// #define rw_1_1_or_above
+// #define rw_1_1_or_below
+// #define rw_1_2_or_below
+// #endif
+
+// #if rw_1_2
+// #define rw_1_1_or_above
+// #define rw_1_2_or_above
+// #define rw_1_2_or_below
+// #endif
+
+using HarmonyLib;
 using RimWorld;
 using RWLayout.alpha2;
 using System;

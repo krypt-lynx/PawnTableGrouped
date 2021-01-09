@@ -101,7 +101,11 @@ namespace PawnTableGrouped
 
 		static private Faction GetPawnFaction(Pawn pawn)
         {
+			#if rw_1_1
+			return pawn?.FactionOrExtraHomeFaction;
+			#else
 			return pawn?.FactionOrExtraMiniOrHomeFaction;
+			#endif
 		}
 
 		static private string GetPawnLabel(Pawn pawn)
