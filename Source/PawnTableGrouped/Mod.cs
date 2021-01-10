@@ -163,9 +163,22 @@ namespace PawnTableGrouped
             return "Grouped Pawns Lists";
         }
 
+        bool invalidateOnce = false;
         public override void ConstructGui()
         {
             Gui.Embed(Gui.AddElement(new SettingsView()));
+            invalidateOnce = true;
+        }
+
+        public override void DoSettingsWindowContents(Rect inRect)
+        {
+            if (invalidateOnce)
+            {
+                Gui.SetNeedsUpdateLayout();
+                Gui.UpdateLayoutIfNeeded();
+                Gui.SetNeedsUpdateLayout();
+            }
+            base.DoSettingsWindowContents(inRect);
         }
 
         public static void DoActiveTablesChanged()
