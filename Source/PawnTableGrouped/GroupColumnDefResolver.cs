@@ -68,10 +68,10 @@ namespace PawnTableGrouped
 
 	public static class GroupColumnDefResolver
 	{
-		public static GroupColumnWorkerDef GetResolverSilentFail(PawnColumnDef column)
+		public static GroupColumnWorkerDef GetResolver(PawnColumnDef column, bool generate = true)
 		{
 			var resolverDef = DefDatabase<GroupColumnWorkerDef>.GetNamedSilentFail(column.defName);
-			if (resolverDef == null)
+			if (generate && resolverDef == null)
 			{
 				var mapping = DefDatabase<ClassMappingDef>.GetNamed("GroupHeadersMapping");
 				var workerClass = column.workerClass;

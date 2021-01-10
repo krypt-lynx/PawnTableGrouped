@@ -172,6 +172,7 @@
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\GUI\ColumnGuide.cs" />
+    <Compile Include="Settings\GUI\CTabsView.cs" />
     <Compile Include="Settings\SettingsView.cs" />
     <Compile Include="Settings\TablesSettingsViewModel.cs" />
     <Compile Include="GroupingProviders\GroupWorker.cs" />

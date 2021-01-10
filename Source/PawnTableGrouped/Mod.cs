@@ -116,7 +116,18 @@ namespace PawnTableGrouped
 
             ApplyPatches(harmony);
 
+            UnpatchWorkTab(harmony);
+
             DetectMods();
+        }
+
+        private void UnpatchWorkTab(Harmony harmony)
+        {
+            harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_prefix"));
+
+
+            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"), HarmonyPatchType.All, "fluffy.worktab");
         }
 
         private static void ApplyPatches(Harmony harmony)
