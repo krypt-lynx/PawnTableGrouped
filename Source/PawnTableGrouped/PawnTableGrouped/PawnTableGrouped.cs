@@ -62,6 +62,7 @@ namespace PawnTableGrouped
 
         public void PawnTableOnGUI(Vector2 position)
         {
+
             if (Event.current.type == EventType.Layout)
             {
                 return;
@@ -81,6 +82,8 @@ namespace PawnTableGrouped
                 return;
             }
             accessor.dirty = false;
+           // $"PawnTableGroupedImpl RecacheIfDirty".Log();
+
             model.RecacheColumnResolvers();
             accessor.RecachePawns();
             model.RecacheGroups();

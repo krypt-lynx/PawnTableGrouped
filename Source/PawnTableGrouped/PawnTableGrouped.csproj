@@ -151,9 +151,9 @@
     <Compile Include="PawnTableGrouped\PawnTableGroupedView.cs" />
     <Compile Include="Settings\GUI\AlternatingBGRow.cs" />
     <Compile Include="GroupColumnDefResolver.cs" />
-    <Compile Include="Elements\CPawnListHeader.cs" />
-    <Compile Include="Elements\CPawnListRow.cs" />
-    <Compile Include="Elements\CPawnListGroup.cs" />
+    <Compile Include="PawnTableGrouped\Elements\CPawnListHeader.cs" />
+    <Compile Include="PawnTableGrouped\Elements\CPawnListRow.cs" />
+    <Compile Include="PawnTableGrouped\Elements\CPawnListGroup.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Checkbox.cs" />

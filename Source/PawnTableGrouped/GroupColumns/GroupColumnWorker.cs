@@ -56,7 +56,6 @@ namespace PawnTableGrouped
 		abstract public bool CanSetValues();
 		abstract public object DefaultValue(IEnumerable<Pawn> pawns);
 		abstract public object GetValue(Pawn pawn);
-
 		abstract public void SetValue(Pawn pawn, object value);
 
 		public virtual Pawn GetRepresentingPawn(IEnumerable<Pawn> pawns)

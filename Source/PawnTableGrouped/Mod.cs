@@ -123,11 +123,12 @@ namespace PawnTableGrouped
 
         private void UnpatchWorkTab(Harmony harmony)
         {
-            harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_prefix"));
+/*            harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_prefix"));*/
 
 
             harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"), HarmonyPatchType.All, "fluffy.worktab");
+            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"), HarmonyPatchType.All, "fluffy.worktab");
         }
 
         private static void ApplyPatches(Harmony harmony)

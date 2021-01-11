@@ -191,10 +191,13 @@
 				<tables>
 					<li>
 						<name>Work</name>
-						<compatibility>Incompatible</compatibility>
+						<compatibility>Issues</compatibility>
 						<defaultGrouping>faction</defaultGrouping>
 						<hint>Fluffy's Work Tab mod is not compatible for time being.
 Issues: tab render is broken</hint>
+						<config>
+							<allowHScroll>true</allowHScroll>
+						</config>
 					</li>
 				</tables>
 			</li>

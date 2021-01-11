@@ -26,8 +26,12 @@ namespace PawnTableGrouped
                 float x = rect.x + (rect.width - 25f) / 2f;
                 float y = rect.y + 2.5f;
                 var incapable = false;
+                var oldValue = (int)GetValue(pawn);
                 WidgetsWork.DrawWorkBoxFor(x, y, pawn, ColumnDef.workType, incapable);
-                CopyToGroup(pawn, column.Group.Pawns);
+                if (oldValue != (int)GetValue(pawn))
+                {
+                    CopyToGroup(pawn, column.Group.Pawns);
+                }
                 Rect rect2 = new Rect(x, y, 25f, 25f);
                 if (Mouse.IsOver(rect2))
                 {
@@ -50,11 +54,6 @@ namespace PawnTableGrouped
 
         public override object GetValue(Pawn pawn)
         {
-            if (pawn.WorkTypeIsDisabled(ColumnDef.workType))
-            {
-                return -1;
-            }
-
             return pawn.workSettings.GetPriority(ColumnDef.workType);
         }
 

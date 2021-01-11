@@ -16,9 +16,7 @@ namespace PawnTableGrouped
     {
         TablesSettingsViewModel tablesModel;
 
-        ClVariable tablesColumn0; // todo: propers columns implementation
         CListView tablesList;
-
 
         CListView columnsList;
 
@@ -138,12 +136,6 @@ namespace PawnTableGrouped
                 10,
                 tablesList);
 
-            var columnGuide = new CVarListGuide();
-            tablesColumn0 = new Cassowary.ClVariable("tColumn0");
-            columnGuide.Variables.Add(tablesColumn0);
-
-            tablesList.AddGuide(columnGuide);
-            tablesList.AddConstraint(tablesColumn0 ^ tablesList.width * 0.45);
 
             PopulateTablesList(tablesList);
         }
@@ -160,24 +152,6 @@ namespace PawnTableGrouped
 
 
             PopulateColumnsList(columnsList);
-        }
-
-        public override void PostLayoutUpdate()
-        {
-            foreach (var row in tablesList.Rows)
-            {
-                var guide = (ColumnGuide)row.Guides[0];
-                guide.UpdateColumnWidth(0, tablesColumn0.Value);
-            }
-
-            /*
-            foreach (var row in columnsList.Rows)
-            {
-                var guide = (ColumnGuide)row.Guides[0];
-                guide.UpdateColumnWidth(0, columnsColumn0.Value);
-                guide.UpdateColumnWidth(1, columnsColumn1.Value);
-            }*/
-            base.PostLayoutUpdate();
         }
 
         Color colorForPawnTable(TablesSettingsViewModel.TableData tableData)
