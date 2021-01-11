@@ -105,6 +105,7 @@ namespace PawnTableGrouped
             tablesTab.Embed(listFrame);
             actionsGroup = listFrame.AddElement(new CElement());
             actionsGroup.StackLeft(
+                2,
                 actionsGroup.AddElement(new CLabel
                 {
                     Title = "PTG_Select".Translate(),
@@ -178,8 +179,6 @@ namespace PawnTableGrouped
             foreach (var table in tablesModel.Tables)
             {
                 var row = new AlternatingBGRow();
-                row.AddGuide(new ColumnGuide(1));
-
                 row.IsOdd = index % 2 == 1;
 
                 var column0 = row.AddElement(new CElement
@@ -221,7 +220,7 @@ namespace PawnTableGrouped
                 column1.AddConstraint(description.height ^ description.intrinsicHeight);
 
                 row.StackLeft(StackOptions.Create(constrainSides: false),
-                    (column0, ((ColumnGuide)row.Guides[0]).columns[0]), 2, column1);
+                    (column0, row.width * 0.45), 2, column1);
 
                 row.AddConstraints(
                     column0.top ^ row.top, column0.bottom <= row.bottom,
@@ -257,8 +256,6 @@ namespace PawnTableGrouped
                 var resolver = GroupColumnDefResolver.GetResolver(column, false);
 
                 var row = new AlternatingBGRow();
-                var columnsGuide = new ColumnGuide(3);
-                row.AddGuide(columnsGuide);
 
                 row.IsOdd = index % 2 == 1;
 
@@ -315,9 +312,6 @@ namespace PawnTableGrouped
                     column0.width ^ row.width * 0.33
                     );
 
-                /*
-                row.StackTop(StackOptions.Create(insets: new EdgeInsets(2)), (column0, column0.intrinsicHeight), 2, (column1, column1.intrinsicHeight), 2, (column2, column2.intrinsicHeight));
-                */
                 columnsList.AppendRow(row);
 
 
