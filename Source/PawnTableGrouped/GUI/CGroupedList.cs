@@ -17,7 +17,8 @@ namespace PawnTableGrouped
 
     public class CPawnTableRow : CListingRow // CElementHost
     {
-
+        public virtual float xScrollOffset { get; set; } = 0;
+        public virtual float visibleRectWidth { get; set; } = 0;
     }
 
 
@@ -114,6 +115,8 @@ namespace PawnTableGrouped
             {
                 if ((element.BoundsRounded.yMax > windowMin) && (element.BoundsRounded.yMin < windowMax))
                 {
+                    element.xScrollOffset = ScrollPosition.x;
+                    element.visibleRectWidth = BoundsRounded.width;
                     element.DoElementContent();
                 }
             }

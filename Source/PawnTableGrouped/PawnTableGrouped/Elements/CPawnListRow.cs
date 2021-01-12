@@ -38,12 +38,14 @@ namespace PawnTableGrouped
         {
             base.DoContent();
 
-            int x = (int)(BoundsRounded.xMin + Metrics.TableLeftMargin);
             var columns = table.ColumnsListForReading;
-                        
+            var cachedColumnWidths = accessor.cachedColumnWidths;
+
+            // decorative line
             GUI.color = new Color(1f, 1f, 1f, 0.2f);
             Widgets.DrawLineHorizontal(BoundsRounded.xMin + Metrics.TableLeftMargin, BoundsRounded.yMin, BoundsRounded.width - Metrics.TableLeftMargin);
             GUI.color = Color.white;
+
             if (!accessor.CanAssignPawn(pawn))
             {
                 GUI.color = Color.gray;
@@ -56,7 +58,27 @@ namespace PawnTableGrouped
             }
 
             bool needUpdateSectionHeader = false;
-            for (int columnIndex = 0; columnIndex < columns.Count; columnIndex++)
+
+            var column0Width = columns.Count > 0 ? cachedColumnWidths[0] : 0;
+
+            if (columns.Count > 0)
+            {
+                Rect cellRect = new Rect((Bounds.xMin + Metrics.TableLeftMargin + xScrollOffset), BoundsRounded.yMin, column0Width, (int)BoundsRounded.height);
+                columns[0].Worker.DoCell(cellRect, pawn, table);
+
+                object cellValue = group.GetValue(0, pawn);
+
+                if (!object.Equals(cellValue, oldValues[0]))
+                {
+                    oldValues[0] = cellValue;
+                    needUpdateSectionHeader = true;
+                }
+            }
+
+            GUI.BeginClip(new Rect(Metrics.TableLeftMargin + column0Width + xScrollOffset, BoundsRounded.yMin, visibleRectWidth - column0Width - Metrics.TableLeftMargin, BoundsRounded.height));
+            int x = (int)(-xScrollOffset);
+
+            for (int columnIndex = 1; columnIndex < columns.Count; columnIndex++)
             {
                 int columnWidth;
                 if (columnIndex == columns.Count - 1)
@@ -65,25 +87,29 @@ namespace PawnTableGrouped
                 }
                 else
                 {
-                    columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
+                    columnWidth = (int)cachedColumnWidths[columnIndex];
                 }
-                Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
+
+                Rect cellRect = new Rect(x, 0, columnWidth, (int)BoundsRounded.height);
 
 
-
-                columns[columnIndex].Worker.DoCell(cellRect, pawn, table);
-
-                
-                object cellValue = group.GetValue(columnIndex, pawn);
-
-                if (!object.Equals(cellValue, oldValues[columnIndex]))
+                if (x + columnWidth > 0 && x <= visibleRectWidth)
                 {
-                    oldValues[columnIndex] = cellValue;
-                    needUpdateSectionHeader = true;
-                }                
+                    columns[columnIndex].Worker.DoCell(cellRect, pawn, table);
+
+                    object cellValue = group.GetValue(columnIndex, pawn);
+
+                    if (!object.Equals(cellValue, oldValues[columnIndex]))
+                    {
+                        oldValues[columnIndex] = cellValue;
+                        needUpdateSectionHeader = true;
+                    }
+                }
 
                 x += columnWidth;
             }
+
+            GUI.EndClip();
 
             if (needUpdateSectionHeader)
             {

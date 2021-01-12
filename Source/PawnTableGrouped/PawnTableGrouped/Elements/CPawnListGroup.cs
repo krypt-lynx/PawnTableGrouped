@@ -11,6 +11,20 @@ using Verse;
 
 namespace PawnTableGrouped
 {
+    class FloatElement : CElement
+    {
+        public float xScrollOffset = 0;
+        public float visibleRectWidth = 0;
+
+        public override void DoElementContent()
+        {
+            // offseting render location to make it float
+            GUI.BeginGroup(new Rect(xScrollOffset, 0, BoundsRounded.xMax, BoundsRounded.yMax)); // offsetng UI render
+            base.DoElementContent();
+            GUI.EndGroup();
+        }
+    }
+
     class CPawnListGroup : CPawnTableRow
     {
         static readonly Texture2D TexCollapse = ContentFinder<Texture2D>.Get("UI/Buttons/Dev/Collapse", true);
@@ -19,7 +33,7 @@ namespace PawnTableGrouped
         private PawnTable table;
         private PawnTableAccessor accessor;
         public PawnTableGroup Group;
-
+        private FloatElement floating;
         private ClVariable rightTitleEdge;
         
         public override Vector2 tryFit(Vector2 size)
@@ -34,12 +48,14 @@ namespace PawnTableGrouped
             this.accessor = accessor;
             this.Group = group;
 
-            var img = AddElement(new CImage
+            floating = AddElement(new FloatElement());
+            this.Embed(floating);
+            var img = floating.AddElement(new CImage
             {
                 Texture = expanded ? TexCollapse : TexRevial
             });
 
-            var label = AddElement(new CLabel
+            var label = floating.AddElement(new CLabel
             {
                 TaggedTitle = (group.Title) + $" ({group.Pawns?.Count ?? 0})",
                 Font = GameFont.Small,
@@ -51,17 +67,34 @@ namespace PawnTableGrouped
             img.MakeSizeIntristic();
 
             this.AddConstraints(
-                img.centerY ^ centerY,
-                label.centerY ^ centerY,
+                img.centerY ^ floating.centerY,
+                label.centerY ^ floating.centerY,
                 label.height ^ label.intrinsicHeight
                 );
 
             rightTitleEdge = label.right;
         }
 
+        public override float xScrollOffset {
+            get => base.xScrollOffset; 
+            set
+            {
+                base.xScrollOffset = value;
+                floating.xScrollOffset = xScrollOffset;
+            }
+        }
+
+        public override float visibleRectWidth {
+            get => base.visibleRectWidth;
+            set 
+            {
+                base.visibleRectWidth = value;
+                floating.visibleRectWidth = visibleRectWidth;
+            }
+        }
+
         public override void DoContent()
         {
-            //  Texture2D tex = node.IsOpen(openMask) ? TexButton.Collapse : TexButton.Reveal;
             base.DoContent();
 
             DoRowsSummary();
@@ -70,7 +103,6 @@ namespace PawnTableGrouped
             {                
                 this.Action?.Invoke(this);
             }
-
         }
 
         
@@ -93,8 +125,9 @@ namespace PawnTableGrouped
                     columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
                 }
 
-                if (x >= rightTitleEdge.Value + Metrics.GroupTitleRightMargin) // hiding cells behind group title
-                {
+                if (x >= rightTitleEdge.Value + xScrollOffset + Metrics.GroupTitleRightMargin &&
+                    x <= xScrollOffset + visibleRectWidth) // hiding cells behind group title
+                {                   
                     var resolver = Group.ColumnResolvers[columnIndex];
                     if (resolver != null && Group.IsVisible(columnIndex))
                     {

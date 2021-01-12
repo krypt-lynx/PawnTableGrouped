@@ -28,27 +28,51 @@ namespace PawnTableGrouped
         {
             base.DoContent();
             var columns = model.Table.ColumnsListForReading;
+            var cachedColumnWidths = model.accessor.cachedColumnWidths;
 
+
+            var column0Width = columns.Count > 0 ? cachedColumnWidths[0] : 0;
 
             float width = BoundsRounded.width - 16f - Metrics.TableLeftMargin;
-            float x = (int)((BoundsRounded.xMin + Metrics.TableLeftMargin) - getScrollOffset());
-            for (int headerColumnIndex = 0; headerColumnIndex < columns.Count; headerColumnIndex++)
+            float xLeft = BoundsRounded.xMin + Metrics.TableLeftMargin;
+            float xRight = xLeft + this.Bounds.width; 
+
+
+            if (columns.Count > 0)
+            {
+                Rect rect = new Rect(xLeft, BoundsRounded.yMin, column0Width, BoundsRounded.height);
+                NumbersWrapper.CallReorderableWidget(model.NumbersMagic, rect);
+                columns[0].Worker.DoHeader(rect, model.Table);
+            }
+
+            
+            GUI.BeginClip(Rect.MinMaxRect(xLeft + column0Width, BoundsRounded.yMin, BoundsRounded.xMax, BoundsRounded.yMax));
+
+            float x = (int)(-getScrollOffset());
+
+            for (int columnIndex = 1; columnIndex < columns.Count; columnIndex++)
             {
                 int columnWidth;
-                if (headerColumnIndex == columns.Count - 1)
+                if (columnIndex == columns.Count - 1)
                 {
-                    columnWidth = (int)(width - x);
+                    columnWidth = (int)(width - x); // <-- this is invalid value. // todo: fix invalid last header height
                 }
                 else
                 {
-                    columnWidth = (int)model.accessor.cachedColumnWidths[headerColumnIndex];
+                    columnWidth = (int)model.accessor.cachedColumnWidths[columnIndex];
                 }
-                Rect rect = new Rect(BoundsRounded.xMin + x, BoundsRounded.yMin, columnWidth, BoundsRounded.height);
 
-                NumbersWrapper.CallReorderableWidget(model.NumbersMagic, rect);
-                columns[headerColumnIndex].Worker.DoHeader(rect, model.Table);
+                if (x + columnWidth > 0 && x <= this.Bounds.width - column0Width)
+                {
+                    Rect rect = new Rect(x, 0, columnWidth, BoundsRounded.height);
+                    NumbersWrapper.CallReorderableWidget(model.NumbersMagic, rect);
+                    columns[columnIndex].Worker.DoHeader(rect, model.Table);
+                }
+
                 x += columnWidth;
             }
+
+            GUI.EndClip();
         }
 
     }
