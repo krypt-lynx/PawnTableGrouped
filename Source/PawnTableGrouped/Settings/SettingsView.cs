@@ -153,8 +153,90 @@ namespace PawnTableGrouped
 
     }
 
-    class ColumnsTab : CTabPage
+    class ColumnsTab : CTabPage, IListViewDataSource
     {
+        List<PawnColumnDef> columnDefs;
+        float rowHeight;
+        CListingRow firstRow;
+        public ColumnsTab()
+        {
+            columnDefs = DefDatabase<GroupColumnWorkerDef>.AllDefs.Select(x => x.Worker.ColumnDef).Concat(
+          DefDatabase<PawnColumnDef>.AllDefs.Where(x => GroupColumnDefResolver.GetResolver(x, false) == null)
+            ).ToList();
+            if (columnDefs.Count > 0) // this is a hack to resolve row height using constraints
+            {
+                firstRow = ListingRowForRowAt(0);
+                firstRow.InRect = new Rect(0, 0, 100, 0);
+                firstRow.UpdateLayoutIfNeeded();
+
+                rowHeight = firstRow.Bounds.height;
+            }
+        }
+
+        public float HeightForRowAt(int index)
+        {
+            return rowHeight;
+        }
+
+        public CListingRow ListingRowForRowAt(int index)
+        {
+            if (index == 0 && firstRow != null)
+            {
+                return firstRow;
+            }
+
+            var column = columnDefs[index];
+            var resolver = GroupColumnDefResolver.GetResolver(column, false);
+
+            var row = new AlternatingBGRow();
+
+            row.IsOdd = index % 2 == 1;
+
+            var column0 = row.AddElement(new CLabel
+            {
+                Title = column.defName,
+                WordWrap = true,
+            });
+            var column1 = row.AddElement(new CLabel
+            {
+                Title = column.workerClass.FullName,
+            });
+            var column2 = row.AddElement(new CLabel
+            {
+                Color = resolver != null ? Color.white : new Color(1, 1, 1, 0.4f),
+                Title = resolver != null ? resolver.workerClass?.FullName : "<unresolved>",
+            });
+
+
+            row.AddConstraints(
+                column0.top ^ row.top + 2,
+                row.bottom ^ column0.bottom + 2,
+
+                column1.top ^ row.top + 2,
+                column2.top ^ column1.bottom + 2,
+                row.bottom ^ column2.bottom + 2,
+
+                column0.left ^ row.left + 2,
+                column1.left ^ column0.right + 2,
+                column2.left ^ column0.right + 2,
+
+                row.right ^ column1.right + 2,
+                row.right ^ column2.right + 2,
+
+                column1.height ^ column1.intrinsicHeight,
+                column2.height ^ column2.intrinsicHeight,
+
+                column0.width ^ row.width * 0.33
+                );
+
+            return row;
+        }
+
+        public int NumberOfRows()
+        {
+            return columnDefs.Count();
+        }
+
         protected override void ConstructGUI()
         {
             base.ConstructGUI();
@@ -168,93 +250,9 @@ namespace PawnTableGrouped
             this.AddElement(listFrame = new CFrame());
             this.Embed(listFrame);
 
-            var columnsList = listFrame.AddElement(new CListView());
+            var columnsList = listFrame.AddElement(new CListView_vNext());
             listFrame.Embed(columnsList, new EdgeInsets(3));
-
-
-            PopulateColumnsList(columnsList);
-        }
-
-        private void PopulateColumnsList(CListView columnsList)
-        {
-            var resolvers = DefDatabase<GroupColumnWorkerDef>.AllDefs;
-            /*
-            $"Generated: column: {column.defName}; worker {column.workerClass.FullName} => {resolverDef.workerClass.FullName}".Log();
-            */
-
-            int index = 0;
-
-            var columns =
-                DefDatabase<GroupColumnWorkerDef>.AllDefs.Select(x => x.Worker.ColumnDef).Concat(
-                    DefDatabase<PawnColumnDef>.AllDefs.Where(x => GroupColumnDefResolver.GetResolver(x, false) == null)
-                );
-
-            foreach (var column in columns)
-            {
-                var resolver = GroupColumnDefResolver.GetResolver(column, false);
-
-                var row = new AlternatingBGRow();
-
-                row.IsOdd = index % 2 == 1;
-
-                var column0 = row.AddElement(new CLabel
-                {
-                    Title = column.defName,
-                    WordWrap = true,
-                });
-                var column1 = row.AddElement(new CLabel
-                {
-                    Title = column.workerClass.FullName,
-                });
-                var column2 = row.AddElement(new CLabel
-                {
-                    Color = resolver != null ? Color.white : new Color(1, 1, 1, 0.4f),
-                    Title = resolver != null ? resolver.workerClass?.FullName : "<unresolved>",
-                });
-
-                /*
-                row.AddConstraints( // yeah, I have no horisontal scroll view in CListView implemented
-                    column0.top ^ row.top + 2,
-                    column1.top ^ column0.bottom + 2,
-                    column2.top ^ column1.bottom + 2,
-                    row.bottom ^ column2.bottom + 2,
-
-                    row.left ^ column0.left, column0.right + 40 ^ row.right,
-                    row.left + 20 ^ column1.left, column1.right + 20 ^ row.right,
-                    row.left + 40 ^ column2.left, column2.right ^ row.right,
-
-                    column0.height ^ column0.intrinsicHeight,
-                    column1.height ^ column1.intrinsicHeight,
-                    column2.height ^ column2.intrinsicHeight
-                    );
-                */
-
-                row.AddConstraints(
-                    column0.top ^ row.top + 2,
-                    row.bottom ^ column0.bottom + 2,
-
-                    column1.top ^ row.top + 2,
-                    column2.top ^ column1.bottom + 2,
-                    row.bottom ^ column2.bottom + 2,
-
-                    column0.left ^ row.left + 2,
-                    column1.left ^ column0.right + 2,
-                    column2.left ^ column0.right + 2,
-
-                    row.right ^ column1.right + 2,
-                    row.right ^ column2.right + 2,
-
-                    column1.height ^ column1.intrinsicHeight,
-                    column2.height ^ column2.intrinsicHeight,
-
-                    column0.width ^ row.width * 0.33
-                    );
-
-                columnsList.AppendRow(row);
-
-
-                index++;
-            }
+            columnsList.DataSource = this;
         }
     }
 
