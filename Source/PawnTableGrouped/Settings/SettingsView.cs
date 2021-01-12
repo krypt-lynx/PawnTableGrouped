@@ -11,98 +11,26 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-
-    class SettingsView : CElement
+    class TablesTab : CTabPage
     {
         TablesSettingsViewModel tablesModel;
 
-        CListView tablesList;
-
-        CListView columnsList;
-
-        public SettingsView() : base()
+        protected override void ConstructGUI()
         {
+            base.ConstructGUI();
+
             tablesModel = new TablesSettingsViewModel();
-
-            CElement debug;
-            CElement hideHeader;
-            CElement primarySort;
-            CElement byColumn;
-            CTabsView tabs;
-
-
-            this.StackTop(
-                (AddElement(debug = new CCheckboxLabeled
-                {
-                    Title = "DebugOutput".Translate(),
-                    Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
-                    Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
-                }), debug.intrinsicHeight),
-                10,
-                (AddElement(hideHeader = new CCheckboxLabeled
-                {
-                    Title = "HideHeaderIfOnlyOneGroup".Translate(),
-                    Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
-                    Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
-                }), hideHeader.intrinsicHeight),
-                10,
-                (AddElement(primarySort = new CCheckboxLabeled
-                {
-                    Title = "UsePrimarySortFunction".Translate(),
-                    Checked = Mod.Settings.usePrimarySortFunction,
-                    Changed = (_, value) => Mod.Settings.usePrimarySortFunction = value,
-                }), hideHeader.intrinsicHeight),
-                10,
-                (AddElement(byColumn = new CCheckboxLabeled
-                {
-                    Title = "GroupByColumnExperimental".Translate(),
-                    Checked = Mod.Settings.groupByColumnExperimental,
-                    Changed = (_, value) => Mod.Settings.groupByColumnExperimental = value,
-                }), byColumn.intrinsicHeight),
-                10,
-                AddElement(tabs = new CTabsView()),
-                7
-            );
-
-            var tablesTab = new CTabPage
-            {
-                Title = "Tables"
-            };
-            tabs.AddTab(tablesTab);
-            ConstructTablesTab(tablesTab);
-
-            var columnsTab = new CTabPage
-            {
-                Title = "Columns"
-            };
-            tabs.AddTab(columnsTab);
-            ConstructColumnsTab(columnsTab);
-
-            CElement footer;
-
-            footer = AddElement(new CLabel
-            {
-                Title = $"Grouped Pawns Lists version: {Mod.CommitInfo}",
-                TextAlignment = TextAnchor.LowerRight,
-                Color = new Color(1, 1, 1, 0.5f),
-                Font = GameFont.Tiny
-            });
-
-            this.AddConstraints(
-                footer.top ^ this.bottom + 3,
-                footer.width ^ footer.intrinsicWidth,
-                footer.right ^ this.right,
-                footer.height ^ footer.intrinsicHeight);
-
+            ConstructTablesTab();
         }
 
-        private void ConstructTablesTab(CTabPage tablesTab)
+
+        private void ConstructTablesTab()
         {
             CElement listFrame;
             CElement actionsGroup;
 
-            tablesTab.AddElement(listFrame = new CFrame());
-            tablesTab.Embed(listFrame);
+            this.AddElement(listFrame = new CFrame());
+            this.Embed(listFrame);
             actionsGroup = listFrame.AddElement(new CElement());
             actionsGroup.StackLeft(
                 2,
@@ -131,7 +59,7 @@ namespace PawnTableGrouped
                 }), 200)
                 );
 
-            tablesList = listFrame.AddElement(new CListView());
+            var tablesList = listFrame.AddElement(new CListView());
             listFrame.StackTop(StackOptions.Create(insets: new EdgeInsets(3)),
                 (actionsGroup, 30),
                 10,
@@ -139,20 +67,6 @@ namespace PawnTableGrouped
 
 
             PopulateTablesList(tablesList);
-        }
-  
-        private void ConstructColumnsTab(CTabPage tablesTab)
-        {
-            CElement listFrame;
-
-            tablesTab.AddElement(listFrame = new CFrame());
-            tablesTab.Embed(listFrame);
-
-            columnsList = listFrame.AddElement(new CListView());
-            listFrame.Embed(columnsList, new EdgeInsets(3));
-
-
-            PopulateColumnsList(columnsList);
         }
 
         Color colorForPawnTable(TablesSettingsViewModel.TableData tableData)
@@ -173,7 +87,7 @@ namespace PawnTableGrouped
         }
 
         private void PopulateTablesList(CListView tablesList)
-        {       
+        {
             int index = 0;
 
             foreach (var table in tablesModel.Tables)
@@ -235,6 +149,30 @@ namespace PawnTableGrouped
 
                 index++;
             }
+        }
+
+    }
+
+    class ColumnsTab : CTabPage
+    {
+        protected override void ConstructGUI()
+        {
+            base.ConstructGUI();
+            ConstructColumnsTab();
+        }
+
+        private void ConstructColumnsTab()
+        {
+            CElement listFrame;
+
+            this.AddElement(listFrame = new CFrame());
+            this.Embed(listFrame);
+
+            var columnsList = listFrame.AddElement(new CListView());
+            listFrame.Embed(columnsList, new EdgeInsets(3));
+
+
+            PopulateColumnsList(columnsList);
         }
 
         private void PopulateColumnsList(CListView columnsList)
@@ -299,7 +237,7 @@ namespace PawnTableGrouped
                     column2.top ^ column1.bottom + 2,
                     row.bottom ^ column2.bottom + 2,
 
-                    column0.left ^ row.left + 2, 
+                    column0.left ^ row.left + 2,
                     column1.left ^ column0.right + 2,
                     column2.left ^ column0.right + 2,
 
@@ -318,6 +256,83 @@ namespace PawnTableGrouped
                 index++;
             }
         }
+    }
+
+    class SettingsView : CElement
+    {
+
+
+        public SettingsView() : base()
+        {
+            CElement debug;
+            CElement hideHeader;
+            CElement primarySort;
+            CElement byColumn;
+            CTabsView tabs;
+
+
+            this.StackTop(
+                (AddElement(debug = new CCheckboxLabeled
+                {
+                    Title = "DebugOutput".Translate(),
+                    Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
+                    Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
+                }), debug.intrinsicHeight),
+                10,
+                (AddElement(hideHeader = new CCheckboxLabeled
+                {
+                    Title = "HideHeaderIfOnlyOneGroup".Translate(),
+                    Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
+                    Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
+                }), hideHeader.intrinsicHeight),
+                10,
+                (AddElement(primarySort = new CCheckboxLabeled
+                {
+                    Title = "UsePrimarySortFunction".Translate(),
+                    Checked = Mod.Settings.usePrimarySortFunction,
+                    Changed = (_, value) => Mod.Settings.usePrimarySortFunction = value,
+                }), hideHeader.intrinsicHeight),
+                10,
+                (AddElement(byColumn = new CCheckboxLabeled
+                {
+                    Title = "GroupByColumnExperimental".Translate(),
+                    Checked = Mod.Settings.groupByColumnExperimental,
+                    Changed = (_, value) => Mod.Settings.groupByColumnExperimental = value,
+                }), byColumn.intrinsicHeight),
+                10,
+                AddElement(tabs = new CTabsView()),
+                7
+            );
+
+
+            tabs.AddTab(new TablesTab
+            {
+                Title = "Tables"
+            });
+
+            tabs.AddTab(new ColumnsTab
+            {
+                Title = "Columns"
+            });
+
+            CElement footer;
+
+            footer = AddElement(new CLabel
+            {
+                Title = $"Grouped Pawns Lists version: {Mod.CommitInfo}",
+                TextAlignment = TextAnchor.LowerRight,
+                Color = new Color(1, 1, 1, 0.5f),
+                Font = GameFont.Tiny
+            });
+
+            this.AddConstraints(
+                footer.top ^ this.bottom + 3,
+                footer.width ^ footer.intrinsicWidth,
+                footer.right ^ this.right,
+                footer.height ^ footer.intrinsicHeight);
+
+        }
+
     }
 
 }
