@@ -8,13 +8,19 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class TableSettings
+    public class TableInfo
     {
         public string name;
         public TableCompatibility compatibility;
         public string defaultGrouping;
         public string hint;
         public string issues;
+        public TableConfig config;
+    }
+
+    public class TableConfig
+    {
+        public bool allowHScroll;
     }
 
     public class CompatibilityInfoDef : Def
@@ -26,7 +32,7 @@ namespace PawnTableGrouped
     {
         public string packageId;
         public string modName;
-        public List<TableSettings> tables;
+        public List<TableInfo> tables;
     }
 
     public enum TableCompatibility

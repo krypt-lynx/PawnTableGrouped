@@ -12,10 +12,11 @@ namespace PawnTableGrouped
     class CPawnListHeader : CElement
     {
         private PawnTableGroupedModel model;
-
-        public CPawnListHeader(PawnTableGroupedModel model)
+        Func<float> getScrollOffset;
+        public CPawnListHeader(PawnTableGroupedModel model, Func<float> getScrollOffset)
         {
             this.model = model;
+            this.getScrollOffset = getScrollOffset;
         }
 
         public override Vector2 tryFit(Vector2 size)
@@ -30,7 +31,7 @@ namespace PawnTableGrouped
 
 
             float width = BoundsRounded.width - 16f - Metrics.TableLeftMargin;
-            int x = (int)(BoundsRounded.xMin + Metrics.TableLeftMargin);
+            float x = (int)((BoundsRounded.xMin + Metrics.TableLeftMargin) - getScrollOffset());
             for (int headerColumnIndex = 0; headerColumnIndex < columns.Count; headerColumnIndex++)
             {
                 int columnWidth;

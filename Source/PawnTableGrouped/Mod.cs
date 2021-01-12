@@ -184,7 +184,7 @@ namespace PawnTableGrouped
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            if (invalidateOnce)
+            if (invalidateOnce) // todo: fix CListView visible horizontal scroll bug.
             {
                 Gui.SetNeedsUpdateLayout();
                 Gui.UpdateLayoutIfNeeded();

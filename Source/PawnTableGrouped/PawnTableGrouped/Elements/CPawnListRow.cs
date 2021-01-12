@@ -10,7 +10,7 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    class CPawnListRow : CListingRow
+    class CPawnListRow : CPawnTableRow
     {
         private PawnTable table;
         private PawnTableAccessor accessor;

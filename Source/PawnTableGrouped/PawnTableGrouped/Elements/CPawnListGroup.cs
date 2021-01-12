@@ -11,7 +11,7 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    class CPawnListGroup : CListingRow
+    class CPawnListGroup : CPawnTableRow
     {
         static readonly Texture2D TexCollapse = ContentFinder<Texture2D>.Get("UI/Buttons/Dev/Collapse", true);
         static readonly Texture2D TexRevial = ContentFinder<Texture2D>.Get("UI/Buttons/Dev/Reveal", true);

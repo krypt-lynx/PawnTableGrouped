@@ -129,6 +129,31 @@ namespace PawnTableGrouped
         }
 
 
+
+        public int minTableWidth
+        {
+            get
+            {
+                return (int)typeof(PawnTable).GetField("minTableWidth", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
+            }
+            set
+            {
+                typeof(PawnTable).GetField("minTableWidth", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
+            }
+        }
+
+        public int maxTableWidth
+        {
+            get
+            {
+                return (int)typeof(PawnTable).GetField("maxTableWidth", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Table);
+            }
+            set
+            {
+                typeof(PawnTable).GetField("maxTableWidth", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
+            }
+        }
+
         public int minTableHeight
         {
             get
@@ -152,6 +177,7 @@ namespace PawnTableGrouped
                 typeof(PawnTable).GetField("maxTableHeight", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Table, value);
             }
         }
+
 
 
         public PawnColumnDef sortByColumn
@@ -229,6 +255,20 @@ namespace PawnTableGrouped
             return (IEnumerable<Pawn>)typeof(PawnTable).GetMethod("PrimarySortFunction", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { input });
         }
 
+        public float GetOptimalWidth(PawnColumnDef column)
+        {
+            return (float)typeof(PawnTable).GetMethod("GetOptimalWidth", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { column });
+        }
+
+        public float GetMinWidth(PawnColumnDef column)
+        {
+            return (float)typeof(PawnTable).GetMethod("GetMinWidth", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { column });
+        }
+
+        public float GetMaxWidth(PawnColumnDef column)
+        {
+            return (float)typeof(PawnTable).GetMethod("GetMaxWidth", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(Table, new object[] { column });
+        }
     }
 
 }

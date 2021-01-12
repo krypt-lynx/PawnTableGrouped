@@ -16,7 +16,7 @@ namespace PawnTableGrouped
 
         CGuiRoot host = new CGuiRoot();
         CCheckbox collapseBtn;
-        CListView list;
+        CPawnTable list;
         CElement header;
 
         public PawnTableGroupedGUI(PawnTableGroupedModel model)
@@ -24,6 +24,10 @@ namespace PawnTableGrouped
             this.model = model;
 
             ConstructGUI();
+        }
+        public void SetInnerWidth(float innerWidth)
+        {
+            list.InnerWidth = innerWidth;
         }
 
         float extendedArea = 30;
@@ -33,11 +37,9 @@ namespace PawnTableGrouped
         {
             CElement footer;
 
-            header = host.AddElement(new CPawnListHeader(model));
-            list = host.AddElement(new CListView
-            {
-                ShowScrollBar = CScrollBarMode.Show
-            });
+            list = host.AddElement(new CPawnTable());
+            var weakList = new Verse.WeakReference<CPawnTable>(list);
+            header = host.AddElement(new CPawnListHeader(model, () => weakList.Target.ScrollPosition.x));
             footer = host.AddElement(new CElement());
 
             Texture2D img1 = new Resource<Texture2D>("UI/Settings");
@@ -149,7 +151,9 @@ namespace PawnTableGrouped
             }
             height += Metrics.PawnTableFooterHeight;
 
-            return height - extendedArea;
+            height -= extendedArea;
+
+            return height;
         }
     }
 
