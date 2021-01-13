@@ -160,7 +160,7 @@ namespace PawnTableGrouped
 
             var headerHeight = Mathf.Max(TableHeader?.Fixed?.Bounds.height ?? 0, TableHeader?.Row?.Bounds.height ?? 0);
 
-            headerRowRect = new Rect(Bounds.xMin + FixedSegmentWidth, Bounds.yMin, InnerWidth - FixedSegmentWidth - vBarWidth, headerHeight);
+            headerRowRect = new Rect(Bounds.xMin + FixedSegmentWidth, Bounds.yMin, Bounds.width - FixedSegmentWidth - vBarWidth, headerHeight);
             headerRowInnerRect = new Rect(0, 0, InnerWidth - FixedSegmentWidth, headerHeight);
 
 
@@ -221,6 +221,7 @@ namespace PawnTableGrouped
                 GUI.EndGroup();
                 GUI.EndClip();
             }
+
             if (TableHeader.Fixed != null)
             {
                 TableHeader.Fixed.xScrollOffset = 0;

@@ -30,8 +30,6 @@ namespace PawnTableGrouped
         {
             base.DoContent();
 
-            GuiTools.UsingColor(Color.green, () => GuiTools.Box(Bounds, EdgeInsets.One));
-
             var columns = model.Table.ColumnsListForReading;
             var cachedColumnWidths = model.accessor.cachedColumnWidths;
     
