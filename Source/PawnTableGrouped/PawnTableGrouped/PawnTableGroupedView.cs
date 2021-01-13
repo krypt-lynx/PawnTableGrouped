@@ -17,7 +17,6 @@ namespace PawnTableGrouped
         CGuiRoot host = new CGuiRoot();
         CCheckbox collapseBtn;
         CPawnTable list;
-        CElement header;
 
         public PawnTableGroupedGUI(PawnTableGroupedModel model)
         {
@@ -39,8 +38,19 @@ namespace PawnTableGrouped
 
             list = host.AddElement(new CPawnTable());
             var weakList = new Verse.WeakReference<CPawnTable>(list);
-            header = host.AddElement(new PawnListHeader(model, () => weakList.Target.OuterScrollPosition.x));
             footer = host.AddElement(new CElement());
+
+            CRowSegment headerSegment = new CPawnListHeader(model, new RangeInt(0, 1));
+            CRowSegment bodySegment = new CPawnListHeader(model, new RangeInt(1, int.MaxValue / 2));
+            var header = list.AppendRow(
+                new CPawnTableRow
+                {
+                    Fixed = headerSegment,
+                    Row = bodySegment,
+                });
+            list.TableHeader = header;
+            headerSegment.AddConstraint(headerSegment.height ^ headerSegment.intrinsicHeight);
+            bodySegment.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
 
             Texture2D img1 = new Resource<Texture2D>("UI/Settings");
             var GroupBtn = footer.AddElement(new CWidget
@@ -84,9 +94,7 @@ namespace PawnTableGrouped
 
 
             // arranging table elements
-            host.AddConstraints(header.left ^ host.left, header.top ^ host.top,
-                header.right ^ host.right, header.height ^ header.intrinsicHeight);
-            host.AddConstraints(list.left ^ host.left, list.top ^ header.bottom, 
+            host.AddConstraints(list.left ^ host.left, list.top ^ host.top, 
                 list.right ^ host.right, list.bottom ^ host.bottom);
 
 
@@ -142,7 +150,7 @@ namespace PawnTableGrouped
                     foreach (var pawn in group.Pawns)
                     {
                         CRowSegment headerSegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(0, 1), true);
-                        CPawnListRow bodySegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(1, columnWidths.Count - 1), false);
+                        CPawnListRow bodySegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(1, int.MaxValue / 2), false);
 
                         var pawnRow = list.AppendRow(
                             new CPawnTableRow

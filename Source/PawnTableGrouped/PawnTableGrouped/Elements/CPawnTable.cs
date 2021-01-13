@@ -49,7 +49,10 @@ namespace PawnTableGrouped
             set
             {
                 fixed_ = value;
-                fixed_.Row = this;
+                if (value != null)
+                {
+                    fixed_.Row = this;
+                }
             }
         }
 
@@ -60,7 +63,10 @@ namespace PawnTableGrouped
             set
             {
                 row_ = value;
-                row_.Row = this;
+                if (value != null)
+                {
+                    row_.Row = this;
+                }
             }
         }
 
@@ -105,10 +111,14 @@ namespace PawnTableGrouped
 
     public class CPawnTable : CElement 
     {
+        Rect headerRowRect;
+        Rect headerRowInnerRect;
+
         Rect vScrollViewOuterRect;
         Rect vScrollViewInnerRect;
         Rect hScrollClipRect;
         Rect hScrollInnerRect;
+
         /// <summary>
         /// Scroll Location
         /// </summary>
@@ -135,6 +145,25 @@ namespace PawnTableGrouped
             var vBarWidth = GUI.skin.verticalScrollbar.fixedWidth + GUI.skin.verticalScrollbar.margin.left;
             var hBarHeight = GUI.skin.horizontalScrollbar.fixedHeight + GUI.skin.horizontalScrollbar.margin.top;
 
+            if (TableHeader.Fixed != null)
+            {
+                TableHeader.Fixed.InRect = new Rect(Bounds.xMin, Bounds.yMin, FixedSegmentWidth, 0);
+                TableHeader.Fixed.UpdateLayoutIfNeeded();
+            }
+
+            if (TableHeader.Row != null)
+            {
+                TableHeader.Row.InRect = new Rect(0, 0, InnerWidth - FixedSegmentWidth, 0);
+                TableHeader.Row.UpdateLayoutIfNeeded();
+            }
+
+
+            var headerHeight = Mathf.Max(TableHeader?.Fixed?.Bounds.height ?? 0, TableHeader?.Row?.Bounds.height ?? 0);
+
+            headerRowRect = new Rect(Bounds.xMin + FixedSegmentWidth, Bounds.yMin, InnerWidth - FixedSegmentWidth - vBarWidth, headerHeight);
+            headerRowInnerRect = new Rect(0, 0, InnerWidth - FixedSegmentWidth, headerHeight);
+
+
             float y = 0;
             foreach (var row in rows)
             {
@@ -153,7 +182,7 @@ namespace PawnTableGrouped
 
             hScrollVisible = InnerWidth > Bounds.width - vBarWidth;
 
-            vScrollViewOuterRect = Rect.MinMaxRect(Bounds.xMin, Bounds.yMin, Bounds.xMax, Bounds.yMax - (hScrollVisible ? hBarHeight : 0));
+            vScrollViewOuterRect = Rect.MinMaxRect(Bounds.xMin, Bounds.yMin + headerHeight, Bounds.xMax, Bounds.yMax - (hScrollVisible ? hBarHeight : 0));
 
             vScrollViewInnerRect = new Rect(0, 0, Bounds.width - vBarWidth, y).GUIRoundedPreserveOrigin();
             hScrollClipRect = new Rect(FixedSegmentWidth, 0, Bounds.width - vBarWidth - FixedSegmentWidth, y);
@@ -166,6 +195,7 @@ namespace PawnTableGrouped
         {
             base.DoContent();
 
+
             if (hScrollVisible)
             {
                 hScrollPosition = GUI.HorizontalScrollbar(hScrollRect, hScrollPosition, hScrollClipRect.width, 0, hScrollInnerRect.width);
@@ -173,6 +203,29 @@ namespace PawnTableGrouped
             else
             {
                 hScrollPosition = 0;
+            }
+
+
+
+            if (TableHeader.Row != null)
+            {
+                GUI.BeginClip(headerRowRect);
+                var innerRowRect = headerRowInnerRect;
+                innerRowRect.x = headerRowInnerRect.x - hScrollPosition;
+                GUI.BeginGroup(innerRowRect);
+
+                TableHeader.Row.xScrollOffset = hScrollPosition;
+                TableHeader.Row.visibleRectWidth = hScrollClipRect.width;
+                TableHeader.Row.DoElementContent();
+
+                GUI.EndGroup();
+                GUI.EndClip();
+            }
+            if (TableHeader.Fixed != null)
+            {
+                TableHeader.Fixed.xScrollOffset = 0;
+                TableHeader.Fixed.visibleRectWidth = FixedSegmentWidth;
+                TableHeader.Fixed.DoElementContent();
             }
 
             Widgets.BeginScrollView(vScrollViewOuterRect, ref OuterScrollPosition, vScrollViewInnerRect, true);

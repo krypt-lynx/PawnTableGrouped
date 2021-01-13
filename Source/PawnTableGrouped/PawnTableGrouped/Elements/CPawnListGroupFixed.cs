@@ -20,8 +20,8 @@ namespace PawnTableGrouped
 
     class CPawnListGroupFixed : CRowSegment
     {
-        static readonly Texture2D TexCollapse = ContentFinder<Texture2D>.Get("UI/Buttons/Dev/Collapse", true);
-        static readonly Texture2D TexRevial = ContentFinder<Texture2D>.Get("UI/Buttons/Dev/Reveal", true);
+        static readonly Resource<Texture2D> TexCollapse = new Resource<Texture2D>("UI/Buttons/Dev/Collapse");
+        static readonly Resource<Texture2D> TexRevial = new Resource<Texture2D>("UI/Buttons/Dev/Reveal");
 
         private ClVariable rightTitleEdge;
 
@@ -64,7 +64,7 @@ namespace PawnTableGrouped
 
             if (Row is CPawnListGroupRow groupRow)
             {
-                groupRow.overflow = (float)rightTitleEdge.Value - BoundsRounded.width;
+                groupRow.overflow = (float)rightTitleEdge.Value + Metrics.GroupTitleRightMargin - BoundsRounded.width;
             }
         }
 

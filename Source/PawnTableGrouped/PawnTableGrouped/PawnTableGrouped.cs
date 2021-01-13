@@ -94,6 +94,8 @@ namespace PawnTableGrouped
             accessor.cachedHeightNoScrollbar = CalculateTotalRequiredHeight();
             accessor.RecacheSize();
 
+          //  var size = accessor.cachedSize;
+          //  size.x += marg
 
             accessor.RecacheColumnWidths();
             var columnWidths = accessor.cachedColumnWidths; 

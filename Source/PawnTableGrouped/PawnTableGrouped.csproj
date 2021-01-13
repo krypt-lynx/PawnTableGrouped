@@ -153,7 +153,7 @@
     <Compile Include="PawnTableGrouped\PawnTableGroupedView.cs" />
     <Compile Include="GUI\AlternatingBGRow.cs" />
     <Compile Include="GroupColumnDefResolver.cs" />
-    <Compile Include="PawnTableGrouped\Elements\PawnListHeader.cs" />
+    <Compile Include="PawnTableGrouped\Elements\CPawnListHeader.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListRow.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListGroupSummary.cs" />
     <Compile Include="GlobalSuppressions.cs" />

@@ -64,7 +64,7 @@ namespace PawnTableGrouped
                     columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
                 }
 
-                if (x + columnWidth > xScrollOffset + overflow && x <= xScrollOffset + visibleRectWidth)
+                if (x >= xScrollOffset + overflow && x <= xScrollOffset + visibleRectWidth)
                 {
                     var resolver = Group.ColumnResolvers[columnIndex];
                     if (resolver != null && Group.IsVisible(columnIndex))

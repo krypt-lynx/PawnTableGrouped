@@ -47,7 +47,7 @@ namespace PawnTableGrouped
 
             // decorative line
             GUI.color = new Color(1f, 1f, 1f, 0.2f);
-            Widgets.DrawLineHorizontal(BoundsRounded.xMin + (doLeftOffset ? Metrics.TableLeftMargin : 0), BoundsRounded.yMin, BoundsRounded.width - Metrics.TableLeftMargin);
+            Widgets.DrawLineHorizontal(BoundsRounded.xMin + (doLeftOffset ? Metrics.TableLeftMargin : 0), BoundsRounded.yMin, BoundsRounded.width - (doLeftOffset ? Metrics.TableLeftMargin : 0));
             GUI.color = Color.white;
 
             if (!accessor.CanAssignPawn(pawn))

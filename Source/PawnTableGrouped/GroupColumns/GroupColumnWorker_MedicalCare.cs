@@ -16,9 +16,9 @@ namespace PawnTableGrouped
         {
             LongEventHandler.ExecuteWhenFinished(delegate
             {
-                careTextures = new Texture2D[] {
-                    ContentFinder<Texture2D>.Get("UI/Icons/Medical/NoCare", true),
-                    ContentFinder<Texture2D>.Get("UI/Icons/Medical/NoMeds", true),
+                careTextures = new Resource<Texture2D>[] {
+                    new Resource<Texture2D>("UI/Icons/Medical/NoCare"),
+                    new Resource<Texture2D>("UI/Icons/Medical/NoMeds"),
                     ThingDefOf.MedicineHerbal.uiIcon,
                     ThingDefOf.MedicineIndustrial.uiIcon,
                     ThingDefOf.MedicineUltratech.uiIcon,
@@ -51,7 +51,7 @@ namespace PawnTableGrouped
             */
         }
 
-        private static Texture2D[] careTextures;
+        private static new Resource<Texture2D>[] careTextures;
 
         // Token: 0x06004A50 RID: 19024 RVA: 0x00192AC2 File Offset: 0x00190CC2
 
