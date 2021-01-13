@@ -147,6 +147,7 @@
     <Compile Include="GroupingProviders\GroupWorker_ByRace.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnTable.cs" />
     <Compile Include="ModCompatibility\Numbers.cs" />
+    <Compile Include="PawnTableGrouped\Elements\CPawnListGroupFixed.cs" />
     <Compile Include="PawnTableGrouped\PawnTableGrouped.cs" />
     <Compile Include="PawnTableGrouped\PawnTableGroupedModel.cs" />
     <Compile Include="PawnTableGrouped\PawnTableGroupedView.cs" />
@@ -154,7 +155,7 @@
     <Compile Include="GroupColumnDefResolver.cs" />
     <Compile Include="PawnTableGrouped\Elements\PawnListHeader.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListRow.cs" />
-    <Compile Include="PawnTableGrouped\Elements\CPawnListGroup.cs" />
+    <Compile Include="PawnTableGrouped\Elements\CPawnListGroupSummary.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_Checkbox.cs" />

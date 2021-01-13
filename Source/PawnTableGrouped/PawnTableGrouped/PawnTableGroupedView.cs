@@ -116,21 +116,22 @@ namespace PawnTableGrouped
             {
                 if (!Mod.Settings.hideHeaderIfOnlyOneGroup || model.Groups.Count > 1)
                 {
-                    CRowSegment headerSegment = null;
-                    CPawnListGroup bodySegment = new CPawnListGroup(model.Table, model.accessor, group, model.IsExpanded(group));
+                    CPawnListGroupFixed headerSegment = new CPawnListGroupFixed(group, model.IsExpanded(group));
+                    CPawnListGroupSummary bodySegment = new CPawnListGroupSummary(model.Table, model.accessor, group);
                     var groupRow = list.AppendRow(
-                        new CPawnTableRow2
+                        new CPawnListGroupRow
                         {
-                            Pinned = headerSegment,
-                            Row = bodySegment
+                            Fixed = headerSegment,
+                            Row = bodySegment,
+                            Group = group,
+                            Action = (sectionRow) =>
+                            {
+                                model.SwitchExpanded(sectionRow.Group);
+                            }
                         });
 
 
-                    bodySegment.Action = (sectionRow) =>
-                    {
-                        var g = ((CPawnListGroup)sectionRow).Group;
-                        model.SwitchExpanded(g);
-                    };
+                    headerSegment.AddConstraint(headerSegment.height ^ headerSegment.intrinsicHeight);
                     bodySegment.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
                     
 
@@ -142,10 +143,11 @@ namespace PawnTableGrouped
                     {
                         CRowSegment headerSegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(0, 1), true);
                         CPawnListRow bodySegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(1, columnWidths.Count - 1), false);
+
                         var pawnRow = list.AppendRow(
-                            new CPawnTableRow2
+                            new CPawnTableRow
                             {
-                                Pinned = headerSegment,
+                                Fixed = headerSegment,
                                 Row = bodySegment
                             });
 

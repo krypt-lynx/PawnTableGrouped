@@ -9,11 +9,10 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public  class CRowSegment : CListingRow
+    public class CRowSegment : CListingRow
     {
-        /*
-        Verse.WeakReference<CPawnTableRow2> row = null;
-        protected CPawnTableRow2 Row
+        Verse.WeakReference<CPawnTableRow> row = null;
+        public CPawnTableRow Row
         {
             get
             {
@@ -21,16 +20,15 @@ namespace PawnTableGrouped
             }
             set
             {
-                row = new Verse.WeakReference<CPawnTableRow2>(value);
+                row = new Verse.WeakReference<CPawnTableRow>(value);
             }
         }
-        */
 
         public virtual float xScrollOffset { get; set; } = 0;
         public virtual float visibleRectWidth { get; set; } = 0;
     }
 
-    public class CPawnTableRow2 
+    public class CPawnTableRow 
     {
         public Verse.WeakReference<CPawnTable> owner = null;
         public CPawnTable Owner
@@ -45,8 +43,26 @@ namespace PawnTableGrouped
             }
         }
 
-        public CRowSegment Pinned;
-        public CRowSegment Row;
+        public CRowSegment fixed_;
+        public CRowSegment Fixed {
+            get => fixed_;
+            set
+            {
+                fixed_ = value;
+                fixed_.Row = this;
+            }
+        }
+
+        public CRowSegment row_;
+        public CRowSegment Row
+        {
+            get => row_;
+            set
+            {
+                row_ = value;
+                row_.Row = this;
+            }
+        }
 
         public virtual float xScrollOffset
         {
@@ -56,9 +72,9 @@ namespace PawnTableGrouped
             }
             set
             {
-                if (Pinned != null)
+                if (Fixed != null)
                 {
-                    Pinned.xScrollOffset = value;
+                    Fixed.xScrollOffset = value;
                 }
                 if (Row != null)
                 {
@@ -74,9 +90,9 @@ namespace PawnTableGrouped
             }
             set
             {
-                if (Pinned != null)
+                if (Fixed != null)
                 {
-                    Pinned.visibleRectWidth = value;
+                    Fixed.visibleRectWidth = value;
                 }
                 if (Row != null)
                 {
@@ -85,7 +101,6 @@ namespace PawnTableGrouped
             }
         }
     }
-
 
 
     public class CPawnTable : CElement 
@@ -99,45 +114,14 @@ namespace PawnTableGrouped
         /// </summary>
         public Vector2 OuterScrollPosition = Vector2.zero;
 
-
-        List<CPawnTableRow2> rows = new List<CPawnTableRow2>();
-        public IReadOnlyList<CPawnTableRow2> Rows { get => rows; }
+        public CPawnTableRow TableHeader = null;
+        List<CPawnTableRow> rows = new List<CPawnTableRow>();
+        public IReadOnlyList<CPawnTableRow> Rows { get => rows; }
 
         public float FixedSegmentWidth { get; internal set; }
 
-        //float contentHeight = 0;
 
         public float InnerWidth;
-
-        /* // todo:
-        public override CElement hitTest(Vector2 point)
-        {
-            if (userInteractionEnabled && Bounds.Contains(point))
-            {
-                var listPoint = point - this.Bounds.position + this.ScrollPosition;
-
-                var sub = base.hitTest(point);
-                if (sub != this)
-                {
-                    return sub;
-                }
-
-                foreach (var row in rows)
-                {
-                    var element = row.hitTest(listPoint);
-                    if (element != null)
-                    {
-                        return element;
-                    }
-                }
-
-                return this;
-            }
-            else
-            {
-                return null;
-            }
-        }*/
 
 
         Rect hScrollRect;
@@ -154,17 +138,17 @@ namespace PawnTableGrouped
             float y = 0;
             foreach (var row in rows)
             {
-                if (row.Pinned != null)
+                if (row.Fixed != null)
                 {
-                    row.Pinned.InRect = new Rect(0, y, FixedSegmentWidth, 0);
-                    row.Pinned.UpdateLayoutIfNeeded();
+                    row.Fixed.InRect = new Rect(0, y, FixedSegmentWidth, 0);
+                    row.Fixed.UpdateLayoutIfNeeded();
                 }
                 if (row.Row != null)
                 {
                     row.Row.InRect = new Rect(0, y, InnerWidth - FixedSegmentWidth, 0);
                     row.Row.UpdateLayoutIfNeeded();
                 }
-                y += Mathf.Max(row.Pinned?.Bounds.height ?? 0, row.Row?.Bounds.height ?? 0);
+                y += Mathf.Max(row.Fixed?.Bounds.height ?? 0, row.Row?.Bounds.height ?? 0);
             }
 
             hScrollVisible = InnerWidth > Bounds.width - vBarWidth;
@@ -181,8 +165,6 @@ namespace PawnTableGrouped
         public override void DoContent()
         {
             base.DoContent();
-
-            //Widgets.BeginScrollView(innerOuterRect, ref InnerScrollPosition, innerInnerRect, true);
 
             if (hScrollVisible)
             {
@@ -222,7 +204,7 @@ namespace PawnTableGrouped
                 {
                     row.xScrollOffset = 0;
                     row.visibleRectWidth = FixedSegmentWidth;
-                    row.Pinned?.DoElementContent();
+                    row.Fixed?.DoElementContent();
                 }
             }
 
@@ -237,7 +219,7 @@ namespace PawnTableGrouped
         /// <param name="row">the row</param>
         /// <returns>the row</returns>
         /// <remarks>Row must not be added in this or other CListView</remarks>
-        public CPawnTableRow2 AppendRow(CPawnTableRow2 row)
+        public CPawnTableRow AppendRow(CPawnTableRow row)
         {
             if (row.Owner != null)
             {
@@ -257,7 +239,7 @@ namespace PawnTableGrouped
         /// <param name="row">the row</param>
         /// <returns>the row</returns>
         /// <remarks>Row must not be added in this or other CListView</remarks>
-        public CPawnTableRow2 InsertRow(int index, CPawnTableRow2 row)
+        public CPawnTableRow InsertRow(int index, CPawnTableRow row)
         {
             if (row.Owner != null)
             {
@@ -275,7 +257,7 @@ namespace PawnTableGrouped
         /// </summary>
         /// <param name="row">the row</param>
         /// <returns>true if row was successfully removed</returns>
-        public bool RemoveRow(CPawnTableRow2 row)
+        public bool RemoveRow(CPawnTableRow row)
         {
             bool result;
             if (result = rows.Remove(row))
@@ -291,7 +273,7 @@ namespace PawnTableGrouped
         /// </summary>
         /// <param name="row">index of row to remove</param>
         /// <returns>the removed row</returns>
-        public CPawnTableRow2 RemoveRowAt(int index)
+        public CPawnTableRow RemoveRowAt(int index)
         {
             var row = rows[index];
             rows.RemoveAt(index);
@@ -305,7 +287,7 @@ namespace PawnTableGrouped
         /// </summary>
         /// <param name="row">the row</param>
         /// <param name="index">new index</param>
-        public void MoveRowTo(CPawnTableRow2 row, int index)
+        public void MoveRowTo(CPawnTableRow row, int index)
         {
             rows.Remove(row);
             rows.Insert(index, row);
@@ -317,7 +299,7 @@ namespace PawnTableGrouped
         /// </summary>
         /// <param name="row">the row</param>
         /// <returns>The zero-based index of the row, if found; otherwise, -1.</returns>
-        public int IndexOfRow(CPawnTableRow2 row)
+        public int IndexOfRow(CPawnTableRow row)
         {
             return rows.IndexOf(row);
         }
