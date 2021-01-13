@@ -39,14 +39,12 @@ namespace PawnTableGrouped
 
             list = host.AddElement(new CPawnTable());
             var weakList = new Verse.WeakReference<CPawnTable>(list);
-            header = host.AddElement(new CPawnListHeader(model, () => weakList.Target.ScrollPosition.x));
+            header = host.AddElement(new PawnListHeader(model, () => weakList.Target.OuterScrollPosition.x));
             footer = host.AddElement(new CElement());
 
             Texture2D img1 = new Resource<Texture2D>("UI/Settings");
             var GroupBtn = footer.AddElement(new CWidget
             {
-                //Title = "#",
-                //Action = (sender) =>
                 DoWidgetContent = (_, bounds) =>
                 {
                     Widgets.Dropdown(bounds, model.ActiveGrouper, g => g,
@@ -84,10 +82,21 @@ namespace PawnTableGrouped
                 },
             });
 
-            host.StackTop((header, header.intrinsicHeight), list);
+
+            // arranging table elements
+            host.AddConstraints(header.left ^ host.left, header.top ^ host.top,
+                header.right ^ host.right, header.height ^ header.intrinsicHeight);
+            host.AddConstraints(list.left ^ host.left, list.top ^ header.bottom, 
+                list.right ^ host.right, list.bottom ^ host.bottom);
+
+
+            // attaching footer bellow table
             host.AddConstraints(footer.top ^ list.bottom, footer.left ^ list.left, footer.right ^ list.right, footer.height ^ Metrics.PawnTableFooterHeight);
             //fotterBtnOffset = 50;
+
+            // arranging buttons in footer
             footer.StackRight(StackOptions.Create(constrainEnd: false), 16, fotterBtnOffset, (GroupBtn, 30), (DecendingSortBtn, 30), (collapseBtn, 30));
+           
 
             model.GroupsStateChanged = (m) =>
             {
@@ -99,26 +108,50 @@ namespace PawnTableGrouped
         {
             list.ClearRows();
 
+            var columnWidths = model.accessor.cachedColumnWidths;
+            var column0Width = columnWidths.Count > 0 ? columnWidths[0] : 0;
+            list.FixedSegmentWidth = column0Width + Metrics.TableLeftMargin;
+
             foreach (var group in model.Groups)
             {
                 if (!Mod.Settings.hideHeaderIfOnlyOneGroup || model.Groups.Count > 1)
                 {
-                    var groupRow = (CPawnListGroup)list.AppendRow(new CPawnListGroup(model.Table, model.accessor, group, model.IsExpanded(group)));
-                    groupRow.Action = (sectionRow) =>
+                    CRowSegment headerSegment = null;
+                    CPawnListGroup bodySegment = new CPawnListGroup(model.Table, model.accessor, group, model.IsExpanded(group));
+                    var groupRow = list.AppendRow(
+                        new CPawnTableRow2
+                        {
+                            Pinned = headerSegment,
+                            Row = bodySegment
+                        });
+
+
+                    bodySegment.Action = (sectionRow) =>
                     {
                         var g = ((CPawnListGroup)sectionRow).Group;
                         model.SwitchExpanded(g);
                     };
-                    groupRow.AddConstraint(groupRow.height ^ groupRow.intrinsicHeight);
+                    bodySegment.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
+                    
 
                 }
+                
                 if (model.IsExpanded(group))
                 {
                     foreach (var pawn in group.Pawns)
                     {
-                        var pawnRow = list.AppendRow(new CPawnListRow(model.Table, model.accessor, group, pawn));
+                        CRowSegment headerSegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(0, 1), true);
+                        CPawnListRow bodySegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(1, columnWidths.Count - 1), false);
+                        var pawnRow = list.AppendRow(
+                            new CPawnTableRow2
+                            {
+                                Pinned = headerSegment,
+                                Row = bodySegment
+                            });
 
-                        pawnRow.AddConstraint(pawnRow.height ^ pawnRow.intrinsicHeight);
+
+                        headerSegment.AddConstraint(headerSegment.height ^ headerSegment.intrinsicHeight);
+                        bodySegment.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
                     }
                 }
             }

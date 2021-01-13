@@ -145,14 +145,14 @@
     <Compile Include="GroupingProviders\GroupWorker_ByFaction.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByGender.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByRace.cs" />
-    <Compile Include="GUI\CGroupedList.cs" />
+    <Compile Include="PawnTableGrouped\Elements\CPawnTable.cs" />
     <Compile Include="ModCompatibility\Numbers.cs" />
     <Compile Include="PawnTableGrouped\PawnTableGrouped.cs" />
     <Compile Include="PawnTableGrouped\PawnTableGroupedModel.cs" />
     <Compile Include="PawnTableGrouped\PawnTableGroupedView.cs" />
     <Compile Include="GUI\AlternatingBGRow.cs" />
     <Compile Include="GroupColumnDefResolver.cs" />
-    <Compile Include="PawnTableGrouped\Elements\CPawnListHeader.cs" />
+    <Compile Include="PawnTableGrouped\Elements\PawnListHeader.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListRow.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListGroup.cs" />
     <Compile Include="GlobalSuppressions.cs" />

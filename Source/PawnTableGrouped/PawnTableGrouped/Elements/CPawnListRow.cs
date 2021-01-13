@@ -10,22 +10,26 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    class CPawnListRow : CPawnTableRow
+    class CPawnListRow : CRowSegment
     {
         private PawnTable table;
         private PawnTableAccessor accessor;
         private Pawn pawn;
-        PawnTableGroup group;
+        private PawnTableGroup group;
         private LookTargets target;
         private object[] oldValues = null;
+        private RangeInt columnsRange;
+        private bool doLeftOffset;
 
-        public CPawnListRow(PawnTable table, PawnTableAccessor accessor, PawnTableGroup group, Pawn pawn)
+        public CPawnListRow(PawnTable table, PawnTableAccessor accessor, PawnTableGroup group, Pawn pawn, RangeInt columnsRange, bool doLeftOffset)
         {
             this.table = table;
             this.accessor = accessor;
             this.pawn = pawn;
             this.group = group;
             this.target = new LookTargets(pawn);
+            this.columnsRange = columnsRange;
+            this.doLeftOffset = doLeftOffset;
             oldValues = new object[group.ColumnResolvers.Count];
         }
 
@@ -43,7 +47,7 @@ namespace PawnTableGrouped
 
             // decorative line
             GUI.color = new Color(1f, 1f, 1f, 0.2f);
-            Widgets.DrawLineHorizontal(BoundsRounded.xMin + Metrics.TableLeftMargin, BoundsRounded.yMin, BoundsRounded.width - Metrics.TableLeftMargin);
+            Widgets.DrawLineHorizontal(BoundsRounded.xMin + (doLeftOffset ? Metrics.TableLeftMargin : 0), BoundsRounded.yMin, BoundsRounded.width - Metrics.TableLeftMargin);
             GUI.color = Color.white;
 
             if (!accessor.CanAssignPawn(pawn))
@@ -59,26 +63,11 @@ namespace PawnTableGrouped
 
             bool needUpdateSectionHeader = false;
 
-            var column0Width = columns.Count > 0 ? cachedColumnWidths[0] : 0;
+            int x = (int)(BoundsRounded.xMin + (doLeftOffset ? Metrics.TableLeftMargin : 0));
 
-            if (columns.Count > 0)
-            {
-                Rect cellRect = new Rect((Bounds.xMin + Metrics.TableLeftMargin + xScrollOffset), BoundsRounded.yMin, column0Width, (int)BoundsRounded.height);
-                columns[0].Worker.DoCell(cellRect, pawn, table);
-
-                object cellValue = group.GetValue(0, pawn);
-
-                if (!object.Equals(cellValue, oldValues[0]))
-                {
-                    oldValues[0] = cellValue;
-                    needUpdateSectionHeader = true;
-                }
-            }
-
-            GUI.BeginClip(new Rect(Metrics.TableLeftMargin + column0Width + xScrollOffset, BoundsRounded.yMin, visibleRectWidth - column0Width - Metrics.TableLeftMargin, BoundsRounded.height));
-            int x = (int)(-xScrollOffset);
-
-            for (int columnIndex = 1; columnIndex < columns.Count; columnIndex++)
+            int start = Mathf.Max(0, columnsRange.start);
+            int end = Mathf.Min(columns.Count, columnsRange.end);
+            for (int columnIndex = start; columnIndex < end; columnIndex++)
             {
                 int columnWidth;
                 if (columnIndex == columns.Count - 1)
@@ -88,13 +77,12 @@ namespace PawnTableGrouped
                 else
                 {
                     columnWidth = (int)cachedColumnWidths[columnIndex];
-                }
+                } 
 
-                Rect cellRect = new Rect(x, 0, columnWidth, (int)BoundsRounded.height);
-
-
-                if (x + columnWidth > 0 && x <= visibleRectWidth)
+                if (x + columnWidth > xScrollOffset && x <= xScrollOffset + visibleRectWidth)
                 {
+                    Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, BoundsRounded.height);
+
                     columns[columnIndex].Worker.DoCell(cellRect, pawn, table);
 
                     object cellValue = group.GetValue(columnIndex, pawn);
@@ -108,8 +96,6 @@ namespace PawnTableGrouped
 
                 x += columnWidth;
             }
-
-            GUI.EndClip();
 
             if (needUpdateSectionHeader)
             {

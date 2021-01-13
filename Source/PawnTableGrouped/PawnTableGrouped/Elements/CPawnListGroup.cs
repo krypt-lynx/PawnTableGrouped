@@ -11,6 +11,7 @@ using Verse;
 
 namespace PawnTableGrouped
 {
+
     class FloatElement : CElement
     {
         public float xScrollOffset = 0;
@@ -25,7 +26,7 @@ namespace PawnTableGrouped
         }
     }
 
-    class CPawnListGroup : CPawnTableRow
+    class CPawnListGroup : CRowSegment
     {
         static readonly Texture2D TexCollapse = ContentFinder<Texture2D>.Get("UI/Buttons/Dev/Collapse", true);
         static readonly Texture2D TexRevial = ContentFinder<Texture2D>.Get("UI/Buttons/Dev/Reveal", true);
@@ -75,24 +76,6 @@ namespace PawnTableGrouped
             rightTitleEdge = label.right;
         }
 
-        public override float xScrollOffset {
-            get => base.xScrollOffset; 
-            set
-            {
-                base.xScrollOffset = value;
-                floating.xScrollOffset = xScrollOffset;
-            }
-        }
-
-        public override float visibleRectWidth {
-            get => base.visibleRectWidth;
-            set 
-            {
-                base.visibleRectWidth = value;
-                floating.visibleRectWidth = visibleRectWidth;
-            }
-        }
-
         public override void DoContent()
         {
             base.DoContent();
@@ -103,17 +86,15 @@ namespace PawnTableGrouped
             {                
                 this.Action?.Invoke(this);
             }
-        }
-
-        
+        }        
 
         private void DoRowsSummary()
         {
-            int x = (int)(BoundsRounded.xMin + Metrics.TableLeftMargin);
+            int x = (int)BoundsRounded.xMin;
             var columns = table.ColumnsListForReading;
 
 
-            for (int columnIndex = 0; columnIndex < columns.Count; columnIndex++)
+            for (int columnIndex = 1; columnIndex < columns.Count; columnIndex++)
             {
                 int columnWidth;
                 if (columnIndex == columns.Count - 1)
@@ -125,13 +106,12 @@ namespace PawnTableGrouped
                     columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
                 }
 
-                if (x >= rightTitleEdge.Value + xScrollOffset + Metrics.GroupTitleRightMargin &&
-                    x <= xScrollOffset + visibleRectWidth) // hiding cells behind group title
-                {                   
+                if (x + columnWidth > xScrollOffset && x <= xScrollOffset + visibleRectWidth)
+                {
                     var resolver = Group.ColumnResolvers[columnIndex];
                     if (resolver != null && Group.IsVisible(columnIndex))
                     {
-                        Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, (int)BoundsRounded.height);
+                        Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, BoundsRounded.height);
                         resolver.DoCell(cellRect, Group.Columns[columnIndex], table);
                     }
                 }

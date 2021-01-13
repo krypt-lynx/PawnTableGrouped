@@ -96,6 +96,8 @@ namespace PawnTableGrouped
 
 
             accessor.RecacheColumnWidths();
+            var columnWidths = accessor.cachedColumnWidths; 
+
             float totalColumnsWidth;
             var fits = UpdateColumnWidths(out totalColumnsWidth);
             view.SetInnerWidth(totalColumnsWidth + Metrics.TableLeftMargin);

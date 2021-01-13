@@ -9,11 +9,11 @@ using UnityEngine;
 
 namespace PawnTableGrouped
 {
-    class CPawnListHeader : CElement
+    class PawnListHeader : CElement
     {
         private PawnTableGroupedModel model;
         Func<float> getScrollOffset;
-        public CPawnListHeader(PawnTableGroupedModel model, Func<float> getScrollOffset)
+        public PawnListHeader(PawnTableGroupedModel model, Func<float> getScrollOffset)
         {
             this.model = model;
             this.getScrollOffset = getScrollOffset;
