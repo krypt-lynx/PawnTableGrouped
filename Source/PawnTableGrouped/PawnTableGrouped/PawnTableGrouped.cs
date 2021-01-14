@@ -94,18 +94,20 @@ namespace PawnTableGrouped
             accessor.cachedHeightNoScrollbar = CalculateTotalRequiredHeight();
             accessor.RecacheSize();
 
-          //  var size = accessor.cachedSize;
-          //  size.x += marg
+            var size = accessor.cachedSize;
+            accessor.cachedSize = new Vector2(Mathf.Min(size.x, accessor.maxTableWidth - Metrics.TableLeftMargin), size.y);
+
 
             accessor.RecacheColumnWidths();
-            var columnWidths = accessor.cachedColumnWidths; 
+            //var columnWidths = accessor.cachedColumnWidths; 
 
             float totalColumnsWidth;
             var fits = UpdateColumnWidths(out totalColumnsWidth);
             view.SetInnerWidth(totalColumnsWidth + Metrics.TableLeftMargin);
 
-            var oldSize = accessor.cachedSize;
-            accessor.cachedSize = new Vector2(Mathf.Min(oldSize.x + Metrics.TableLeftMargin, accessor.maxTableWidth), oldSize.y + (fits ? 0:Metrics.ScrollBar)); // expand table for collapse indicator and horizontal scrollbar
+            size = accessor.cachedSize;
+            accessor.cachedSize = new Vector2(size.x + Metrics.TableLeftMargin,                 
+                Mathf.Min(size.y + (fits ? 0:Metrics.ScrollBar), accessor.maxTableHeight)); // expand table for collapse indicator and horizontal scrollbar
 
             accessor.RecacheLookTargets();
 
