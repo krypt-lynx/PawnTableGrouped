@@ -129,7 +129,7 @@ namespace PawnTableGrouped
         public IReadOnlyList<CPawnTableRow> Rows { get => rows; }
 
         public float FixedSegmentWidth { get; internal set; }
-
+        public bool allowHScroll = false;
 
         public float InnerWidth;
 
@@ -153,7 +153,14 @@ namespace PawnTableGrouped
 
             if (TableHeader.Row != null)
             {
-                TableHeader.Row.InRect = new Rect(0, 0, InnerWidth - FixedSegmentWidth, 0);
+                if (allowHScroll)
+                {
+                    TableHeader.Row.InRect = new Rect(0, 0, InnerWidth - FixedSegmentWidth, 0);
+                } 
+                else
+                {
+                    TableHeader.Row.InRect = new Rect(Bounds.xMin, Bounds.yMin, InnerWidth, 0);
+                }
                 TableHeader.Row.UpdateLayoutIfNeeded();
             }
 
@@ -209,24 +216,35 @@ namespace PawnTableGrouped
 
             if (TableHeader.Row != null)
             {
-                GUI.BeginClip(headerRowRect);
-                var innerRowRect = headerRowInnerRect;
-                innerRowRect.x = headerRowInnerRect.x - hScrollPosition;
-                GUI.BeginGroup(innerRowRect);
+                float xScrollOffset = 0;
+                if (allowHScroll)
+                {
+                    GUI.BeginClip(headerRowRect);
+                    var innerRowRect = headerRowInnerRect;
+                    xScrollOffset = hScrollPosition + FixedSegmentWidth;
+                    innerRowRect.x = headerRowInnerRect.x - xScrollOffset;
+                    GUI.BeginGroup(innerRowRect);
+                }
 
-                TableHeader.Row.xScrollOffset = hScrollPosition;
+                TableHeader.Row.xScrollOffset = xScrollOffset;
                 TableHeader.Row.visibleRectWidth = hScrollClipRect.width;
                 TableHeader.Row.DoElementContent();
 
-                GUI.EndGroup();
-                GUI.EndClip();
+                if (allowHScroll)
+                {
+                    GUI.EndGroup();
+                    GUI.EndClip();
+                }
             }
 
             if (TableHeader.Fixed != null)
             {
-                TableHeader.Fixed.xScrollOffset = 0;
-                TableHeader.Fixed.visibleRectWidth = FixedSegmentWidth;
-                TableHeader.Fixed.DoElementContent();
+                if (allowHScroll)
+                {
+                    TableHeader.Fixed.xScrollOffset = 0;
+                    TableHeader.Fixed.visibleRectWidth = FixedSegmentWidth;
+                    TableHeader.Fixed.DoElementContent();
+                }
             }
 
             Widgets.BeginScrollView(vScrollViewOuterRect, ref OuterScrollPosition, vScrollViewInnerRect, true);

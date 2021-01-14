@@ -31,6 +31,7 @@ namespace PawnTableGrouped
 
         float extendedArea = 0;
         float fotterBtnOffset = 0;
+        bool allowHScroll = false;
 
         void ConstructGUI()
         {
@@ -39,11 +40,13 @@ namespace PawnTableGrouped
             CElement footer;
 
             list = host.AddElement(new CPawnTable());
+            list.allowHScroll = allowHScroll;
+
             var weakList = new Verse.WeakReference<CPawnTable>(list);
             footer = host.AddElement(new CElement());
 
-            CRowSegment headerSegment = new CPawnListHeader(model, new RangeInt(0, 1));
-            CRowSegment bodySegment = new CPawnListHeader(model, new RangeInt(1, int.MaxValue / 2));
+            CRowSegment headerSegment = new CPawnListHeader(model, new RangeInt(0, 1), true);
+            CRowSegment bodySegment = new CPawnListHeader(model, new RangeInt(0, int.MaxValue / 2), true); // including first column twice for Nubmers compatibility; second copy is invisible
             var header = list.AppendRow(
                 new CPawnTableRow
                 {
@@ -121,6 +124,7 @@ namespace PawnTableGrouped
             {
                 extendedArea = info.config?.expandedBottomSpace ?? extendedArea;
                 fotterBtnOffset = info.config?.fotterBtnOffset ?? fotterBtnOffset;
+                allowHScroll = info.config?.allowHScroll ?? allowHScroll;
             }
         }
 

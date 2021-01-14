@@ -15,10 +15,11 @@ namespace PawnTableGrouped
         private bool doLeftOffset;
 
         private PawnTableGroupedModel model;
-        public CPawnListHeader(PawnTableGroupedModel model, RangeInt columnsRange)
+        public CPawnListHeader(PawnTableGroupedModel model, RangeInt columnsRange, bool doLeftOffset)
         {
             this.model = model;
             this.columnsRange = columnsRange;
+            this.doLeftOffset = doLeftOffset;
         }
 
         public override Vector2 tryFit(Vector2 size)
