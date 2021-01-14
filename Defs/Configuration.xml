@@ -193,8 +193,8 @@
 						<name>Work</name>
 						<compatibility>Issues</compatibility>
 						<defaultGrouping>faction</defaultGrouping>
-						<hint>Fluffy's Work Tab mod is not compatible for time being.
-Issues: tab render is broken</hint>
+						<hint>Fluffy's Work Tab mod is not fully compatible for time being.
+Issues: various render issues</hint>
 						<defaultGrouping>faction</defaultGrouping>
 						<config>
 							<allowHScroll>true</allowHScroll>
@@ -208,7 +208,7 @@ Issues: tab render is broken</hint>
 				<tables>
 					<li>
 						<name>Animals</name>
-						<compatibility>Issues</compatibility>
+						<compatibility>Supported</compatibility>
 						<hint>Filter button overlaps with settings buttons</hint>
 						<defaultGrouping>race</defaultGrouping>
 						<config>
