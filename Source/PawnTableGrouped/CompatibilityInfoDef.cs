@@ -14,6 +14,7 @@ namespace PawnTableGrouped
         public string defaultGrouping;
         public string hint;
         public string issues;
+        public Type settingsWorker = null;
         public TableConfig config;
     }
 

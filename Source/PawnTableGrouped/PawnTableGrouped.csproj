@@ -146,6 +146,7 @@
     <Compile Include="GroupingProviders\GroupWorker_ByFaction.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByGender.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByRace.cs" />
+    <Compile Include="ModCompatibility\WorkTab.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnTable.cs" />
     <Compile Include="ModCompatibility\Numbers.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListGroupFixed.cs" />

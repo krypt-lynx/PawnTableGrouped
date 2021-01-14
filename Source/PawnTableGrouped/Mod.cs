@@ -83,8 +83,10 @@ namespace PawnTableGrouped
         }
 
         public static string CommitInfo = null;
-        public static bool ModNumbersActive = false;
         
+        public static bool ModNumbersActive = false;
+        public static bool ModWorkTabActive = false;
+
         public static Verse.Mod Instance = null;
         
         public static Action ActiveTablesChanged = null;
@@ -99,19 +101,7 @@ namespace PawnTableGrouped
 
             ApplyPatches(harmony);
 
-            UnpatchWorkTab(harmony);
-
             DetectMods();
-        }
-
-        private void UnpatchWorkTab(Harmony harmony)
-        {
-/*            harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_prefix"));*/
-
-
-            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"), HarmonyPatchType.All, "fluffy.worktab");
-            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"), HarmonyPatchType.All, "fluffy.worktab");
         }
 
         private static void ApplyPatches(Harmony harmony)
@@ -145,12 +135,12 @@ namespace PawnTableGrouped
         private static void DetectMods()
         {
             var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
-            if (loadedModIds.Contains("mehni.numbers"))
-            {
-                ModNumbersActive = true;
-            }
+            
+            ModNumbersActive = loadedModIds.Contains("mehni.numbers");
+            ModWorkTabActive = loadedModIds.Contains("fluffy.worktab");
 
             NumbersWrapper.Resolve();
+            WorkTabWrapper.Resolve();
         }
 
         public override string SettingsCategory()

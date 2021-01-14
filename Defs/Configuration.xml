@@ -195,10 +195,10 @@
 						<defaultGrouping>faction</defaultGrouping>
 						<hint>Fluffy's Work Tab mod is not fully compatible for time being.
 Issues: various render issues</hint>
-						<defaultGrouping>faction</defaultGrouping>
 						<config>
 							<allowHScroll>true</allowHScroll>
 						</config>
+						<settingsWorker>PawnTableGrouped.WorkTabSettingsWorker</settingsWorker>
 					</li>
 				</tables>
 			</li>

@@ -71,7 +71,7 @@ namespace PawnTableGrouped
 
         Color colorForPawnTable(TablesSettingsViewModel.TableData tableData)
         {
-            switch (tableData.compatibility)
+            switch (tableData.Compatibility)
             {
                 case TableCompatibility.Supported:
                     return Color.green;
@@ -97,29 +97,29 @@ namespace PawnTableGrouped
 
                 var column0 = row.AddElement(new CElement
                 {
-                    Tip = table.tip,
+                    Tip = table.Tip,
                 });
 
                 var checkbox = row.AddElement(new CCheckbox
                 {
-                    Checked = table.selected,
+                    Checked = table.Selected,
                     Changed = (_, value) => tablesModel.SetSelected(table, value),
                     Paintable = true,
                 });
                 var title = row.AddElement(new CLabel
                 {
-                    Title = table.defName,
+                    Title = table.DefName,
                     Color = colorForPawnTable(table),
                 });
 
                 var column1 = row.AddElement(new CElement
                 {
-                    Tip = table.packageId,
+                    Tip = table.PackageId,
                 });
 
                 var description = column1.AddElement(new CLabel
                 {
-                    Title = table.modName,
+                    Title = table.ModName,
                 });
 
                 column0.StackLeft(StackOptions.Create(constrainSides: false), 2, checkbox, 2, title);
@@ -144,7 +144,7 @@ namespace PawnTableGrouped
 
                 table.OnChanged = (t) =>
                 {
-                    checkbox.Checked = t.selected;
+                    checkbox.Checked = t.Selected;
                 };
 
                 index++;

@@ -51,7 +51,7 @@ namespace PawnTableGrouped
             */
         }
 
-        private static new Resource<Texture2D>[] careTextures;
+        private static Resource<Texture2D>[] careTextures;
 
         // Token: 0x06004A50 RID: 19024 RVA: 0x00192AC2 File Offset: 0x00190CC2
 

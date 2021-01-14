@@ -12,13 +12,19 @@ namespace PawnTableGrouped
     {
         public class TableData
         {
-            public TableCompatibility compatibility;
-            public string defName;
-            public string modName;
-            public string packageId;
-            public bool selected;
-            public string tip;
+            public TableCompatibility Compatibility;
+            public string DefName;
+            public string ModName;
+            public string PackageId;
+            public bool Selected;
+            public string Tip;
             public Action<TableData> OnChanged;
+            public ISettingsWorker Worker;
+
+            public void NotifySettingsWorker()
+            {
+                Worker?.TableActiveChanged(DefName, Selected);
+            }
 
             public void DoChanged()
             {
@@ -35,12 +41,12 @@ namespace PawnTableGrouped
             Tables = DefDatabase<PawnTableDef>.AllDefs
                 .Select(def => new TableData
                 {
-                    defName = def.defName,
-                    compatibility = TableCompatibility.Compatible,
-                    selected = Mod.Settings.pawnTablesEnabled.Contains(def.defName),
+                    DefName = def.defName,
+                    Compatibility = TableCompatibility.Compatible,
+                    Selected = Mod.Settings.pawnTablesEnabled.Contains(def.defName),
                 }).ToList();
 
-            defToTable = Tables.ToDictionary(d => d.defName, d => d);
+            defToTable = Tables.ToDictionary(d => d.DefName, d => d);
 
             DetectMods();
 
@@ -64,10 +70,11 @@ namespace PawnTableGrouped
 
                         if (defToTable.TryGetValue(tableInfo.name, out data))
                         {
-                            data.modName = modInfo.modName;
-                            data.packageId = modInfo.packageId;
-                            data.compatibility = tableInfo.compatibility;
-                            data.tip = tableInfo.hint;
+                            data.ModName = modInfo.modName;
+                            data.PackageId = modInfo.packageId;
+                            data.Compatibility = tableInfo.compatibility;
+                            data.Tip = tableInfo.hint;
+                            data.Worker = tableInfo.settingsWorker != null ? (ISettingsWorker)Activator.CreateInstance(tableInfo.settingsWorker) : null;
                         }
                     }
                 }
@@ -76,15 +83,16 @@ namespace PawnTableGrouped
 
         public void SetSelected(TableData table, bool value)
         {
-            table.selected = value;
+            table.Selected = value;
             if (value)
             {
-                Mod.Settings.pawnTablesEnabled.Add(table.defName);
+                Mod.Settings.pawnTablesEnabled.Add(table.DefName);
             }
             else
             {
-                Mod.Settings.pawnTablesEnabled.Remove(table.defName);
+                Mod.Settings.pawnTablesEnabled.Remove(table.DefName);
             }
+            table.NotifySettingsWorker(); 
             Mod.DoActiveTablesChanged();
         }
 
@@ -94,15 +102,16 @@ namespace PawnTableGrouped
 
             foreach (var table in Tables)
             {
-                if (table.compatibility >= compatibility)
+                if (table.Compatibility >= compatibility)
                 {
-                    Mod.Settings.pawnTablesEnabled.Add(table.defName);
-                    table.selected = true;
+                    Mod.Settings.pawnTablesEnabled.Add(table.DefName);
+                    table.Selected = true;
                 }
                 else
                 {
-                    table.selected = false;
+                    table.Selected = false;
                 }
+                table.NotifySettingsWorker();
                 table.DoChanged();
             }
 
@@ -115,7 +124,8 @@ namespace PawnTableGrouped
 
             foreach (var table in Tables)
             {
-                table.selected = false;
+                table.Selected = false;
+                table.NotifySettingsWorker();
                 table.DoChanged();
             }
 

@@ -10,7 +10,6 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-
     public class NumbersWrapper
     {
         static bool disabled = true;
