@@ -8,41 +8,6 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class TableInfo
-    {
-        public string name;
-        public TableCompatibility compatibility;
-        public string defaultGrouping;
-        public string hint;
-        public string issues;
-        public TableConfig config;
-    }
-
-    public class TableConfig
-    {
-        public bool allowHScroll;
-    }
-
-    public class CompatibilityInfoDef : Def
-    {
-        public List<ModCompatibility> compatibilityList;
-    }
-
-    public class ModCompatibility
-    {
-        public string packageId;
-        public string modName;
-        public List<TableInfo> tables;
-    }
-
-    public enum TableCompatibility
-    {
-        Incompatible,
-        Issues,
-        Compatible,
-        Supported,
-    }
-
     public class TablesSettingsViewModel
     {
         public class TableData

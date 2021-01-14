@@ -29,11 +29,13 @@ namespace PawnTableGrouped
             list.InnerWidth = innerWidth;
         }
 
-        float extendedArea = 30;
+        float extendedArea = 0;
         float fotterBtnOffset = 0;
 
         void ConstructGUI()
         {
+            ReadTableSettings();
+
             CElement footer;
 
             list = host.AddElement(new CPawnTable());
@@ -110,6 +112,16 @@ namespace PawnTableGrouped
             {
                 collapseBtn.Checked = !model.Groups.Any(x => model.IsExpanded(x));
             };
+        }
+
+        private void ReadTableSettings()
+        {
+            TableInfo info = null;
+            if (CompatibilityInfoDef.CurrentTables.TryGetValue(model.def.defName, out info))
+            {
+                extendedArea = info.config?.expandedBottomSpace ?? extendedArea;
+                fotterBtnOffset = info.config?.fotterBtnOffset ?? fotterBtnOffset;
+            }
         }
 
         public void PopulateList()
@@ -192,9 +204,8 @@ namespace PawnTableGrouped
                     }
                 }
             }
-            height += Metrics.PawnTableFooterHeight;
 
-            height -= extendedArea;
+            height += extendedArea;
 
             return height;
         }

@@ -58,30 +58,14 @@ namespace PawnTableGrouped
     {
         static ModPostInit()
         {
-            var info = DefDatabase<CompatibilityInfoDef>.GetNamed("ModCompatibility");
-            var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
-
-            Mod.DefaultTableConfig.Clear();
-
-            // default table config
-            foreach (var tableInfo in info.compatibilityList.Where(x => loadedModIds.Contains(x.packageId)).SelectMany(x => x.tables))
-            {
-                Mod.DefaultTableConfig[tableInfo.name] = tableInfo.defaultGrouping;
-            }
-
             // enabling supported tables if first run
             if (Mod.Settings.firstRun)
             {
                 Mod.Settings.firstRun = false;
 
-                Dictionary<string, TableCompatibility> compatibility = new Dictionary<string, TableCompatibility>();
-                foreach (var tableInfo in info.compatibilityList.Where(x => loadedModIds.Contains(x.packageId)).SelectMany(x => x.tables))
-                {
-                    compatibility[tableInfo.name] = tableInfo.compatibility;
-                }
-
                 Mod.Settings.pawnTablesEnabled.AddRange(
-                    compatibility.Where(kvp => kvp.Value == TableCompatibility.Supported).Select(kvp => kvp.Key));
+                    CompatibilityInfoDef.CurrentTables.Where(kvp => kvp.Value.compatibility == TableCompatibility.Supported).Select(kvp => kvp.Key)
+                    );
             }
         }
     }
@@ -90,7 +74,6 @@ namespace PawnTableGrouped
     {
         public static string PackageIdOfMine = null;
         public static Settings Settings { get; private set; }
-        public static Dictionary<string, string> DefaultTableConfig = new Dictionary<string, string>();
 
         private static bool debug = false;
         public static bool Debug { get

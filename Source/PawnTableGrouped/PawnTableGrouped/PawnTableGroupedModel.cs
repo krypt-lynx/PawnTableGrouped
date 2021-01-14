@@ -88,10 +88,10 @@ namespace PawnTableGrouped
             else
             {
                 // have no data, using defaults
-                string groupingKey = null;
-                if (Mod.DefaultTableConfig.TryGetValue(def.defName, out groupingKey))
+                TableInfo info = null;
+                if (CompatibilityInfoDef.CurrentTables.TryGetValue(def.defName, out info))
                 {
-                    ActiveGrouper = AllGroupers.FirstOrDefault(x => groupingKey == x.Key()) ?? AllGroupers.First();
+                    ActiveGrouper = AllGroupers.FirstOrDefault(x => info.defaultGrouping == x.Key()) ?? AllGroupers.First();
                 } 
                 else
                 {

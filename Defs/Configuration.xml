@@ -195,6 +195,7 @@
 						<defaultGrouping>faction</defaultGrouping>
 						<hint>Fluffy's Work Tab mod is not compatible for time being.
 Issues: tab render is broken</hint>
+						<defaultGrouping>faction</defaultGrouping>
 						<config>
 							<allowHScroll>true</allowHScroll>
 						</config>
@@ -210,6 +211,9 @@ Issues: tab render is broken</hint>
 						<compatibility>Issues</compatibility>
 						<hint>Filter button overlaps with settings buttons</hint>
 						<defaultGrouping>race</defaultGrouping>
+						<config>
+							<fotterBtnOffset>30</fotterBtnOffset>
+						</config>
 					</li>
 				</tables>
 			</li>
