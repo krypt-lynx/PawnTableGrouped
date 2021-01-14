@@ -84,9 +84,6 @@ namespace PawnTableGrouped
 
         public static string CommitInfo = null;
         
-        public static bool ModNumbersActive = false;
-        public static bool ModWorkTabActive = false;
-
         public static Verse.Mod Instance = null;
         
         public static Action ActiveTablesChanged = null;
@@ -136,11 +133,9 @@ namespace PawnTableGrouped
         {
             var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
             
-            ModNumbersActive = loadedModIds.Contains("mehni.numbers");
-            ModWorkTabActive = loadedModIds.Contains("fluffy.worktab");
-
-            NumbersWrapper.Resolve();
-            WorkTabWrapper.Resolve();
+            NumbersWrapper.Resolve(loadedModIds.Contains("mehni.numbers"));
+            WorkTabWrapper.Resolve(loadedModIds.Contains("fluffy.worktab"));
+            SimpleSlaveryWrapper.Resolve(loadedModIds.Contains("syl.simpleslavery"));
         }
 
         public override string SettingsCategory()

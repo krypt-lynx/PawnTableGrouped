@@ -81,9 +81,9 @@ namespace PawnTableGrouped
             }
         }
 
-        public static void Resolve()
+        public static void Resolve(bool active)
         {
-            if (!Mod.ModWorkTabActive)
+            if (!active)
             {
                 disabled = true;
             }

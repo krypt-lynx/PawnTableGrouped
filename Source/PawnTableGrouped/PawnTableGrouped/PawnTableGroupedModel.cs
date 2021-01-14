@@ -46,6 +46,10 @@ namespace PawnTableGrouped
             miscGroupers.Add(new GroupWorker_ByRace());
             miscGroupers.Add(new GroupWorker_ByGender());
             miscGroupers.Add(new GroupWorker_ByFaction());
+            if (SimpleSlaveryWrapper.IsActive)
+            {
+                miscGroupers.Add(new GroupWorker_IsSlave());
+            }
 
             ActiveGrouper = AllGroupers.First();
 
