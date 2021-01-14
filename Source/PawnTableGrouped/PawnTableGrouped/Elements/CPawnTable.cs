@@ -216,18 +216,26 @@ namespace PawnTableGrouped
 
             if (TableHeader.Row != null)
             {
-                float xScrollOffset = 0;
+                float xScrollOffset;
+                float visibleRectWidth;
                 if (allowHScroll)
                 {
+                    xScrollOffset = hScrollPosition + FixedSegmentWidth;
+                    visibleRectWidth = hScrollClipRect.width;
+
                     GUI.BeginClip(headerRowRect);
                     var innerRowRect = headerRowInnerRect;
-                    xScrollOffset = hScrollPosition + FixedSegmentWidth;
                     innerRowRect.x = headerRowInnerRect.x - xScrollOffset;
                     GUI.BeginGroup(innerRowRect);
                 }
+                else
+                {
+                    xScrollOffset = 0;
+                    visibleRectWidth = TableHeader.Row.BoundsRounded.width;
+                }
 
                 TableHeader.Row.xScrollOffset = xScrollOffset;
-                TableHeader.Row.visibleRectWidth = hScrollClipRect.width;
+                TableHeader.Row.visibleRectWidth = visibleRectWidth;
                 TableHeader.Row.DoElementContent();
 
                 if (allowHScroll)

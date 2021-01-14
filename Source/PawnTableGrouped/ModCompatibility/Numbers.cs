@@ -25,6 +25,11 @@ namespace PawnTableGrouped
             }
         }
 
+        public static bool IsNumbersTable(PawnTable table)
+        {
+            return IsActive && NumbersTableType.IsAssignableFrom(table.GetType());
+        }
+
         public static Type NumbersTableType
         {
             get

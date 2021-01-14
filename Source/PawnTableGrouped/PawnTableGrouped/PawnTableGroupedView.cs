@@ -29,18 +29,13 @@ namespace PawnTableGrouped
             list.InnerWidth = innerWidth;
         }
 
-        float extendedArea = 0;
-        float fotterBtnOffset = 0;
-        bool allowHScroll = false;
 
         void ConstructGUI()
         {
-            ReadTableSettings();
-
             CElement footer;
 
             list = host.AddElement(new CPawnTable());
-            list.allowHScroll = allowHScroll;
+            list.allowHScroll = model.AllowHScroll;
 
             var weakList = new Verse.WeakReference<CPawnTable>(list);
             footer = host.AddElement(new CElement());
@@ -108,24 +103,13 @@ namespace PawnTableGrouped
             //fotterBtnOffset = 50;
 
             // arranging buttons in footer
-            footer.StackRight(StackOptions.Create(constrainEnd: false), 16, fotterBtnOffset, (GroupBtn, 30), (DecendingSortBtn, 30), (collapseBtn, 30));
+            footer.StackRight(StackOptions.Create(constrainEnd: false), 16, model.FotterBtnOffset, (GroupBtn, 30), (DecendingSortBtn, 30), (collapseBtn, 30));
            
 
             model.GroupsStateChanged = (m) =>
             {
                 collapseBtn.Checked = !model.Groups.Any(x => model.IsExpanded(x));
             };
-        }
-
-        private void ReadTableSettings()
-        {
-            TableInfo info = null;
-            if (CompatibilityInfoDef.CurrentTables.TryGetValue(model.def.defName, out info))
-            {
-                extendedArea = info.config?.expandedBottomSpace ?? extendedArea;
-                fotterBtnOffset = info.config?.fotterBtnOffset ?? fotterBtnOffset;
-                allowHScroll = info.config?.allowHScroll ?? allowHScroll;
-            }
         }
 
         public void PopulateList()
@@ -209,7 +193,7 @@ namespace PawnTableGrouped
                 }
             }
 
-            height += extendedArea;
+            height += model.TableExtendedArea;
 
             return height;
         }

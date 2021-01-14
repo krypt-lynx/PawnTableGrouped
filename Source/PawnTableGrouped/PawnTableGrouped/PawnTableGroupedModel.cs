@@ -40,6 +40,8 @@ namespace PawnTableGrouped
             columnResolvers = new List<GroupColumnWorker>();
             miscGroupers = new List<GroupWorker>();
 
+            ReadTableConfig();
+
             miscGroupers.Add(new GroupWorker_AllInOne());
             miscGroupers.Add(new GroupWorker_ByRace());
             miscGroupers.Add(new GroupWorker_ByGender());
@@ -55,6 +57,22 @@ namespace PawnTableGrouped
             $"~PawnTableGroupedModel {def.defName}".Log();
             ForceSaveData();
         }
+
+        public float TableExtendedArea = 0;
+        public float FotterBtnOffset = 0;
+        public bool AllowHScroll = false;
+
+        private void ReadTableConfig()
+        {
+            TableInfo info = null;
+            if (CompatibilityInfoDef.CurrentTables.TryGetValue(def.defName, out info))
+            {
+                TableExtendedArea = info.config?.expandedBottomSpace ?? TableExtendedArea;
+                FotterBtnOffset = info.config?.fotterBtnOffset ?? FotterBtnOffset;
+                AllowHScroll = info.config?.allowHScroll ?? AllowHScroll;
+            }
+        }
+
 
         #region Save/Load
 

@@ -69,7 +69,7 @@ namespace PawnTableGrouped
                 return;
             }
 
-            var magic = NumbersWrapper.ReorderableGroup(table);
+            var magic = NumbersWrapper.IsNumbersTable(model.Table) ? NumbersWrapper.ReorderableGroup(table) : 0;
             accessor.RecacheIfDirty();
 
             view.OnGUI(position, magic);
@@ -118,7 +118,7 @@ namespace PawnTableGrouped
             var cachedColumnWidths = accessor.cachedColumnWidths;
             float optimalWidth = accessor.cachedSize.x - Metrics.ScrollBar;
 
-            if (true)
+            if (model.AllowHScroll)
             {
                 float minWidth = 0;
                 for (int i = 0; i < model.def.columns.Count; i++)
