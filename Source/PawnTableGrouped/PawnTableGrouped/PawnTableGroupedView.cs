@@ -151,12 +151,14 @@ namespace PawnTableGrouped
                     {
                         CRowSegment headerSegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(0, 1), true);
                         CPawnListRow bodySegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(1, int.MaxValue / 2), false);
+                        CPawnListHighlight background = new CPawnListHighlight(pawn);
 
                         var pawnRow = list.AppendRow(
                             new CPawnTableRow
                             {
                                 Fixed = headerSegment,
-                                Row = bodySegment
+                                Row = bodySegment,
+                                Background = background
                             });
 
 

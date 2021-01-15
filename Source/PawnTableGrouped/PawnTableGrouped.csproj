@@ -149,6 +149,7 @@
     <Compile Include="GroupingProviders\GroupWorker_IsSlave.cs" />
     <Compile Include="ModCompatibility\SimpleSlaveryWrapper.cs" />
     <Compile Include="ModCompatibility\WorkTabWrapper.cs" />
+    <Compile Include="PawnTableGrouped\Elements\CPawnListHighlight.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnTable.cs" />
     <Compile Include="ModCompatibility\NumbersWrapper.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListGroupFixed.cs" />

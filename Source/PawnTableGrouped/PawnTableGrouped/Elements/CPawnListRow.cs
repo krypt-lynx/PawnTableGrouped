@@ -16,7 +16,6 @@ namespace PawnTableGrouped
         private PawnTableAccessor accessor;
         private Pawn pawn;
         private PawnTableGroup group;
-        private LookTargets target;
         private object[] oldValues = null;
         private RangeInt columnsRange;
         private bool doLeftOffset;
@@ -27,7 +26,6 @@ namespace PawnTableGrouped
             this.accessor = accessor;
             this.pawn = pawn;
             this.group = group;
-            this.target = new LookTargets(pawn);
             this.columnsRange = columnsRange;
             this.doLeftOffset = doLeftOffset;
             oldValues = new object[group.ColumnResolvers.Count];
@@ -53,12 +51,6 @@ namespace PawnTableGrouped
             if (!accessor.CanAssignPawn(pawn))
             {
                 GUI.color = Color.gray;
-            }
-
-            if (Mouse.IsOver(BoundsRounded))
-            {
-                GUI.DrawTexture(BoundsRounded, TexUI.HighlightTex);
-                target.Highlight(true, pawn.IsColonist, false);
             }
 
             bool needUpdateSectionHeader = false;

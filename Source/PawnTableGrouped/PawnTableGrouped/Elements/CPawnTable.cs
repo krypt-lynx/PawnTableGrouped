@@ -40,6 +40,18 @@ namespace PawnTableGrouped
             set
             {
                 owner = new Verse.WeakReference<CPawnTable>(value);
+                if (Fixed != null)
+                {
+                    Fixed.Owner = value;
+                }
+                if (Row != null)
+                {
+                    Row.Owner = value;
+                }
+                if (Background != null)
+                {
+                    Background.Owner = value;
+                }
             }
         }
 
@@ -69,6 +81,21 @@ namespace PawnTableGrouped
                 }
             }
         }
+
+        public CGuiRoot background_;
+        public CGuiRoot Background
+        {
+            get => background_;
+            set
+            {
+                background_ = value;
+               /* if (value != null)
+                {
+                    background_.Row = this;
+                }*/
+            }
+        }
+
 
         public virtual float xScrollOffset
         {
@@ -174,6 +201,7 @@ namespace PawnTableGrouped
             float y = 0;
             foreach (var row in rows)
             {
+
                 if (row.Fixed != null)
                 {
                     row.Fixed.InRect = new Rect(0, y, FixedSegmentWidth, 0);
@@ -184,7 +212,14 @@ namespace PawnTableGrouped
                     row.Row.InRect = new Rect(0, y, InnerWidth - FixedSegmentWidth, 0);
                     row.Row.UpdateLayoutIfNeeded();
                 }
-                y += Mathf.Max(row.Fixed?.Bounds.height ?? 0, row.Row?.Bounds.height ?? 0);
+                var rowHeight = Mathf.Max(row.Fixed?.Bounds.height ?? 0, row.Row?.Bounds.height ?? 0);
+
+                if (row.Background != null)
+                {
+                    row.Background.InRect = new Rect(0, y, InnerWidth, rowHeight);
+                    row.Background.UpdateLayoutIfNeeded();
+                }
+                y += rowHeight;
             }
 
             hScrollVisible = InnerWidth > Bounds.width - vBarWidth;
@@ -259,6 +294,16 @@ namespace PawnTableGrouped
 
             var windowYMin = OuterScrollPosition.y;
             var windowYMax = OuterScrollPosition.y + this.BoundsRounded.height;
+
+            foreach (var row in rows)
+            {
+                if ((row.Row.BoundsRounded.yMax > windowYMin) && (row.Row.BoundsRounded.yMin < windowYMax))
+                {
+                    row.xScrollOffset = hScrollPosition;
+                    row.visibleRectWidth = hScrollClipRect.width;
+                    row.Background?.DoElementContent();
+                }
+            }
 
             GUI.BeginClip(hScrollClipRect);
             var rect = hScrollInnerRect;
