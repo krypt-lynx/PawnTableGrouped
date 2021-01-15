@@ -179,7 +179,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\ColumnGuide.cs" />
     <Compile Include="GUI\CTabsView.cs" />
+    <Compile Include="Settings\ColumnsSettingsTab.cs" />
+    <Compile Include="Settings\GeneralSettingsTab.cs" />
     <Compile Include="Settings\SettingsView.cs" />
+    <Compile Include="Settings\TablesSettingsTab.cs" />
     <Compile Include="Settings\TablesSettingsViewModel.cs" />
     <Compile Include="GroupingProviders\GroupWorker.cs" />
   </ItemGroup>

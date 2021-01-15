@@ -9,10 +9,8 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    class CTabPage : CElement
+    public class CTabPage : CElement
     {
-        public virtual string Title { get; set; }
-
         bool guiNotReady = true;
         public void ConstructGUIIfNeeded()
         {
@@ -24,13 +22,18 @@ namespace PawnTableGrouped
             }
         }
 
+        public virtual string Title()
+        {
+            return NamePrefix();
+        }
+
         protected virtual void ConstructGUI()
         {
 
         }
     }
 
-    class CTabsPanel : CElement
+    public class CTabsPanel : CElement
     {
         public List<TabRecord> Tabs = new List<TabRecord>();
         Rect tabsRegion;
@@ -97,7 +100,7 @@ namespace PawnTableGrouped
 
             var selected = TabIndex == newIndex;
 
-            headersPanel.Tabs.Add(new TabRecord(tab.Title, () =>
+            headersPanel.Tabs.Add(new TabRecord(tab.Title(), () =>
             {
                 TabIndex = newIndex;
             }, selected));
