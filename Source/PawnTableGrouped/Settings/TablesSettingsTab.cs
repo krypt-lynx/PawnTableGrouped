@@ -29,12 +29,10 @@ namespace PawnTableGrouped
 
         private void ConstructTablesTab()
         {
-            CElement tabFrame;
-            CElement actionsGroup;
-
-            this.AddElement(tabFrame = new CFrame());
+            CElement tabFrame = this.AddElement(new CFrame());
             this.Embed(tabFrame);
-            actionsGroup = tabFrame.AddElement(new CElement());
+
+            CElement actionsGroup = tabFrame.AddElement(new CElement());
             actionsGroup.StackLeft(
                 2,
                 actionsGroup.AddElement(new CLabel

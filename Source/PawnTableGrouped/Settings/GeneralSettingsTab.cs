@@ -17,9 +17,7 @@ namespace PawnTableGrouped
 
         protected override void ConstructGUI()
         {
-            CElement tabFrame;
-
-            this.AddElement(tabFrame = new CFrame());
+            CElement tabFrame = this.AddElement(new CFrame());
             this.Embed(tabFrame);
 
 
@@ -30,6 +28,7 @@ namespace PawnTableGrouped
 
 
             tabFrame.StackTop(StackOptions.Create(constrainEnd:false, insets:new EdgeInsets(5)),
+                2,
                 (AddElement(debug = new CCheckboxLabeled
                 {
                     Title = "DebugOutput".Translate(),
