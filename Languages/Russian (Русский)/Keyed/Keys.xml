@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
+  <PTG_General>Общее</PTG_General>
+  <PTG_Tables>Таблицы</PTG_Tables>
+  <PTG_Columns>Колонки</PTG_Columns>
+  <ResolveAllColumns>Сопоставить все колонки</ResolveAllColumns>
+  <LogColumns>Логировать колонки</LogColumns>
+
   <DebugOutput>Отладочный вывод</DebugOutput>
   <HideHeaderIfOnlyOneGroup>Скрыть заголовок группы если в таблице всего одна группа</HideHeaderIfOnlyOneGroup>
   <UsePrimarySortFunction>Использовать первичную сортировку</UsePrimarySortFunction>

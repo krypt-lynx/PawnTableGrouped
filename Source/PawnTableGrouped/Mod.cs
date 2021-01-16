@@ -78,7 +78,7 @@ namespace PawnTableGrouped
         private static bool debug = false;
         public static bool Debug { get
             {
-                return debug || Settings.debug;
+                return Settings.debug;
             }
         }
 

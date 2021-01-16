@@ -15,7 +15,7 @@ namespace PawnTableGrouped
 
         public override string Title()
         {
-            return "Tables".Translate();
+            return "PTG_Tables".Translate();
         }
 
         protected override void ConstructGUI()

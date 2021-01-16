@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
+  <PTG_General>General</PTG_General>
+  <PTG_Tables>Tables</PTG_Tables>
+  <PTG_Columns>Columns</PTG_Columns>
+  <ResolveAllColumns>Resolve all columns</ResolveAllColumns>
+  <LogColumns>Log columns</LogColumns>
+
   <DebugOutput>Debug output</DebugOutput>
   <HideHeaderIfOnlyOneGroup>Hide group header if only one section exists</HideHeaderIfOnlyOneGroup>
   <UsePrimarySortFunction>Use primary sort function</UsePrimarySortFunction>

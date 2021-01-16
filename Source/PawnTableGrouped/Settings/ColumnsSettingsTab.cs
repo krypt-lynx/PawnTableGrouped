@@ -38,7 +38,7 @@ namespace PawnTableGrouped
 
         public override string Title()
         {
-            return "Columns".Translate();
+            return "PTG_Columns".Translate();
         }
 
         public float HeightForRowAt(int index)
@@ -48,8 +48,6 @@ namespace PawnTableGrouped
 
         public CListingRow ListingRowForRowAt(int index)
         {
-            $"ListingRowForRowAt {index}".Log();
-
             if (index == 0 && firstRow != null)
             {
                 return firstRow;
@@ -136,20 +134,44 @@ namespace PawnTableGrouped
 
             var resolveTable = buttonsPanel.AddElement(new CButtonText
             {
-                Title = "Resolve all columns".Translate(),
+                Title = "ResolveAllColumns".Translate(),
                 Action = (_) =>
                 {
-                    var this_ = weakThis?.Target;
-                    foreach (var def in this_.columnDefs)
+                    if (weakThis?.Target is var this_ && this_ != null)
                     {
-                        GroupColumnDefResolver.GetResolver(def);
+                        foreach (var def in this_.columnDefs)
+                        {
+                            GroupColumnDefResolver.GetResolver(def);
+                        }
+                        this_.ReadColumnDefs();
+                        this_.firstRow = null;
+                        this_.columnsList.UpdateList();
                     }
-                    this_.ReadColumnDefs();
-                    firstRow = null;
-                    this_.columnsList.UpdateList();
                 }
             });
-            buttonsPanel.Embed(resolveTable);
+            var logColumns = buttonsPanel.AddElement(new CButtonText
+            {
+                Title = "LogColumns".Translate(),
+                Action = (_) =>
+                {
+                    if (weakThis?.Target is var this_ && this_ != null)
+                    {
+                        string msg = string.Join("\n",
+                            DefDatabase<PawnColumnDef>.AllDefs
+                                .Select(x => (columnDef: x, resolver: GroupColumnDefResolver.GetResolver(x, false)))
+                                .Select(x => $"column: defName={x.columnDef.defName}; " +
+                                $"worker: {x.columnDef.workerClass.FullName}; " + 
+                                $"group worker: {(x.resolver != null).Case(() => x.resolver.workerClass?.FullName, () => "<unresolved>")}")
+                            );
+                        Log.Message(msg);
+                    }
+                }
+            });
+
+            buttonsPanel.StackRight(StackOptions.Create(constrainEnd:false),
+                (logColumns, 200), 
+                10,
+                (resolveTable, 200));
             resolveTable.AddConstraint(resolveTable.height ^ 30);
 
             columnsList = tabFrame.AddElement(new CListView_vNext());

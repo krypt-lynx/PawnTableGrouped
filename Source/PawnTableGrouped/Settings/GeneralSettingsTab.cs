@@ -12,7 +12,7 @@ namespace PawnTableGrouped
     {
         public override string Title()
         {
-            return "General".Translate();
+            return "PTG_General".Translate();
         }
 
         protected override void ConstructGUI()
