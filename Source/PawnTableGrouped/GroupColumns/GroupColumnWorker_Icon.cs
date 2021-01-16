@@ -126,7 +126,7 @@ namespace PawnTableGrouped
 
 		public override bool IsVisible(Pawn pawn)
 		{
-			return true;
+			return GetIconFor(pawn) != null;
 		}
 
 		public override string GetStringValue(Pawn pawn)
