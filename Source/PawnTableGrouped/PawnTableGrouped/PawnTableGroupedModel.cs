@@ -56,12 +56,6 @@ namespace PawnTableGrouped
             LoadData(def);
         }
 
-        ~PawnTableGroupedModel() 
-        {
-            $"~PawnTableGroupedModel {def.defName}".Log();
-            ForceSaveData();
-        }
-
         public float TableExtendedArea = 0;
         public float FotterBtnOffset = 0;
         public bool AllowHScroll = false;
@@ -82,12 +76,15 @@ namespace PawnTableGrouped
 
         private void LoadData(PawnTableDef def)
         {
+            $"LoadData {def.defName}...".Log();
+            
             // trying to access data saved in savegame
             var store = Current.Game.GetComponent<DataStore>();
             store.RegisterModel(this);
             var data = store.GetData(def.defName);
             if (data != null)
             {
+                $"Restored".Log();
                 // have data, reading it
                 IExposable value = null;
                 if (data.TryGetValue("groupsState", out value))
@@ -109,6 +106,7 @@ namespace PawnTableGrouped
             } 
             else
             {
+                $"Defaults".Log();
                 // have no data, using defaults
                 TableInfo info = null;
                 if (CompatibilityInfoDef.CurrentTables.TryGetValue(def.defName, out info))
@@ -122,7 +120,7 @@ namespace PawnTableGrouped
             }
         }
 
-        private void ForceSaveData()
+        public void SaveData()
         {
             var store = Current.Game.GetComponent<DataStore>();
 
@@ -134,6 +132,7 @@ namespace PawnTableGrouped
         public Dictionary<string, IExposable> SaveData(out string Key)
         {
             Key = def.defName;
+            $"SaveData {Key}".Log();
 
             var data =  new Dictionary<string, IExposable>();
             data["groupsState"] = (DictionaryContainer<string, bool>)ExpandedState;

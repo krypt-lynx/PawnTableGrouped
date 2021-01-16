@@ -60,6 +60,10 @@ namespace PawnTableGrouped
             return view.CalculateTotalRequiredHeight();
         }
 
+        public virtual void SaveData()
+        {
+            model.SaveData();
+        }
 
         public virtual void PawnTableOnGUI(Vector2 position)
         {

@@ -13,12 +13,7 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class StringListDef : Def
-    {
-        public List<string> list;
-    }
-
-    class PawnTablePatches
+    public class PawnTablePatches
     {
         public static void Patch(Harmony harmony)
         {
@@ -27,7 +22,10 @@ namespace PawnTableGrouped
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"),
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "CalculateTotalRequiredHeight"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));            
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));
+
+            harmony.Patch(AccessTools.Method(typeof(Window), "PostClose"),
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PostClose_postfix"));
         }
 
         static PawnTablePatches()
@@ -38,7 +36,25 @@ namespace PawnTableGrouped
                 ResetImplementationsCache();
             };
         }
-        
+
+        static PawnTable GetTable(MainTabWindow_PawnTable window)
+        {
+            return (PawnTable)typeof(MainTabWindow_PawnTable).GetField("table", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(window);
+        }
+
+        static void PostClose_postfix(Window __instance)
+        {
+            if (__instance is MainTabWindow_PawnTable tableWindow)
+            {
+                var table = GetTable(tableWindow);
+
+                if (table != null && TryGetImplementation(table, out var impl))
+                {
+                    impl.SaveData();
+                }
+            }
+        }
+
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl> implementations;
 
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>.CreateValueCallback instantiateTableImpl = table =>
