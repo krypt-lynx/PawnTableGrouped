@@ -32,8 +32,8 @@ namespace PawnTableGrouped
                 (AddElement(debug = new CCheckboxLabeled
                 {
                     Title = "DebugOutput".Translate(),
-                    Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
-                    Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
+                    Checked = Mod.Settings.debug,
+                    Changed = (_, value) => Mod.Settings.debug = value,
                 }), debug.intrinsicHeight),
                 10,
                 (AddElement(hideHeader = new CCheckboxLabeled
