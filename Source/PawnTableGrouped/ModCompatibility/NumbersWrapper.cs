@@ -26,7 +26,7 @@ namespace PawnTableGrouped
 
         public static bool IsNumbersTable(PawnTable table)
         {
-            return IsActive && NumbersTableType.IsAssignableFrom(table.GetType());
+            return IsActive && table != null && NumbersTableType.IsAssignableFrom(table.GetType());
         }
 
         public static Type NumbersTableType
@@ -82,6 +82,7 @@ namespace PawnTableGrouped
             if (!active)
             {
                 disabled = true;
+                return;
             }
 
             try

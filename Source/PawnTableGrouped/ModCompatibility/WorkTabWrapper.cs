@@ -86,6 +86,7 @@ namespace PawnTableGrouped
             if (!active)
             {
                 disabled = true;
+                return;
             }
 
             try
