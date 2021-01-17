@@ -32,7 +32,16 @@ namespace PawnTableGrouped
 
     public class PawnTableGroupedImpl
     {
-        PawnTable table; // todo: weak ref
+        Verse.WeakReference<PawnTable> table;
+        public PawnTable Table
+        {
+            get => table.Target; 
+            set
+            {
+                table = new Verse.WeakReference<PawnTable>(value);
+            }
+        }
+
         PawnTableAccessor accessor;
         //PawnTableDef def;
 
@@ -43,7 +52,7 @@ namespace PawnTableGrouped
 
         public PawnTableGroupedImpl(PawnTable table, PawnTableDef def)
         {
-            this.table = table;
+            this.Table = table;
             //this.def = def;
 
             accessor = new PawnTableAccessor(table);
@@ -73,7 +82,7 @@ namespace PawnTableGrouped
                 return;
             }
 
-            var magic = NumbersWrapper.IsNumbersTable(model.Table) ? NumbersWrapper.ReorderableGroup(table) : 0;
+            var magic = NumbersWrapper.IsNumbersTable(Table) ? NumbersWrapper.ReorderableGroup(Table) : 0;
             accessor.RecacheIfDirty();
 
             view.OnGUI(position, magic);
