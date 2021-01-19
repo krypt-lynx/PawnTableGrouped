@@ -7,14 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using Numbers;
 
 namespace PawnTableGrouped
 {
     public class NumbersWrapper
     {
         static bool disabled = true;
-        static Type numbersType = null;
-        static Type pawnTableType = null;
+        //static Type numbersType = null;
+        //static Type pawnTableType = null;
 
         public static bool IsActive
         {
@@ -38,7 +39,7 @@ namespace PawnTableGrouped
                     return null;
                 }
 
-                return pawnTableType;
+                return typeof(PawnTable_NumbersMain);
             }
         }
 
@@ -51,7 +52,7 @@ namespace PawnTableGrouped
 
             try
             {
-                return (int)numbersType.GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { pawnTable });
+                return (int)typeof(Numbers.Numbers).GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { pawnTable });
             }
             catch
             {
@@ -69,7 +70,7 @@ namespace PawnTableGrouped
 
             try
             {
-                numbersType.GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { groupId, rect });
+                typeof(Numbers.Numbers).GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { groupId, rect });
             }
             catch
             {
@@ -87,9 +88,8 @@ namespace PawnTableGrouped
 
             try
             {
-                numbersType = GenTypes.GetTypeInAnyAssembly("Numbers.Numbers");
-                pawnTableType = GenTypes.GetTypeInAnyAssembly("Numbers.PawnTable_NumbersMain");
-                disabled = false;
+                disabled = GenTypes.GetTypeInAnyAssembly("Numbers.Numbers") == null ||
+                           GenTypes.GetTypeInAnyAssembly("Numbers.PawnTable_NumbersMain") == null;
             }
             catch
             {

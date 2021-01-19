@@ -366,3 +366,4 @@ MigrationBackup/
 
 # embeded git info generation
 git.txt
+Dependencies/

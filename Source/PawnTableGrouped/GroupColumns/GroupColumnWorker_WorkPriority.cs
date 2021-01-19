@@ -10,7 +10,7 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    class GroupColumnWorker_WorkPriority : GroupColumnWorker
+    public class GroupColumnWorker_WorkPriority : GroupColumnWorker
     {
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
@@ -57,7 +57,6 @@ namespace PawnTableGrouped
             return pawn.workSettings.GetPriority(ColumnDef.workType);
         }
 
-
         public override bool IsVisible(Pawn pawn)
         {
             return !pawn.WorkTypeIsDisabled(ColumnDef.workType);
@@ -66,12 +65,10 @@ namespace PawnTableGrouped
         public override void SetValue(Pawn pawn, object value)
         {
             var priority = (int)value;
-            if (priority >= 0)
+
+            if (!pawn.WorkTypeIsDisabled(ColumnDef.workType))
             {
-                if (!pawn.WorkTypeIsDisabled(ColumnDef.workType))
-                {
-                    pawn.workSettings.SetPriority(ColumnDef.workType, priority);
-                }
+                pawn.workSettings.SetPriority(ColumnDef.workType, priority);
             }
         }
     }
