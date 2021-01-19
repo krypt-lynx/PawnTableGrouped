@@ -11,41 +11,16 @@ using Numbers;
 
 namespace PawnTableGrouped
 {
-    public class NumbersBridge
-    {
-        static bool disabled = true;
-        //static Type numbersType = null;
-        //static Type pawnTableType = null;
-
-        public static bool IsActive
-        {
-            get
-            {
-                return !disabled;
-            }
-        }
-
+    public class NumbersBridge : ModBridge<NumbersBridge>
+    { 
         public static bool IsNumbersTable(PawnTable table)
         {
-            return IsActive && table != null && NumbersTableType.IsAssignableFrom(table.GetType());
-        }
-
-        public static Type NumbersTableType
-        {
-            get
-            {
-                if (disabled)
-                {
-                    return null;
-                }
-
-                return typeof(PawnTable_NumbersMain);
-            }
+            return Instance.IsActive && table != null && tableType.IsAssignableFrom(table.GetType());
         }
 
         public static int ReorderableGroup(PawnTable pawnTable)
         {
-            if (disabled)
+            if (!Instance.IsActive)
             {
                 return 0;
             }
@@ -56,14 +31,15 @@ namespace PawnTableGrouped
             }
             catch
             {
-                disabled = true;
+                Instance.Deactivate();
                 return 0;
             }
         }
 
+        static Type tableType = null;
         public static void CallReorderableWidget(int groupId, Rect rect)
         {
-            if (disabled)
+            if (!Instance.IsActive)
             {
                 return;
             }
@@ -74,27 +50,15 @@ namespace PawnTableGrouped
             }
             catch
             {
-                disabled = true;
+                Instance.Deactivate();
             }
         }
 
-        public static void Resolve(bool active)
+        protected override bool ResolveInternal()
         {
-            if (!active)
-            {
-                disabled = true;
-                return;
-            }
-
-            try
-            {
-                disabled = GenTypes.GetTypeInAnyAssembly("Numbers.Numbers") == null ||
-                           GenTypes.GetTypeInAnyAssembly("Numbers.PawnTable_NumbersMain") == null;
-            }
-            catch
-            {
-                disabled = true;
-            }
+            tableType = typeof(PawnTable_NumbersMain);
+            return GenTypes.GetTypeInAnyAssembly("Numbers.Numbers") != null &&
+                GenTypes.GetTypeInAnyAssembly("Numbers.PawnTable_NumbersMain") != null;
         }
     }
 

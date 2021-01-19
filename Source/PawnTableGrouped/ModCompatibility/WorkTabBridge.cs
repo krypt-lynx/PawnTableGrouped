@@ -17,38 +17,30 @@ namespace PawnTableGrouped
         void TableActiveChanged(string tableName, bool active);
     }
 
-    class WorkTabSettingsWorker : ISettingsWorker
+    public class WorkTabSettingsWorker : ISettingsWorker
     {
         public void TableActiveChanged(string tableName, bool active)
         {
             if (tableName == WorkTabBridge.WorkTabDefName)
             {
-                WorkTabBridge.WorkTabRenderEnabled = !active;
+                WorkTabBridge.Instance.WorkTabRenderEnabled = !active;
             }
         }
     }
 
-    class WorkTabBridge
+    public class WorkTabBridge : ModBridge<WorkTabBridge>
     {
-        static bool disabled = true;
-        static Harmony harmony = null;
-        static MethodInfo PawnTable_PawnTableOnGUI_prefix = null;
-        static MethodInfo PawnTable_RecacheIfDirty_prefix = null;
-        static MethodInfo PawnTable_RecacheIfDirty_postfix = null;
+        Harmony harmony = null;
+        MethodInfo PawnTable_PawnTableOnGUI_prefix = null;
+        MethodInfo PawnTable_RecacheIfDirty_prefix = null;
+        MethodInfo PawnTable_RecacheIfDirty_postfix = null;
         
         const string workTabHarmonyId = "fluffy.worktab";
         internal const string WorkTabDefName = "Work";
 
-        public static bool IsActive
-        {
-            get
-            {
-                return !disabled;
-            }
-        }
 
-        public static bool workTabRenderEnabled = true;
-        public static bool WorkTabRenderEnabled
+        public bool workTabRenderEnabled = true;
+        public bool WorkTabRenderEnabled
         {
             get
             {
@@ -56,7 +48,7 @@ namespace PawnTableGrouped
             }
             set
             {
-                if (disabled)
+                if (!Instance.IsActive)
                 {
                     return;
                 }
@@ -84,44 +76,33 @@ namespace PawnTableGrouped
                 }
                 catch
                 {
-                    disabled = true;
+                    Instance.Deactivate();
                 }
             }
         }
 
+
         delegate bool PawnTable_PawnTableOnGUI_Prefix_Delegate(PawnTable arg1, Vector2 arg2, PawnTableDef arg3, ref Vector2 arg4);
 
-
-        public static void Resolve(bool active)
+        protected override bool ResolveInternal()
         {
-            if (!active)
+            PawnTable_PawnTableOnGUI_prefix = ((PawnTable_PawnTableOnGUI_Prefix_Delegate)PawnTable_PawnTableOnGUI.Prefix).Method;
+
+            PawnTable_RecacheIfDirty_prefix = typeof(PawnTable_RecacheIfDirty).GetMethod("Prefix", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(PawnTable), typeof(bool).MakeByRefType(), typeof(PawnTableDef) }, null);
+            PawnTable_RecacheIfDirty_postfix = typeof(PawnTable_RecacheIfDirty).GetMethod("Postfix", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(PawnTable), typeof(bool) }, null);
+
+            if (PawnTable_PawnTableOnGUI_prefix == null || PawnTable_RecacheIfDirty_prefix == null || PawnTable_RecacheIfDirty_postfix == null)
             {
-                disabled = true;
-                return;
+                throw new Exception();
             }
 
-            try
-            {
-                PawnTable_PawnTableOnGUI_prefix = ((PawnTable_PawnTableOnGUI_Prefix_Delegate)PawnTable_PawnTableOnGUI.Prefix).Method;
+            harmony = new Harmony(workTabHarmonyId);
 
-                PawnTable_RecacheIfDirty_prefix = typeof(PawnTable_RecacheIfDirty).GetMethod("Prefix", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(PawnTable), typeof(bool).MakeByRefType(), typeof(PawnTableDef) }, null);
-                PawnTable_RecacheIfDirty_postfix = typeof(PawnTable_RecacheIfDirty).GetMethod("Postfix", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(PawnTable), typeof(bool) }, null);
 
-                if (PawnTable_PawnTableOnGUI_prefix == null || PawnTable_RecacheIfDirty_prefix == null || PawnTable_RecacheIfDirty_postfix == null)
-                {
-                    throw new Exception();
-                }
+            WorkTabRenderEnabled = !Mod.Settings.pawnTablesEnabled.Contains(WorkTabDefName);
 
-                harmony = new Harmony(workTabHarmonyId);
 
-                disabled = false;
-
-                WorkTabRenderEnabled = !Mod.Settings.pawnTablesEnabled.Contains(WorkTabDefName);
-            }
-            catch
-            {
-                disabled = true;
-            }
+            return true;
         }
     }
 }

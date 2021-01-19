@@ -10,45 +10,20 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class SimpleSlaveryBridge
+    public class SimpleSlaveryBridge : ModBridge<SimpleSlaveryBridge>
     {
-        static bool disabled = true;
-
-        public static bool IsActive
-        {
-            get
-            {
-                return !disabled;
-            }
-        }
-
         public static bool IsPawnColonySlave(Pawn pawn)
         {
-            if (!IsActive)
+            if (!Instance.IsActive)
             {
                 return false;
             }
             return SlaveUtility.IsPawnColonySlave(pawn);
         }
 
-
-        public static void Resolve(bool active)
+        protected override bool ResolveInternal()
         {
-            if (!active)
-            {
-                disabled = true;
-                return;
-            }
-
-            try
-            {
-                disabled = GenTypes.GetTypeInAnyAssembly("SimpleSlavery.SlaveUtility") == null || 
-                    typeof(SlaveUtility).GetMethod("IsPawnColonySlave", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(Pawn) }, null) == null;
-            }
-            catch
-            {
-                disabled = true;
-            }
+            return ((Func<Pawn, bool>)SlaveUtility.IsPawnColonySlave)?.Method != null; // ensure method exists
         }
     }
 
