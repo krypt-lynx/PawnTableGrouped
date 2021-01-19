@@ -1,0 +1,40 @@
+1.2
+* Work Tab missing column headers fix
+* correct count of priorities in group header for Work Tab
+* Compatible mods handling... improvements?
+
+1.1.2 
+* mod detection bug
+
+1.1.1
+* better group state saving
+* different group icon selection for icon columns: icon shown even if some pawns does not have it, if there is no conflicting icons.
+
+1.1
++ Partial Work Tab support
++ [Simple Slavery] Grouping by Colonist/Slave.
+
+1.0
++ grouping settings
++ grouping by pawn faction
++ grouping by pawn gender
++ grouping by pawn column value (experimental, disabled by default)
++ groups state saving
+
+0.11.2
+* group row cells transparency behavior
++ allow area column group cell
+
+0.11.1
+* settings window fix
+
+0.11
++ group workers are xml configurable now
+
+0.10
++ Interactive group cells
++ Numbers mod support
++ Groups are available for any pawn table now (check the mod options)
+
+0.9
++ initial release
