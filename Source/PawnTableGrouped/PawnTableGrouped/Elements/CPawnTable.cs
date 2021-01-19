@@ -182,7 +182,7 @@ namespace PawnTableGrouped
             {
                 if (allowHScroll)
                 {
-                    TableHeader.Row.InRect = new Rect(0, 0, InnerWidth - FixedSegmentWidth, 0);
+                    TableHeader.Row.InRect = new Rect(0, 0, InnerWidth, 0);
                 } 
                 else
                 {
@@ -195,7 +195,7 @@ namespace PawnTableGrouped
             var headerHeight = Mathf.Max(TableHeader?.Fixed?.Bounds.height ?? 0, TableHeader?.Row?.Bounds.height ?? 0);
 
             headerRowRect = new Rect(Bounds.xMin + FixedSegmentWidth, Bounds.yMin, Bounds.width - FixedSegmentWidth - vBarWidth, headerHeight);
-            headerRowInnerRect = new Rect(0, 0, InnerWidth - FixedSegmentWidth, headerHeight);
+            headerRowInnerRect = new Rect(0, 0, InnerWidth, headerHeight);
 
 
             float y = 0;
