@@ -31,6 +31,11 @@ namespace PawnTableGrouped
             return Group.ColumnResolvers[columnIndex];
         }
 
+        public PawnColumnWorker ColumnWorker()
+        {
+            return Resolver()?.ColumnDef?.Worker;
+        }
+
         public bool HasResolver()
         {
             return Group.HasResolver(columnIndex);

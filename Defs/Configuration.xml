@@ -39,9 +39,13 @@
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
 			</li>
 			<li>
-				<!-- needed for Numbers + Work Tab -->
+				<!-- Work Tab -->
 				<columnWorkerType>WorkTab.PawnColumnWorker_WorkType</columnWorkerType> 
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
+				<workerConfig Class="PawnTableGrouped.GCW_WorkPriority_Config">
+					<prioritiesCount>10</prioritiesCount>
+					<defaultPriority>3</defaultPriority>
+				</workerConfig>
 			</li>
 			<!-- allowed area -->	
 			<li>
