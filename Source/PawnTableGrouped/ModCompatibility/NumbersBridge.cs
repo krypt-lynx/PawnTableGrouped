@@ -11,7 +11,7 @@ using Numbers;
 
 namespace PawnTableGrouped
 {
-    public class NumbersWrapper
+    public class NumbersBridge
     {
         static bool disabled = true;
         //static Type numbersType = null;

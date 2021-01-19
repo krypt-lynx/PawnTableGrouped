@@ -103,6 +103,10 @@
       <HintPath>F:\games\RimWorld\Mods\PawnTableGrouped_dev\Dependencies\Numbers.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="SimpleSlavery">
+      <HintPath>F:\games\RimWorld\Mods\PawnTableGrouped_dev\Dependencies\1.2\SimpleSlavery.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -139,6 +143,10 @@
       <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="WorkTab">
+      <HintPath>F:\games\RimWorld\Mods\PawnTableGrouped_dev\Dependencies\1.2\WorkTab.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompatibilityInfoDef.cs" />
@@ -152,11 +160,11 @@
     <Compile Include="GroupingProviders\GroupWorker_ByGender.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByRace.cs" />
     <Compile Include="GroupingProviders\GroupWorker_IsSlave.cs" />
-    <Compile Include="ModCompatibility\SimpleSlaveryWrapper.cs" />
-    <Compile Include="ModCompatibility\WorkTabWrapper.cs" />
+    <Compile Include="ModCompatibility\SimpleSlaveryBridge.cs" />
+    <Compile Include="ModCompatibility\WorkTabBridge.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListHighlight.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnTable.cs" />
-    <Compile Include="ModCompatibility\NumbersWrapper.cs" />
+    <Compile Include="ModCompatibility\NumbersBridge.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListGroupFixed.cs" />
     <Compile Include="PawnTableGrouped\PawnTableGrouped.cs" />
     <Compile Include="PawnTableGrouped\PawnTableGroupedModel.cs" />

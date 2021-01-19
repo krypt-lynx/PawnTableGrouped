@@ -49,7 +49,7 @@ namespace PawnTableGrouped
 
                     Text.Font = GameFont.Small;
 
-                    if (!config.forceAlignment && NumbersWrapper.IsNumbersTable(table))
+                    if (!config.forceAlignment && NumbersBridge.IsNumbersTable(table))
                     {
                         Text.Anchor = TextAnchor.MiddleCenter;
                     }

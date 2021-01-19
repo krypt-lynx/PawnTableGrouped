@@ -55,9 +55,9 @@ namespace PawnTableGrouped
                 {
                     Rect rect = new Rect(x, BoundsRounded.yMin, columnWidth, BoundsRounded.height);
 
-                    if (NumbersWrapper.IsNumbersTable(model.Table))
+                    if (NumbersBridge.IsNumbersTable(model.Table))
                     {
-                        NumbersWrapper.CallReorderableWidget(model.NumbersMagic, rect);
+                        NumbersBridge.CallReorderableWidget(model.NumbersMagic, rect);
                     }
                     columns[columnIndex].Worker.DoHeader(rect, model.Table);
                 }

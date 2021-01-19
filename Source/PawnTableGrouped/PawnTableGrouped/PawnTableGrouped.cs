@@ -82,7 +82,7 @@ namespace PawnTableGrouped
                 return;
             }
 
-            var magic = NumbersWrapper.IsNumbersTable(Table) ? NumbersWrapper.ReorderableGroup(Table) : 0;
+            var magic = NumbersBridge.IsNumbersTable(Table) ? NumbersBridge.ReorderableGroup(Table) : 0;
             accessor.RecacheIfDirty();
 
             view.OnGUI(position, magic);

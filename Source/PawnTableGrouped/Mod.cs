@@ -133,9 +133,9 @@ namespace PawnTableGrouped
         {
             var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
             
-            NumbersWrapper.Resolve(loadedModIds.Contains("mehni.numbers"));
-            WorkTabWrapper.Resolve(loadedModIds.Contains("fluffy.worktab"));
-            SimpleSlaveryWrapper.Resolve(loadedModIds.Contains("syl.simpleslavery"));
+            NumbersBridge.Resolve(loadedModIds.Contains("mehni.numbers"));
+            WorkTabBridge.Resolve(loadedModIds.Contains("fluffy.worktab"));
+            SimpleSlaveryBridge.Resolve(loadedModIds.Contains("syl.simpleslavery"));
         }
 
         public override string SettingsCategory()

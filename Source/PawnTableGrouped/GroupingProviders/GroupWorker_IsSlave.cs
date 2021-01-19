@@ -13,7 +13,7 @@ namespace PawnTableGrouped
         {
             public bool Equals(Pawn x, Pawn y)
             {
-                return SimpleSlaveryWrapper.IsPawnColonySlave(x) == SimpleSlaveryWrapper.IsPawnColonySlave(y);
+                return SimpleSlaveryBridge.IsPawnColonySlave(x) == SimpleSlaveryBridge.IsPawnColonySlave(y);
             }
 
             public int GetHashCode(Pawn obj)
@@ -26,7 +26,7 @@ namespace PawnTableGrouped
         {
             public int Compare(PawnTableGroup x, PawnTableGroup y)
             {
-                return Math.Sign(Convert.ToInt32(SimpleSlaveryWrapper.IsPawnColonySlave(x.KeyPawn)) - Convert.ToInt32(SimpleSlaveryWrapper.IsPawnColonySlave(y.KeyPawn)));
+                return Math.Sign(Convert.ToInt32(SimpleSlaveryBridge.IsPawnColonySlave(x.KeyPawn)) - Convert.ToInt32(SimpleSlaveryBridge.IsPawnColonySlave(y.KeyPawn)));
             }
         }
 
@@ -41,7 +41,7 @@ namespace PawnTableGrouped
 
         public override TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
         {
-            return SimpleSlaveryWrapper.IsPawnColonySlave(keyPawn) ? "Slave" : "Colonist";
+            return SimpleSlaveryBridge.IsPawnColonySlave(keyPawn) ? "Slave" : "Colonist";
         }
 
         public override string MenuItemTitle()

@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using SimpleSlavery;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,9 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class SimpleSlaveryWrapper
+    public class SimpleSlaveryBridge
     {
         static bool disabled = true;
-        static Type simpleSlaveryType = null;
-
-        static MethodInfo isPawnColonySlaveMethod = null;
 
         public static bool IsActive
         {
@@ -29,21 +27,8 @@ namespace PawnTableGrouped
             if (!IsActive)
             {
                 return false;
-            }            
-            return (bool)isPawnColonySlaveMethod?.Invoke(null, new object[] { pawn });
-        }
-
-        public static Type SimpleSlaveryType
-        {
-            get
-            {
-                if (disabled)
-                {
-                    return null;
-                }
-
-                return simpleSlaveryType;
             }
+            return SlaveUtility.IsPawnColonySlave(pawn);
         }
 
 
@@ -57,11 +42,8 @@ namespace PawnTableGrouped
 
             try
             {
-                simpleSlaveryType = GenTypes.GetTypeInAnyAssembly("SimpleSlavery.SlaveUtility");
-                isPawnColonySlaveMethod = simpleSlaveryType.GetMethod("IsPawnColonySlave", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(Pawn) }, null);
-
-
-                disabled = false;
+                disabled = GenTypes.GetTypeInAnyAssembly("SimpleSlavery.SlaveUtility") == null || 
+                    typeof(SlaveUtility).GetMethod("IsPawnColonySlave", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(Pawn) }, null) == null;
             }
             catch
             {
