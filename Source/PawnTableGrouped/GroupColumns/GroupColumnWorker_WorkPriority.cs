@@ -3,6 +3,7 @@ using RWLayout.alpha2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -15,20 +16,53 @@ namespace PawnTableGrouped
 	{
 		public int prioritiesCount = 5;
 		public int defaultPriority = 3;
+		public string priorityColorMethod = "RimWorld.WidgetsWork:ColorOfPriority";
+
+		[Unsaved(false)]
+		MethodInfo getColorMethod = null;
+		[Unsaved(false)]
+		bool getColorMethodFailsafe = false;
+		[Unsaved(false)]
+		Color getColorMethodFailsafeColor = new Color(0.74f, 0.74f, 0.74f);
+
+		public Color ColorOfPriority(int priority)
+		{
+			if (getColorMethodFailsafe)
+			{
+				return getColorMethodFailsafeColor;
+			}
+
+			try
+			{
+				if (getColorMethod == null)
+				{
+					getColorMethod = HarmonyLib.AccessTools.Method(priorityColorMethod);
+				}
+
+				return (Color)getColorMethod.Invoke(null, new object[] { priority });
+			}
+			catch
+			{
+				getColorMethodFailsafe = true;
+				return getColorMethodFailsafeColor;
+			}
+		}
 	}
 
 	public class GroupColumnWorker_WorkPriority : GroupColumnWorker
     {
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
-            GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
             if (!column.IsUniform())
             {
-                DoMixedValuesWidget(rect, column);
-            }
-            else
+				GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
+				DoMixedValuesWidget(rect, column);
+				GuiTools.PopColor();
+			}
+			else
             {
-                var pawn = GetRepresentingPawn(column.Group.Pawns);
+				GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
+				var pawn = GetRepresentingPawn(column.Group.Pawns);
                 GuiTools.PushFont(GameFont.Medium);
                 float x = rect.x + (rect.width - 25f) / 2f;
                 float y = rect.y + 2.5f;
@@ -41,9 +75,9 @@ namespace PawnTableGrouped
                 {
                     Event.current.Use();
                 }
-            }
-            GuiTools.PopColor();
-        }
+				GuiTools.PopColor();
+			}
+		}
 
 		protected virtual int PrioritiesCount()
         {
@@ -59,15 +93,17 @@ namespace PawnTableGrouped
 			Rect rect = new Rect(x, y, 25f, 25f);
 
 			DrawWorkBoxBackground(rect, column, wType);
-			GUI.color = Color.white;
+			//GUI.color = Color.white;
 			if (Find.PlaySettings.useWorkPriorities)
 			{
 				if (priority > 0)
 				{
 					Text.Anchor = TextAnchor.MiddleCenter;
-					GUI.color = WidgetsWork.ColorOfPriority(priority);
+					Color textColor = GetWorkerConfig<GCW_WorkPriority_Config>().ColorOfPriority(priority);
+					textColor.a *= GUI.color.a == 1 ? 1 : Metrics.GroupHeaderOpacityText;
+					GuiTools.PushColor(textColor);
 					Widgets.Label(rect.ContractedBy(-3f), priority.ToStringCached());
-					GUI.color = Color.white;
+					GuiTools.PopColor();
 					Text.Anchor = TextAnchor.UpperLeft;
 				}
 				if (Event.current.type == EventType.MouseDown && Mouse.IsOver(rect))
@@ -119,8 +155,8 @@ namespace PawnTableGrouped
 				}
 			}
 		}
-		
-		private void DrawWorkBoxBackground(Rect rect, PawnTableGroupColumn column, WorkTypeDef workDef)
+
+        private void DrawWorkBoxBackground(Rect rect, PawnTableGroupColumn column, WorkTypeDef workDef)
 		{
 			//float num = p.skills.AverageOfRelevantSkillsFor(workDef);
 			Texture2D image;
@@ -170,7 +206,7 @@ namespace PawnTableGrouped
 			//		GUI.DrawTexture(position, WidgetsWork.PassionWorkboxMajorIcon);
 			//	}
 			//}
-			GUI.color = Color.white;
+			//GUI.color = Color.white;
 		}
 		
 		public override bool CanSetValues()

@@ -45,6 +45,7 @@
 				<workerConfig Class="PawnTableGrouped.GCW_WorkPriority_Config">
 					<prioritiesCount>10</prioritiesCount>
 					<defaultPriority>3</defaultPriority>
+					<priorityColorMethod>WorkTab.DrawUtilities:ColorOfPriority</priorityColorMethod>
 				</workerConfig>
 			</li>
 			<!-- allowed area -->	
