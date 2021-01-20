@@ -31,7 +31,7 @@ namespace PawnTableGrouped
 
             footer = AddElement(new CLabel
             {
-                Title = $"Grouped Pawns Lists version: {Mod.CommitInfo}",
+                Title = $"Version: {Mod.CommitInfo}",
                 TextAlignment = TextAnchor.LowerRight,
                 Color = new Color(1, 1, 1, 0.5f),
                 Font = GameFont.Tiny

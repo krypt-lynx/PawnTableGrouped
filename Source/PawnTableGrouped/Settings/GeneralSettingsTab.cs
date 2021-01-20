@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace PawnTableGrouped
@@ -25,10 +26,9 @@ namespace PawnTableGrouped
             CElement hideHeader;
             CElement primarySort;
             CElement byColumn;
+            CElement tmp; // lets hope I will not hit undefined behavior 
 
-
-            tabFrame.StackTop(StackOptions.Create(constrainEnd:false, insets:new EdgeInsets(5)),
-                2,
+            tabFrame.StackTop(StackOptions.Create(insets:new EdgeInsets(7)),
                 (AddElement(debug = new CCheckboxLabeled
                 {
                     Title = "DebugOutput".Translate(),
@@ -55,8 +55,39 @@ namespace PawnTableGrouped
                     Title = "GroupByColumnExperimental".Translate(),
                     Checked = Mod.Settings.groupByColumnExperimental,
                     Changed = (_, value) => Mod.Settings.groupByColumnExperimental = value,
-                }), byColumn.intrinsicHeight)
+                }), byColumn.intrinsicHeight),
+                AddElement(new CElement()), // flexable spacer
+                (AddElement(tmp = new CLabel
+                {
+                    Title = ModInfoString("Numbers", NumbersBridge.Instance),
+                }), tmp.intrinsicHeight),
+                (AddElement(tmp = new CLabel
+                {
+                    Title = ModInfoString("Simple Slavery", SimpleSlaveryBridge.Instance),
+                }), tmp.intrinsicHeight),
+                (AddElement(tmp = new CLabel
+                {
+                    Title = ModInfoString("Work Tab", WorkTabBridge.Instance),
+                }), tmp.intrinsicHeight)
             );
+        }
+
+        string ModInfoString<T>(string modName, ModBridge<T> bridge) where T : ModBridge<T>
+        {
+            StringBuilder sb = new StringBuilder();
+
+            string BoolToString(bool value, Color if_, Color else_)
+            {
+                return value ? "Yes".Colorize(if_) : "No".Colorize(else_);
+            }
+
+            sb.Append($"{modName}: detected: {BoolToString(bridge.IsDetected, Color.green, Color.white)};");
+            if (bridge.IsDetected)
+            {
+                sb.Append($" interacting: { BoolToString(bridge.IsActive, Color.green, Color.red)};");
+            }
+
+            return sb.ToString();
         }
     }
 }
