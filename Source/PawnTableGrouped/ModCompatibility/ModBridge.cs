@@ -8,7 +8,10 @@ namespace PawnTableGrouped
 {
     public abstract class ModBridge<T> where T : ModBridge<T>
     {
-        private bool disabled = true;
+        private bool detected = false;
+        private bool activated = false;
+        //private bool disabled = true;
+
 
         public static T Instance;
 
@@ -20,37 +23,33 @@ namespace PawnTableGrouped
             }
         }
 
-        public bool IsActive
-        {
-            get
-            {
-                return !disabled;
-            }
-        }
+        public bool IsDetected => detected;
+        public bool IsActive => activated;
 
         public void Deactivate()
         {
-            disabled = true;
+            activated = false;
         }
 
         public static void Resolve(bool active)
         {
             Instance = (T)Activator.CreateInstance(typeof(T));
 
-            Instance.disabled = !active;
+            Instance.activated = active;
+            Instance.detected = active;
 
-            if (Instance.disabled)
+            if (!Instance.activated)
             {
                 return;
             }
 
             try
             {
-                Instance.disabled = !Instance.ResolveInternal();
+                Instance.activated = Instance.ResolveInternal();
             }
             catch
             {
-                Instance.disabled = true;
+                Instance.activated = false;
             }
         }
 
