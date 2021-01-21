@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TacticalGroups;
 using Verse;
 
 namespace PawnTableGrouped
 {
-    public class GroupWorker_ByGender : SortingGroupWorker
+    class GroupWorker_ByColonyGroup : SortingGroupWorker
     {
         class PawnComparer : IEqualityComparer<Pawn>
         {
             public bool Equals(Pawn x, Pawn y)
             {
-                return x.gender.Equals(x.gender);
+                return true;
             }
 
             public int GetHashCode(Pawn obj)
             {
-                return obj.gender.GetHashCode();
+                return 0;
             }
         }
 
@@ -26,33 +27,34 @@ namespace PawnTableGrouped
         {
             public int Compare(PawnTableGroup x, PawnTableGroup y)
             {
-                return Math.Sign((int)y.KeyPawn.gender - (int)x.KeyPawn.gender);
+                return 0;
             }
         }
 
         public override IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
         public override IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
 
-        public GroupWorker_ByGender()
+        public GroupWorker_ByColonyGroup()
         {
             GroupingEqualityComparer = new PawnComparer();
             GroupsSortingComparer = new GroupComparer();
         }
 
-        public override TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
+        public override string Key()
         {
-            return keyPawn.gender.ToString().CapitalizeFirst() ?? "<unknown gender?>";
+            return "colonygroups_group";
         }
 
         public override string MenuItemTitle()
         {
-            return "by gender";
+            return "colony groups";
         }
 
-        public override string Key()
+        public override TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
         {
-            return "gender";
+           // TacticalGroups.
+
+            throw new NotImplementedException();
         }
     }
-
 }

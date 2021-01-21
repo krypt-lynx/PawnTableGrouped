@@ -7,7 +7,7 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    class GroupWorker_IsSlave : GroupWorker
+    class GroupWorker_IsSlave : SortingGroupWorker
     {
         class PawnComparer : IEqualityComparer<Pawn>
         {

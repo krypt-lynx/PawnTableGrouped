@@ -9,7 +9,7 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class GroupWorker_ByColumn : GroupWorker
+    public class GroupWorker_ByColumn : SortingGroupWorker
     {
         class ByColumnComparer : IEqualityComparer<Pawn>
         {

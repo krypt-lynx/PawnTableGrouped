@@ -68,7 +68,11 @@ namespace PawnTableGrouped
                 (AddElement(tmp = new CLabel
                 {
                     Title = ModInfoString("Work Tab", WorkTabBridge.Instance),
-                }), tmp.intrinsicHeight)
+                }), tmp.intrinsicHeight),
+                (AddElement(tmp = new CLabel
+                {
+                    Title = ModInfoString("Colony Groups", ColonyGroupsBridge.Instance),
+                }), tmp.intrinsicHeight)                
             );
         }
 

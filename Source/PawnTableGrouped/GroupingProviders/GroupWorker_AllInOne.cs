@@ -9,19 +9,6 @@ namespace PawnTableGrouped
 {
     public class GroupWorker_AllInOne : GroupWorker
     {
-        class PawnComparer : IEqualityComparer<Pawn>
-        {
-            public bool Equals(Pawn x, Pawn y)
-            {
-                return true;
-            }
-
-            public int GetHashCode(Pawn obj)
-            {
-                return 0;
-            }
-        }
-
         class GroupComparer : IComparer<PawnTableGroup>
         {
             public int Compare(PawnTableGroup x, PawnTableGroup y)
@@ -30,13 +17,18 @@ namespace PawnTableGrouped
             }
         }
 
-        public override IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
         public override IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
 
         public GroupWorker_AllInOne()
         {
-            GroupingEqualityComparer = new PawnComparer();
             GroupsSortingComparer = new GroupComparer();
+        }
+
+        public override IEnumerable<IGrouping<Pawn, Pawn>> CreateGroups(List<Pawn> pawns)
+        {
+            if (pawns.Count > 0) {
+                yield return new Grouping<Pawn, Pawn>(pawns.First(), pawns);
+            }
         }
 
         public override TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
@@ -53,6 +45,7 @@ namespace PawnTableGrouped
         {
             return "all";
         }
+
     }
 
 }

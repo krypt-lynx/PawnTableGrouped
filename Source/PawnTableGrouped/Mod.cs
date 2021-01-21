@@ -136,6 +136,7 @@ namespace PawnTableGrouped
             NumbersBridge.Resolve(loadedModIds.Contains("mehni.numbers"));
             WorkTabBridge.Resolve(loadedModIds.Contains("fluffy.worktab"));
             SimpleSlaveryBridge.Resolve(loadedModIds.Contains("syl.simpleslavery"));
+            ColonyGroupsBridge.Resolve(loadedModIds.Contains("derekbickley.ltocolonygroupsfinal"));
         }
 
         public override string SettingsCategory()

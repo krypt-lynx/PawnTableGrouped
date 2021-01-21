@@ -11,8 +11,8 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-	class GroupWorker_ByFaction : GroupWorker
-    {
+	class GroupWorker_ByFaction : SortingGroupWorker
+	{
         class PawnComparer : IEqualityComparer<Pawn>
         {
             public bool Equals(Pawn x, Pawn y)

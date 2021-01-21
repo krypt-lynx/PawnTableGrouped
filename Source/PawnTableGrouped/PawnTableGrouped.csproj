@@ -115,6 +115,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TacticalGroups">
+      <HintPath>F:\games\RimWorld\Mods\PawnTableGrouped_dev\Dependencies\1.2\TacticalGroups.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -155,11 +158,13 @@
     <Compile Include="GroupColumns\GroupColumnWorker_AllowedArea.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_WorkPriority.cs" />
     <Compile Include="GroupingProviders\GroupWorker_AllInOne.cs" />
+    <Compile Include="GroupingProviders\GroupWorker_ByColonyGroup.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByColumn.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByFaction.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByGender.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByRace.cs" />
     <Compile Include="GroupingProviders\GroupWorker_IsSlave.cs" />
+    <Compile Include="ModCompatibility\ColonyGroupsBridge.cs" />
     <Compile Include="ModCompatibility\ModBridge.cs" />
     <Compile Include="ModCompatibility\SimpleSlaveryBridge.cs" />
     <Compile Include="ModCompatibility\WorkTabBridge.cs" />

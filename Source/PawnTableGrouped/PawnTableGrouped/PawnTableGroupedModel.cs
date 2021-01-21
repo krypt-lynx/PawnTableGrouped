@@ -50,6 +50,10 @@ namespace PawnTableGrouped
             {
                 miscGroupers.Add(new GroupWorker_IsSlave());
             }
+            if (ColonyGroupsBridge.Instance.IsActive)
+            {
+                miscGroupers.Add(new GroupWorker_ByColonyGroup());
+            }
 
             ActiveGrouper = AllGroupers.First();
 
@@ -229,8 +233,8 @@ namespace PawnTableGrouped
 
         public void RecacheGroups()
         {
-            var pawnGroups = Table.PawnsListForReading
-                .GroupBy(p => p, ActiveGrouper.GroupingEqualityComparer);
+
+            var pawnGroups = ActiveGrouper.CreateGroups(Table.PawnsListForReading);
 
             Groups = new List<PawnTableGroup>();
             foreach (var group in pawnGroups)
@@ -251,6 +255,7 @@ namespace PawnTableGrouped
                 {
                     pawns = accessor.PrimarySortFunction(pawns).ToList();
                 }
+
                 Groups.Add(new PawnTableGroup(ActiveGrouper.TitleForGroup(group, group.Key), group.Key, pawns, columnResolvers));
             }
 
