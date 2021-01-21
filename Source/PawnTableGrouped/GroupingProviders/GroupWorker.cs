@@ -41,16 +41,25 @@ namespace PawnTableGrouped
         public abstract string MenuItemTitle();
         public abstract string Key();
 
-        public abstract IEnumerable<IGrouping<Pawn, Pawn>> CreateGroups(List<Pawn> pawns);
+        public abstract IEnumerable<PawnTableGroup> CreateGroups(List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers);
+
+        public TaggedString TitleForGroup(IGrouping<Pawn, Pawn> pawns)
+        {
+            return TitleForGroup(pawns, pawns.Key);
+        }
     }
 
     public abstract class SortingGroupWorker : GroupWorker // todo: name
     {
         public abstract IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
 
-        public override IEnumerable<IGrouping<Pawn, Pawn>> CreateGroups(List<Pawn> pawns)
+        public override IEnumerable<PawnTableGroup> CreateGroups(List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
         {
-           return pawns.GroupBy(p => p, GroupingEqualityComparer);
+            var groups = pawns.GroupBy(p => p, GroupingEqualityComparer);
+            foreach (var group in groups)
+            {
+                yield return new PawnTableGroup(TitleForGroup(group), group.Key, group, columnResolvers);
+            }
         }
     }
 

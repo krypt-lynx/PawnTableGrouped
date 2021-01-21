@@ -231,33 +231,44 @@ namespace PawnTableGrouped
 
         #region Group management
 
+        List<Pawn> tmpSortList = new List<Pawn>();
+
+        /// <summary>
+        /// Sorts pawns using default-ish PawnTable sorting
+        /// </summary>
+        /// <param name="pawns"></param>
+        /// <returns>sorted pawns</returns>
+        /// <remarks>returned object must not be stored</remarks>
+        public IEnumerable<Pawn> DefaultPawnSort(IEnumerable<Pawn> pawns)
+        {
+            tmpSortList.Clear();
+            tmpSortList.AddRange(accessor.LabelSortFunction(pawns));
+            if (accessor.sortByColumn != null)
+            {
+                if (accessor.sortDescending)
+                {
+                    tmpSortList.SortStable(new Func<Pawn, Pawn, int>(accessor.sortByColumn.Worker.Compare));
+                }
+                else
+                {
+                    tmpSortList.SortStable((Pawn a, Pawn b) => accessor.sortByColumn.Worker.Compare(b, a));
+                }
+            }
+            if (Mod.Settings.usePrimarySortFunction)
+            {
+                return accessor.PrimarySortFunction(tmpSortList);
+            }
+            else
+            {
+                return tmpSortList;
+            }
+        }
+
+
         public void RecacheGroups()
         {
 
-            var pawnGroups = ActiveGrouper.CreateGroups(Table.PawnsListForReading);
-
-            Groups = new List<PawnTableGroup>();
-            foreach (var group in pawnGroups)
-            {
-                var pawns = accessor.LabelSortFunction(group).ToList();
-                if (accessor.sortByColumn != null)
-                {
-                    if (accessor.sortDescending)
-                    {
-                        pawns.SortStable(new Func<Pawn, Pawn, int>(accessor.sortByColumn.Worker.Compare));
-                    }
-                    else
-                    {
-                        pawns.SortStable((Pawn a, Pawn b) => accessor.sortByColumn.Worker.Compare(b, a));
-                    }
-                }
-                if (Mod.Settings.usePrimarySortFunction)
-                {
-                    pawns = accessor.PrimarySortFunction(pawns).ToList();
-                }
-
-                Groups.Add(new PawnTableGroup(ActiveGrouper.TitleForGroup(group, group.Key), group.Key, pawns, columnResolvers));
-            }
+            Groups = ActiveGrouper.CreateGroups(Table.PawnsListForReading, DefaultPawnSort, columnResolvers).ToList();
 
             SortGroups();
         }

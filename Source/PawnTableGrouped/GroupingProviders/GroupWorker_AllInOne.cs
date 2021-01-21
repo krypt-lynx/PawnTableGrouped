@@ -24,12 +24,14 @@ namespace PawnTableGrouped
             GroupsSortingComparer = new GroupComparer();
         }
 
-        public override IEnumerable<IGrouping<Pawn, Pawn>> CreateGroups(List<Pawn> pawns)
+        public override IEnumerable<PawnTableGroup> CreateGroups(List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
         {
-            if (pawns.Count > 0) {
-                yield return new Grouping<Pawn, Pawn>(pawns.First(), pawns);
+            if (pawns.Count > 0)
+            {
+                yield return new PawnTableGroup(TitleForGroup(pawns, pawns.First()), pawns.First(), pawns, columnResolvers);
             }
         }
+
 
         public override TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
         {

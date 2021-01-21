@@ -8,21 +8,8 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    class GroupWorker_ByColonyGroup : SortingGroupWorker
+    class GroupWorker_ByColonyGroup : GroupWorker
     {
-        class PawnComparer : IEqualityComparer<Pawn>
-        {
-            public bool Equals(Pawn x, Pawn y)
-            {
-                return true;
-            }
-
-            public int GetHashCode(Pawn obj)
-            {
-                return 0;
-            }
-        }
-
         class GroupComparer : IComparer<PawnTableGroup>
         {
             public int Compare(PawnTableGroup x, PawnTableGroup y)
@@ -31,12 +18,10 @@ namespace PawnTableGrouped
             }
         }
 
-        public override IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
         public override IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
 
         public GroupWorker_ByColonyGroup()
         {
-            GroupingEqualityComparer = new PawnComparer();
             GroupsSortingComparer = new GroupComparer();
         }
 
@@ -52,9 +37,29 @@ namespace PawnTableGrouped
 
         public override TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn)
         {
-           // TacticalGroups.
+            return "";
+        }
 
-            throw new NotImplementedException();
+        public override IEnumerable<PawnTableGroup> CreateGroups(List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
+        {
+            if (!ColonyGroupsBridge.Instance.IsActive)
+            {
+                yield break;
+            }
+
+            HashSet<Pawn> ungrouped = new HashSet<Pawn>(pawns);
+
+            foreach (var cgGroup in ColonyGroupsBridge.AllPawnGroups.Reverse<PawnGroup>())
+            {
+                ungrouped.ExceptWith(cgGroup.ActivePawns);
+                yield return new PawnTableGroup(cgGroup.curGroupName ?? "", null, cgGroup.ActivePawns, columnResolvers);            
+            }
+
+            if (ungrouped.Count > 0)
+            {
+                var pawnsPreservingOrder = pawns.Where(p => ungrouped.Contains(p));
+                yield return new PawnTableGroup("Ungrouped", null, pawnsPreservingOrder, columnResolvers);
+            }
         }
     }
 }
