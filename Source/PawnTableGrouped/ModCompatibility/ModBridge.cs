@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,22 +7,10 @@ using System.Threading.Tasks;
 
 namespace PawnTableGrouped
 {
-    public abstract class ModBridge<T> where T : ModBridge<T>
+    public abstract class ModBridge
     {
-        private bool detected = false;
-        private bool activated = false;
-        //private bool disabled = true;
-
-
-        public static T Instance;
-
-        protected ModBridge()
-        {
-            if (Instance != null)
-            {
-                throw new InvalidOperationException($"Instance of {this.GetType().Name} already initialized");
-            }
-        }
+        protected bool detected = false;
+        protected bool activated = false;
 
         public bool IsDetected => detected;
         public bool IsActive => activated;
@@ -31,28 +20,52 @@ namespace PawnTableGrouped
             activated = false;
         }
 
-        public static void Resolve(bool active)
+        protected ModBridge() { }
+
+        public void Resolve(bool active, Harmony harmony)
         {
-            Instance = (T)Activator.CreateInstance(typeof(T));
+            activated = active;
+            detected = active;
 
-            Instance.activated = active;
-            Instance.detected = active;
-
-            if (!Instance.activated)
+            if (!activated)
             {
                 return;
             }
 
             try
             {
-                Instance.activated = Instance.ResolveInternal();
+                var success = this.ResolveInternal(harmony);
+                activated |= success;
+
+                ApplyPatches(harmony);
             }
             catch
             {
-                Instance.activated = false;
+                activated = false;
+                $"{this.GetType()} was activated but failed initialization, integration disabled".Log(MessageType.Warning);
             }
         }
 
-        protected abstract bool ResolveInternal();
+        protected abstract bool ResolveInternal(Harmony harmony);
+        protected virtual void ApplyPatches(Harmony harmony) { }
+    }
+
+    public abstract class ModBridge<T> : ModBridge where T : ModBridge, new()
+    {
+
+        private static T instance = null;
+        public static T Instance => instance ??= new T();
+
+        protected ModBridge()
+        {
+            if (instance != null)
+            {
+                throw new InvalidOperationException($"Instance of {this.GetType().Name} already initialized");
+            }
+            else
+            {
+                instance = (T)(object)this;
+            }
+        }
     }
 }

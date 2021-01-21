@@ -25,67 +25,27 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class Settings : ModSettings
-    {
-        public bool firstRun = true;
-        public bool debug = false;
-        public bool hideHeaderIfOnlyOneGroup = false;
-        public bool usePrimarySortFunction = true;
-        public bool groupByColumnExperimental = false;
-
-        public HashSet<string> pawnTablesEnabled = new HashSet<string>();
-
-        public override void ExposeData()
-        {
-            Scribe_Values.Look(ref firstRun, "firstRun2", true);
-
-            Scribe_Values.Look(ref debug, "debug", false);  
-            Scribe_Values.Look(ref hideHeaderIfOnlyOneGroup, "hideHeaderIfOnlyOneGroup", false);
-            Scribe_Values.Look(ref usePrimarySortFunction, "usePrimarySortFunction", true);
-            Scribe_Values.Look(ref groupByColumnExperimental, "groupByColumnExperimental", false);
-
-            Scribe_Collections.Look(ref pawnTablesEnabled, "pawnTablesEnabled");
-            
-            pawnTablesEnabled ??= new HashSet<string>();
-            
-            base.ExposeData();
-        }
-    }
-
-    [StaticConstructorOnStartup]
-    public static class ModPostInit
-    {
-        static ModPostInit()
-        {
-            // enabling supported tables if first run
-            if (Mod.Settings.firstRun)
-            {
-                Mod.Settings.firstRun = false;
-
-                Mod.Settings.pawnTablesEnabled.AddRange(
-                    CompatibilityInfoDef.CurrentTables.Where(kvp => kvp.Value.compatibility == TableCompatibility.Supported).Select(kvp => kvp.Key)
-                    );
-            }
-        }
-    }
-
     public class Mod : CMod
     {
         public static string PackageIdOfMine = null;
         public static Settings Settings { get; private set; }
 
         private static bool debug = false;
-        public static bool Debug { get
-            {
-                return Settings.debug;
-            }
-        }
+        public static bool Debug => Settings.debug;
 
-        public static string CommitInfo = null;
+        static string commitInfo = null;
+        public static string CommitInfo => debug ? (commitInfo + "-dev") : commitInfo;
         
         public static Verse.Mod Instance = null;
         
         public static Action ActiveTablesChanged = null;
+
+        static (string packageId, ModBridge bridge)[] ModBridges =  {
+            ("mehni.numbers", NumbersBridge.Instance),
+            ("fluffy.worktab", WorkTabBridge.Instance),
+            ("syl.simpleslavery", SimpleSlaveryBridge.Instance),
+            ("derekbickley.ltocolonygroupsfinal", ColonyGroupsBridge.Instance),
+        };
 
         public Mod(ModContentPack content) : base(content)
         {
@@ -97,7 +57,7 @@ namespace PawnTableGrouped
 
             ApplyPatches(harmony);
 
-            DetectMods();
+            DetectMods(harmony);
         }
 
         private static void ApplyPatches(Harmony harmony)
@@ -117,25 +77,25 @@ namespace PawnTableGrouped
                         .GetManifestResourceStream(name + ".git.txt"))
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    CommitInfo = reader.ReadToEnd()?.TrimEndNewlines();
+                    commitInfo = reader.ReadToEnd()?.TrimEndNewlines();
                 }
             }
             catch
             {
-                CommitInfo = null;
+                commitInfo = null;
             }
 
             debug = PackageIdOfMine.EndsWith(".dev");
         }
 
-        private static void DetectMods()
+        private static void DetectMods(Harmony harmony)
         {
-            var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
-            
-            NumbersBridge.Resolve(loadedModIds.Contains("mehni.numbers"));
-            WorkTabBridge.Resolve(loadedModIds.Contains("fluffy.worktab"));
-            SimpleSlaveryBridge.Resolve(loadedModIds.Contains("syl.simpleslavery"));
-            ColonyGroupsBridge.Resolve(loadedModIds.Contains("derekbickley.ltocolonygroupsfinal"));
+            var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();            
+
+            foreach (var info in ModBridges)
+            {
+                info.bridge.Resolve(loadedModIds.Contains(info.packageId), harmony);
+            }
         }
 
         public override string SettingsCategory()

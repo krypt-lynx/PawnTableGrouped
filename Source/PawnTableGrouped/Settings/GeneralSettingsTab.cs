@@ -76,7 +76,7 @@ namespace PawnTableGrouped
             );
         }
 
-        string ModInfoString<T>(string modName, ModBridge<T> bridge) where T : ModBridge<T>
+        string ModInfoString<T>(string modName, ModBridge<T> bridge) where T : ModBridge<T>, new()
         {
             StringBuilder sb = new StringBuilder();
 

@@ -21,7 +21,7 @@ namespace PawnTableGrouped
             return SlaveUtility.IsPawnColonySlave(pawn);
         }
 
-        protected override bool ResolveInternal()
+        protected override bool ResolveInternal(HarmonyLib.Harmony harmony)
         {
             return ((Func<Pawn, bool>)SlaveUtility.IsPawnColonySlave)?.Method != null; // ensure method exists
         }

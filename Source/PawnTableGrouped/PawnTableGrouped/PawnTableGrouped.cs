@@ -43,7 +43,6 @@ namespace PawnTableGrouped
         }
 
         PawnTableAccessor accessor;
-        //PawnTableDef def;
 
 
         PawnTableGroupedModel model;
@@ -60,6 +59,11 @@ namespace PawnTableGrouped
 
             model = new PawnTableGroupedModel(table, accessor, def);
             view = new PawnTableGroupedGUI(model);
+
+            new EventBusListener<PawnTableGroupedImpl, PawnTableInvalidateMessage>(this, (x, sender, args) =>
+            {
+                x.Table.SetDirty();
+            });
 
             table.SetDirty();
         }

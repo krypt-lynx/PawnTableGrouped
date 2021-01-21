@@ -54,7 +54,7 @@ namespace PawnTableGrouped
             }
         }
 
-        protected override bool ResolveInternal()
+        protected override bool ResolveInternal(HarmonyLib.Harmony harmony)
         {
             tableType = typeof(PawnTable_NumbersMain);
             return GenTypes.GetTypeInAnyAssembly("Numbers.Numbers") != null &&

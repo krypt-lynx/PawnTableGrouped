@@ -7,16 +7,16 @@ using Verse;
 
 namespace PawnTableGrouped
 {
+    public enum MessageType
+    {
+        Verbose,
+        Message,
+        Warning,
+        Error,
+    }
+
     public static class LogHelper
     {
-        public enum MessageType
-        {
-            Verbose,
-            Message,
-            Warning,
-            Error,
-        }
-
         public static void Log(this string str, MessageType type = MessageType.Verbose)
         {
             str = $"[PTG] {str}";
@@ -38,6 +38,22 @@ namespace PawnTableGrouped
                     Verse.Log.Error(str);
                     return;
             }
+        }
+
+
+        public static void LogException(string message, Exception e)
+        {
+            BuildExceptionMessage(message, e).Log(MessageType.Error);
+        }
+
+        public static string BuildExceptionMessage(string message, Exception e)
+        {
+            var result = $"{message}: {e.GetType().Name}: {e.Message}\n";
+            if (e.InnerException != null)
+            {
+                result += BuildExceptionMessage("Inner Exception", e.InnerException);
+            }
+            return result;
         }
     }
 }

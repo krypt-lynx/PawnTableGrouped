@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -118,6 +118,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="TacticalGroups">
       <HintPath>F:\games\RimWorld\Mods\PawnTableGrouped_dev\Dependencies\1.2\TacticalGroups.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
@@ -155,6 +156,8 @@
   <ItemGroup>
     <Compile Include="CompatibilityInfoDef.cs" />
     <Compile Include="DataStore.cs" />
+    <Compile Include="EventBus\EventBus.cs" />
+    <Compile Include="EventBus\PawnTableInvalidateMessage.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_AllowedArea.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_WorkPriority.cs" />
@@ -169,6 +172,8 @@
     <Compile Include="ModCompatibility\ModBridge.cs" />
     <Compile Include="ModCompatibility\SimpleSlaveryBridge.cs" />
     <Compile Include="ModCompatibility\WorkTabBridge.cs" />
+    <Compile Include="Mod\ModPostInit.cs" />
+    <Compile Include="Mod\Settings.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListHighlight.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnTable.cs" />
     <Compile Include="ModCompatibility\NumbersBridge.cs" />
@@ -196,7 +201,7 @@
     <Compile Include="PawnTableGroup.cs" />
     <Compile Include="PawnTablePatches.cs" />
     <Compile Include="PawnTableGroupDef.cs" />
-    <Compile Include="Mod.cs" />
+    <Compile Include="Mod\Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\ColumnGuide.cs" />
     <Compile Include="GUI\CTabsView.cs" />

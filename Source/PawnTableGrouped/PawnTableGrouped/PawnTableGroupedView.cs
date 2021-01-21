@@ -37,7 +37,8 @@ namespace PawnTableGrouped
             list = host.AddElement(new CPawnTable());
             list.allowHScroll = model.AllowHScroll;
 
-            var weakList = new Verse.WeakReference<CPawnTable>(list);
+            var weakThis = new Verse.WeakReference<PawnTableGroupedGUI>(this);
+
             footer = host.AddElement(new CElement());
 
             CRowSegment headerSegment = new CPawnListHeader(model, new RangeInt(0, 1), true);
@@ -60,12 +61,13 @@ namespace PawnTableGrouped
                     Widgets.Dropdown(bounds, model.ActiveGrouper, g => g,
                     t =>
                     {
-                        return model.AllGroupers.Select(g =>
+                        var this_ = weakThis.Target;
+                        return this_.model.AllGroupers.Select(g =>
                             new Widgets.DropdownMenuElement<GroupWorker>
                             {
                                 option = new FloatMenuOption(g.MenuItemTitle(), () =>
                                 {
-                                    model.SetGrouper(g);
+                                    this_.model.SetGrouper(g);
                                 })
                             });
                     }, null, img1);
@@ -78,8 +80,9 @@ namespace PawnTableGrouped
                 Checked = model.SortDecending,
                 Changed = (_, value) =>
                 {
-                    model.SetSortingDecending(value);
-                    PopulateList();
+                    var this_ = weakThis.Target;
+                    this_.model.SetSortingDecending(value);
+                    this_.PopulateList();
                 },
             });
             collapseBtn = footer.AddElement(new CCheckbox
@@ -88,7 +91,7 @@ namespace PawnTableGrouped
                 TextureUnchecked = new Resource<Texture2D>("UI/Collapse"),
                 Changed = (sender, _) =>
                 {
-                    sender.Checked = model.ExpandCollapse();
+                    sender.Checked = weakThis.Target.model.ExpandCollapse();
                 },
             });
 
@@ -108,7 +111,7 @@ namespace PawnTableGrouped
 
             model.GroupsStateChanged = (m) =>
             {
-                collapseBtn.Checked = !model.Groups.Any(x => model.IsExpanded(x));
+                collapseBtn.Checked = !m.Groups.Any(x => m.IsExpanded(x));
             };
         }
 
@@ -119,6 +122,8 @@ namespace PawnTableGrouped
             var columnWidths = model.accessor.cachedColumnWidths;
             var column0Width = columnWidths.Count > 0 ? columnWidths[0] : 0;
             list.FixedSegmentWidth = column0Width + Metrics.TableLeftMargin;
+
+            var weakThis = new Verse.WeakReference<PawnTableGroupedGUI>(this);
 
             foreach (var group in model.Groups)
             {
@@ -134,7 +139,7 @@ namespace PawnTableGrouped
                             Group = group,
                             Action = (sectionRow) =>
                             {
-                                model.SwitchExpanded(sectionRow.Group);
+                                weakThis.Target.model.SwitchExpanded(sectionRow.Group);
                             }
                         });
 

@@ -164,9 +164,9 @@ namespace PawnTableGrouped
 
         public bool IsExpanded(PawnTableGroup group)
         {
-            if (group?.Title == null)
+            if (group?.Title.RawText == null)
             {
-                $"trying to get expanded flag for group with 'null' title".Log(LogHelper.MessageType.Warning);
+                $"trying to get expanded flag for group with 'null' title".Log(MessageType.Warning);
                 return true;
             }
 
@@ -188,9 +188,9 @@ namespace PawnTableGrouped
 
         void SetExpanded(PawnTableGroup group, bool expanded, bool updateBtnState = true)
         {
-            if (group?.Title == null)
+            if (group?.Title.RawText == null)
             {
-                $"trying to set expanded flag for group with 'null' title".Log(LogHelper.MessageType.Warning);
+                $"trying to set expanded flag for group with 'null' title".Log(MessageType.Warning);
                 return;
             }
 

@@ -74,9 +74,10 @@ namespace PawnTableGrouped
                         }
                     }
                 }
-                catch
+                catch (Exception e)
                 {
                     Instance.Deactivate();
+                    LogHelper.LogException("Exception thrown during tempering with Work Tab harmony patches", e);
                 }
             }
         }
@@ -84,7 +85,7 @@ namespace PawnTableGrouped
 
         delegate bool PawnTable_PawnTableOnGUI_Prefix_Delegate(PawnTable arg1, Vector2 arg2, PawnTableDef arg3, ref Vector2 arg4);
 
-        protected override bool ResolveInternal()
+        protected override bool ResolveInternal(HarmonyLib.Harmony harmony)
         {
             PawnTable_PawnTableOnGUI_prefix = ((PawnTable_PawnTableOnGUI_Prefix_Delegate)PawnTable_PawnTableOnGUI.Prefix).Method;
 
@@ -93,10 +94,10 @@ namespace PawnTableGrouped
 
             if (PawnTable_PawnTableOnGUI_prefix == null || PawnTable_RecacheIfDirty_prefix == null || PawnTable_RecacheIfDirty_postfix == null)
             {
-                throw new Exception();
+                return false;
             }
 
-            harmony = new Harmony(workTabHarmonyId);
+            this.harmony = new Harmony(workTabHarmonyId);
 
 
             WorkTabRenderEnabled = !Mod.Settings.pawnTablesEnabled.Contains(WorkTabDefName);
