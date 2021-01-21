@@ -22,17 +22,7 @@ namespace PawnTableGrouped
         private Anchor[] columns_;
 
         private ClVariable[] columnsCached = null;
-        public ClVariable[] columns
-        {
-            get
-            {
-                if (columnsCached == null)
-                {
-                    columnsCached = columns_.Select((c, i) => Parent.GetVariable(ref columns_[i], $"column{i}")).ToArray();
-                }
-                return columnsCached;
-            }
-        }
+        public ClVariable[] columns => columnsCached ??= columns_.Select((c, i) => Parent.GetVariable(ref columns_[i], $"column{i}")).ToArray();
 
         public void UpdateColumnWidth(int index, double width)
         {

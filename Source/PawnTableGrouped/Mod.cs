@@ -45,10 +45,9 @@ namespace PawnTableGrouped
             Scribe_Values.Look(ref groupByColumnExperimental, "groupByColumnExperimental", false);
 
             Scribe_Collections.Look(ref pawnTablesEnabled, "pawnTablesEnabled");
-            if (pawnTablesEnabled == null)
-            {
-                pawnTablesEnabled = new HashSet<string>();
-            }
+            
+            pawnTablesEnabled ??= new HashSet<string>();
+            
             base.ExposeData();
         }
     }

@@ -40,18 +40,8 @@ namespace PawnTableGrouped
             }
         }
 
-		private PawnColumnDef columnDef;
-		public PawnColumnDef ColumnDef
-        {
-			get
-            {
-				if (columnDef == null)
-                {
-					columnDef = DefDatabase<PawnColumnDef>.GetNamed(def.defName);
-                }
-				return columnDef;
-            }
-        }
+		private PawnColumnDef columnDef = null;
+		public PawnColumnDef ColumnDef => columnDef ??= DefDatabase<PawnColumnDef>.GetNamed(def.defName);
 
 		abstract public bool CanSetValues();
 		abstract public object DefaultValue(IEnumerable<Pawn> pawns);

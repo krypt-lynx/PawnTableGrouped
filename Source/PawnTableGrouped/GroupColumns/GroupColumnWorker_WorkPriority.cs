@@ -37,6 +37,7 @@ namespace PawnTableGrouped
 				if (getColorMethod == null)
 				{
 					getColorMethod = HarmonyLib.AccessTools.Method(priorityColorMethod);
+					getColorMethodFailsafe = getColorMethod == null;
 				}
 
 				return (Color)getColorMethod.Invoke(null, new object[] { priority });
