@@ -19,7 +19,6 @@ namespace PawnTableGrouped
         private PawnTableAccessor accessor;
         PawnTableGroup Group;
 
-        //  private ClVariable rightTitleEdge;
 
         public override Vector2 tryFit(Vector2 size)
         {

@@ -16,6 +16,11 @@ namespace PawnTableGrouped
         public T Message { get; }
     }
 
+    /// <summary>
+    /// Weak event bus listener. Allows to observe to be destroyed by Garbadge Collector.
+    /// </summary>
+    /// <typeparam name="TListener"></typeparam>
+    /// <typeparam name="T"></typeparam>
     public class EventBusListener<TListener, T> where TListener : class
     {
         Verse.WeakReference<TListener> listener;
@@ -45,6 +50,7 @@ namespace PawnTableGrouped
     public class EventBus<T>
     {
         private static EventBus<T> _instance = null;
+
         //private static readonly object _lock = new object(); // we are in single thread app
 
         protected EventBus()
