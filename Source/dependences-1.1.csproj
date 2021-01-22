@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<ItemGroup>
+		<Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.1\Assemblies\0Cassowary.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.1\Assemblies\0RWLayout.dll</HintPath>
+			<Private>False</Private>
+		</Reference>	
+	</ItemGroup>
+</Project>
