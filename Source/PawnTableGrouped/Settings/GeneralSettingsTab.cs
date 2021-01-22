@@ -43,21 +43,21 @@ namespace PawnTableGrouped
                     Checked = Mod.Settings.debug,
                     Changed = (_, value) => Mod.Settings.debug = value,
                 }), debug.intrinsicHeight),
-                10,
+                2,
                 (AddElement(hideHeader = new CCheckboxLabeled
                 {
                     Title = "HideHeaderIfOnlyOneGroup".Translate(),
                     Checked = Mod.Settings.hideHeaderIfOnlyOneGroup,
                     Changed = (_, value) => Mod.Settings.hideHeaderIfOnlyOneGroup = value,
                 }), hideHeader.intrinsicHeight),
-                10,
+                2,
                 (AddElement(primarySort = new CCheckboxLabeled
                 {
                     Title = "UsePrimarySortFunction".Translate(),
                     Checked = Mod.Settings.usePrimarySortFunction,
                     Changed = (_, value) => Mod.Settings.usePrimarySortFunction = value,
                 }), hideHeader.intrinsicHeight),
-                10,
+                2,
                 (AddElement(byColumn = new CCheckboxLabeled
                 {
                     Title = "GroupByColumnExperimental".Translate(),
