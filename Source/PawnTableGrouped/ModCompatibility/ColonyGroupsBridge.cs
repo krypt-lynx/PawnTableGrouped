@@ -6,12 +6,16 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using TacticalGroups;
 using Verse;
 
+#if rw_1_2
+using TacticalGroups;
+#endif
 namespace PawnTableGrouped
 {
-    public class ColonyGroupsBridge : ModBridge<ColonyGroupsBridge>
+
+#if rw_1_2
+   public class ColonyGroupsBridge : ModBridge<ColonyGroupsBridge>
     {
         static PropertyInfo AllPawnGroupsProp = null;
 
@@ -48,4 +52,15 @@ namespace PawnTableGrouped
             return AllPawnGroupsProp != null;
         }
     }
+#else
+    public class ColonyGroupsBridge : ModBridge<ColonyGroupsBridge>
+    {
+        protected override bool ResolveInternal(Harmony harmony)
+        {
+            return false;
+        }
+    }
+
+
+#endif
 }

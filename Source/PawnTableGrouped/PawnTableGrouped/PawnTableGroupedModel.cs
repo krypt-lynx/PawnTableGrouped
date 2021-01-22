@@ -50,11 +50,12 @@ namespace PawnTableGrouped
             {
                 miscGroupers.Add(new GroupWorker_IsSlave());
             }
+#if rw_1_2
             if (ColonyGroupsBridge.Instance.IsActive)
             {
                 miscGroupers.Add(new GroupWorker_ByColonyGroup());
             }
-
+#endif
             ActiveGrouper = AllGroupers.First();
 
             LoadData(def);
@@ -76,7 +77,7 @@ namespace PawnTableGrouped
         }
 
 
-        #region Save/Load
+#region Save/Load
 
         private void LoadData(PawnTableDef def)
         {
@@ -145,7 +146,7 @@ namespace PawnTableGrouped
             return data;
         }
 
-        #endregion
+#endregion
 
         public List<PawnTableGroup> Groups;
         public bool SortDecending = false;
@@ -158,7 +159,7 @@ namespace PawnTableGrouped
             }
         }
 
-        #region Group expanded state
+#region Group expanded state
 
         Dictionary<string, bool> ExpandedState = new Dictionary<string, bool>();
 
@@ -227,9 +228,9 @@ namespace PawnTableGrouped
             GroupsStateChanged?.Invoke(this);
         }
 
-        #endregion
+#endregion
 
-        #region Group management
+#region Group management
 
         List<Pawn> tmpSortList = new List<Pawn>();
 
@@ -312,7 +313,7 @@ namespace PawnTableGrouped
             }
         }
 
-        #endregion
+#endregion
 
 
         public void RecacheColumnResolvers()

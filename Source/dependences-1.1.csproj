@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-	<ItemGroup>
-		<Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.1\Assemblies\0Cassowary.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>F:\games\RimWorld\Mods\RWLayout_dev\1.1\Assemblies\0RWLayout.dll</HintPath>
-			<Private>False</Private>
-		</Reference>	
-	</ItemGroup>
+	<PropertyGroup>
+		<ReferencePath>
+			F:\games\RimWorld\RimWorldWin64_Data\Managed\;
+			D:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\;
+			F:\games\RimWorld\Mods\RWLayout_dev\1.1\Assemblies\;
+			F:\games\RimWorld\Mods\PawnTableGrouped_dev\Dependencies\1.1\;
+			F:\games\RimWorld\Mods\PawnTableGrouped_dev\Dependencies\;
+			$(ReferencePath)
+		</ReferencePath>
+
+    <!-- misteriously breaks everything
+	<AssemblySearchPaths>$(AssemblySearchPaths);</AssemblySearchPaths>
+	-->
+</PropertyGroup>
 </Project>

@@ -1,11 +1,11 @@
-﻿using System;
+﻿#if rw_1_2
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TacticalGroups;
 using Verse;
-
+using TacticalGroups;
 namespace PawnTableGrouped
 {
     class GroupWorker_ByColonyGroup : GroupWorker
@@ -63,3 +63,4 @@ namespace PawnTableGrouped
         }
     }
 }
+#endif
