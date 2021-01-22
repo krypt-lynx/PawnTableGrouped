@@ -106,13 +106,15 @@ namespace PawnTableGrouped
 				return null;
             }
 #if rw_1_1
-			return pawn?.FactionOrExtraHomeFaction;
+			return pawn.Faction ??
+				pawn.GetExtraHomeFaction() ??
+				pawn.GetExtraHostFaction();
 #else
 			return pawn.Faction ??
 				pawn.GetExtraMiniFaction() ??
 				pawn.GetExtraHomeFaction() ??
 				pawn.GetExtraHostFaction();
-			#endif
+#endif
 		}
 
 		static private string GetPawnLabel(Pawn pawn)
