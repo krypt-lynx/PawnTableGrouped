@@ -150,6 +150,7 @@ $Task = "Cleanup..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
 
+if (Test-Path $mod) { Remove-Item -Recurse -Force $mod }
 Move-Item -Path $packingMod -Destination $mod
 if (Test-Path $packing) { Remove-Item -Recurse -Force $packing }
 
