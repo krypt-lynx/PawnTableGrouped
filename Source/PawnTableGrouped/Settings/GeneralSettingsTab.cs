@@ -16,6 +16,12 @@ namespace PawnTableGrouped
             return "PTG_General".Translate();
         }
 
+        public override void PostLayoutUpdate()
+        {
+            base.PostLayoutUpdate();
+            $"test".Log();
+        }
+
         protected override void ConstructGUI()
         {
             CElement tabFrame = this.AddElement(new CFrame());
@@ -28,7 +34,9 @@ namespace PawnTableGrouped
             CElement byColumn;
             CElement tmp; // lets hope I will not hit undefined behavior 
 
-            tabFrame.StackTop(StackOptions.Create(insets:new EdgeInsets(7)),
+            CreateInfoColumns();
+
+            tabFrame.StackTop(StackOptions.Create(insets: new EdgeInsets(7)),
                 (AddElement(debug = new CCheckboxLabeled
                 {
                     Title = "DebugOutput".Translate(),
@@ -57,41 +65,77 @@ namespace PawnTableGrouped
                     Changed = (_, value) => Mod.Settings.groupByColumnExperimental = value,
                 }), byColumn.intrinsicHeight),
                 AddElement(new CElement()), // flexable spacer
-                (AddElement(tmp = new CLabel
-                {
-                    Title = ModInfoString("Numbers", NumbersBridge.Instance),
-                }), tmp.intrinsicHeight),
-                (AddElement(tmp = new CLabel
-                {
-                    Title = ModInfoString("Simple Slavery", SimpleSlaveryBridge.Instance),
-                }), tmp.intrinsicHeight),
-                (AddElement(tmp = new CLabel
-                {
-                    Title = ModInfoString("Work Tab", WorkTabBridge.Instance),
-                }), tmp.intrinsicHeight),
-                (AddElement(tmp = new CLabel
-                {
-                    Title = ModInfoString("Colony Groups", ColonyGroupsBridge.Instance),
-                }), tmp.intrinsicHeight)                
+                (AddElement(tmp = new CLabel { Title = "Mods report:" }), tmp.intrinsicHeight), 
+                ConstructModStatusView("Numbers", NumbersBridge.Instance),
+                ConstructModStatusView("Simple Slavery", SimpleSlaveryBridge.Instance),
+                ConstructModStatusView("Work Tab", WorkTabBridge.Instance),
+                ConstructModStatusView("Colony Groups", ColonyGroupsBridge.Instance) 
             );
+
+
+        }
+        CVarListGuide Columns;
+
+        private void CreateInfoColumns()
+        {
+            Columns = new CVarListGuide();
+            for (int i = 0; i < 5; i++)
+            {
+                Columns.Variables.Add(new Cassowary.ClVariable($"column{i}"));
+            }
+            this.AddGuide(Columns);
         }
 
-        string ModInfoString<T>(string modName, ModBridge<T> bridge) where T : ModBridge<T>, new()
+        string BoolToString(bool value, Color if_, Color else_)
         {
-            StringBuilder sb = new StringBuilder();
+            return value ? "Yes".Colorize(if_) : "No".Colorize(else_);
+        }
 
-            string BoolToString(bool value, Color if_, Color else_)
+        CElement ConstructModStatusView(string modName, ModBridge bridge)
+        {
+            List<CElement> elements = new List<CElement>();
+
+
+            elements.Add(AddElement(new CLabel
             {
-                return value ? "Yes".Colorize(if_) : "No".Colorize(else_);
-            }
+                Title = modName + ": "
+            }));
+            elements.Add(AddElement(new CLabel
+            {
+                Title = "detected: "
+            }));
+            elements.Add(AddElement(new CLabel
+            {
+                Title = BoolToString(bridge.IsDetected, Color.green, Color.white) + "; "
+            }));
 
-            sb.Append($"{modName}: detected: {BoolToString(bridge.IsDetected, Color.green, Color.white)};");
             if (bridge.IsDetected)
             {
-                sb.Append($" interacting: { BoolToString(bridge.IsActive, Color.green, Color.red)};");
+                elements.Add(AddElement(new CLabel
+                {
+                    Title = "interacting: "
+                }));
+                elements.Add(AddElement(new CLabel
+                {
+                    Title = BoolToString(bridge.IsActive, Color.green, Color.red)
+                }));
             }
 
-            return sb.ToString();
+            CElement panel = this.AddElement(new CElement());
+            panel.StackLeft(StackOptions.Create(constrainEnd: false), elements.ToArray<object>());
+            for (int i = 0; i < elements.Count; i++)
+            {
+                panel.AddConstraints(
+                    elements[i].width >= elements[i].intrinsicWidth,
+                    elements[i].width <= Columns.Variables[i]);
+            }
+
+            panel.AddConstraint(
+                elements[0].height ^ elements[0].intrinsicHeight
+                );
+            //);
+
+            return panel;
         }
     }
 }
