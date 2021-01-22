@@ -38,8 +38,8 @@ namespace PawnTableGrouped
             int x = (int)(BoundsRounded.xMin + (doLeftOffset ? Metrics.TableLeftMargin : 0));
 
             int start = Mathf.Max(0, columnsRange.start);
-            int end = Mathf.Min(columns.Count, columnsRange.end);
-            for (int columnIndex = start; columnIndex < end; columnIndex++)
+            // int end = Mathf.Min(columns.Count, columnsRange.end); // cannot cache because of Numbers modifiing columns list during enumeration.
+            for (int columnIndex = start; columnIndex < Mathf.Min(columns.Count, columnsRange.end); columnIndex++)
             {
                 int columnWidth;
                 if (columnIndex == columns.Count - 1)
@@ -48,7 +48,7 @@ namespace PawnTableGrouped
                 }
                 else
                 {
-                    columnWidth = (int)model.accessor.cachedColumnWidths[columnIndex];
+                    columnWidth = (int)cachedColumnWidths[columnIndex];
                 }
 
                 if (x + columnWidth > xScrollOffset && x <= xScrollOffset + visibleRectWidth)
