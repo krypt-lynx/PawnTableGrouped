@@ -67,18 +67,12 @@ $Task = "Building 1.1..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
 
-pushd $rw
-git checkout tags/1.1
-popd 
 & $msbuild $solution /t:$target /p:Configuration="1.1" /p:Platform="Any CPU" /p:BuildProjectReferences=true
 
 $Task = "Building 1.2..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
 
-pushd $rw
-git checkout tags/1.2
-popd 
 & $msbuild $solution /t:$target /p:Configuration="1.2" /p:Platform="Any CPU" /p:BuildProjectReferences=true
 
 # Prepating data
