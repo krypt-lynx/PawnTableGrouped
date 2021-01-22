@@ -14,9 +14,9 @@ using TacticalGroups;
 namespace PawnTableGrouped
 {
 
-#if rw_1_2
-   public class ColonyGroupsBridge : ModBridge<ColonyGroupsBridge>
+    public class ColonyGroupsBridge : ModBridge<ColonyGroupsBridge>
     {
+#if rw_1_2
         static PropertyInfo AllPawnGroupsProp = null;
 
         public static List<PawnGroup> AllPawnGroups
@@ -51,16 +51,18 @@ namespace PawnTableGrouped
 
             return AllPawnGroupsProp != null;
         }
-    }
 #else
-    public class ColonyGroupsBridge : ModBridge<ColonyGroupsBridge>
-    {
         protected override bool ResolveInternal(Harmony harmony)
         {
             return false;
         }
+#endif
+
+        public override string ModName()
+        {
+            return "Colony Groups";
+        }
     }
 
 
-#endif
 }

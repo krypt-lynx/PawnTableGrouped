@@ -60,6 +60,11 @@ namespace PawnTableGrouped
             return GenTypes.GetTypeInAnyAssembly("Numbers.Numbers") != null &&
                 GenTypes.GetTypeInAnyAssembly("Numbers.PawnTable_NumbersMain") != null;
         }
+
+        public override string ModName()
+        {
+            return "Numbers";
+        }
     }
 
 }

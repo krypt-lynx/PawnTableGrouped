@@ -40,7 +40,7 @@ namespace PawnTableGrouped
         
         public static Action ActiveTablesChanged = null;
 
-        static (string packageId, ModBridge bridge)[] ModBridges =  {
+        public static (string packageId, ModBridge bridge)[] ModBridges = {
             ("mehni.numbers", NumbersBridge.Instance),
             ("fluffy.worktab", WorkTabBridge.Instance),
             ("syl.simpleslavery", SimpleSlaveryBridge.Instance),

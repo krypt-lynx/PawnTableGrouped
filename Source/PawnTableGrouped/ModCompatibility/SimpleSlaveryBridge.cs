@@ -36,5 +36,10 @@ namespace PawnTableGrouped
             return false;
 #endif
         }
+
+        public override string ModName()
+        {
+            return "Simple Slavery";
+        }
     }
 }

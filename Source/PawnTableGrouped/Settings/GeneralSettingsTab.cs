@@ -36,6 +36,8 @@ namespace PawnTableGrouped
 
             CreateInfoColumns();
 
+            CElement modReport = new CElement();
+
             tabFrame.StackTop(StackOptions.Create(insets: new EdgeInsets(7)),
                 (AddElement(debug = new CCheckboxLabeled
                 {
@@ -65,13 +67,18 @@ namespace PawnTableGrouped
                     Changed = (_, value) => Mod.Settings.groupByColumnExperimental = value,
                 }), byColumn.intrinsicHeight),
                 AddElement(new CElement()), // flexable spacer
-                (AddElement(tmp = new CLabel { Title = "Mods report:" }), tmp.intrinsicHeight), 
-                ConstructModStatusView("Numbers", NumbersBridge.Instance),
-                ConstructModStatusView("Simple Slavery", SimpleSlaveryBridge.Instance),
-                ConstructModStatusView("Work Tab", WorkTabBridge.Instance),
-                ConstructModStatusView("Colony Groups", ColonyGroupsBridge.Instance) 
+                AddElement(modReport)
             );
 
+
+            var elements = new List<CElement>();
+            tmp = new CLabel { Title = "Mods report:" };
+            tmp.AddConstraint(tmp.height ^ tmp.intrinsicHeight);
+
+            elements.Add(modReport.AddElement(tmp));
+            elements.AddRange(Mod.ModBridges.Select(x => ConstructModStatusView(x.bridge)));
+
+            modReport.StackTop(elements.ToArray<object>());
 
         }
         CVarListGuide Columns;
@@ -91,14 +98,14 @@ namespace PawnTableGrouped
             return value ? "Yes".Colorize(if_) : "No".Colorize(else_);
         }
 
-        CElement ConstructModStatusView(string modName, ModBridge bridge)
+        CElement ConstructModStatusView(ModBridge bridge)
         {
             List<CElement> elements = new List<CElement>();
 
 
             elements.Add(AddElement(new CLabel
             {
-                Title = modName + ": "
+                Title = bridge.ModName() + ": "
             }));
             elements.Add(AddElement(new CLabel
             {

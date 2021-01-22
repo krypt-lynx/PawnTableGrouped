@@ -22,6 +22,8 @@ namespace PawnTableGrouped
 
         protected ModBridge() { }
 
+        public abstract string ModName();
+        
         public void Resolve(bool active, Harmony harmony)
         {
             activated = active;

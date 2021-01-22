@@ -105,5 +105,10 @@ namespace PawnTableGrouped
 
             return true;
         }
+
+        public override string ModName()
+        {
+            return "Work Tab";
+        }
     }
 }
