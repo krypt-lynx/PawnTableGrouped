@@ -54,17 +54,15 @@
   <Import Condition=" '$(Configuration)' == '1.2' " Project="..\dependences-1.2.csproj" />
   <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.2.csproj" />
   <Import Condition=" '$(Configuration)' == 'Release' " Project="..\dependences-1.2.csproj" />
-
-	
   <ItemGroup>
-  	<Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-		<SpecificVersion>False</SpecificVersion>
-		<Private>False</Private>
-	</Reference>
-	<Reference Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-		<SpecificVersion>False</SpecificVersion>
-		<Private>False</Private>
-	</Reference>
+    <Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="0Harmony">
       <Private>False</Private>
     </Reference>
@@ -74,7 +72,6 @@
     <Reference Include="Numbers">
       <Private>False</Private>
     </Reference>
-
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -168,9 +165,7 @@
     <Compile Include="GroupingProviders\GroupWorker.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="git.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="git.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
