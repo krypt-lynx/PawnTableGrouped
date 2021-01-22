@@ -28,7 +28,7 @@ namespace PawnTableGrouped
         {
             if (pawns.Count > 0)
             {
-                yield return new PawnTableGroup(TitleForGroup(pawns, pawns.First()), pawns.First(), pawns, columnResolvers);
+                yield return new PawnTableGroup(TitleForGroup(pawns, pawns.First()), pawns.First(), defaultPawnSort(pawns), columnResolvers);
             }
         }
 

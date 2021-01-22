@@ -58,7 +58,7 @@ namespace PawnTableGrouped
             var groups = pawns.GroupBy(p => p, GroupingEqualityComparer);
             foreach (var group in groups)
             {
-                yield return new PawnTableGroup(TitleForGroup(group), group.Key, group, columnResolvers);
+                yield return new PawnTableGroup(TitleForGroup(group), group.Key, defaultPawnSort(group), columnResolvers);
             }
         }
     }
