@@ -25,6 +25,7 @@ using Verse;
 
 namespace PawnTableGrouped
 {
+    public class PTGModSupport { }
     public class Mod : CMod
     {
         public static string PackageIdOfMine = null;
@@ -40,12 +41,29 @@ namespace PawnTableGrouped
         
         public static Action ActiveTablesChanged = null;
 
-        public static (string packageId, ModBridge bridge)[] ModBridges = {
+        public static List<(string packageId, ModBridge bridge)> ModBridges = new List<(string packageId, ModBridge bridge)> {
             ("mehni.numbers", NumbersBridge.Instance),
             ("fluffy.worktab", WorkTabBridge.Instance),
             ("syl.simpleslavery", SimpleSlaveryBridge.Instance),
-            ("derekbickley.ltocolonygroupsfinal", ColonyGroupsBridge.Instance),
         };
+
+        public static void RegisterModBridge(string packageId, ModBridge bridge)
+        {
+            ModBridges.Add((packageId, bridge));
+        }
+
+        public static List<GroupWorker> MiscGroupWorkers = new List<GroupWorker>
+        {
+            new GroupWorker_AllInOne(),
+            new GroupWorker_ByRace(),
+            new GroupWorker_ByGender(),
+            new GroupWorker_ByFaction(),
+        };
+
+        public static void RegisterGroupWorker(GroupWorker groupWorker)
+        {
+            MiscGroupWorkers.Add(groupWorker);
+        }
 
         public Mod(ModContentPack content) : base(content)
         {
@@ -96,6 +114,12 @@ namespace PawnTableGrouped
             {
                 info.bridge.Resolve(loadedModIds.Contains(info.packageId), harmony);
             }
+
+            if (SimpleSlaveryBridge.Instance.IsActive)
+            {
+                RegisterGroupWorker(new GroupWorker_IsSlave());
+            }
+
         }
 
         public override string SettingsCategory()
@@ -125,6 +149,7 @@ namespace PawnTableGrouped
         {
             ActiveTablesChanged?.Invoke();
         }
+
     }
 
 

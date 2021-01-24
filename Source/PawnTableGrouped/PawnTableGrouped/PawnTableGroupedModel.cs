@@ -23,7 +23,6 @@ namespace PawnTableGrouped
 
         List<GroupColumnWorker> columnResolvers;
 
-        List<GroupWorker> miscGroupers;
         public GroupWorker ActiveGrouper;
 
 
@@ -38,22 +37,9 @@ namespace PawnTableGrouped
             this.def = def;
 
             columnResolvers = new List<GroupColumnWorker>();
-            miscGroupers = new List<GroupWorker>();
 
             ReadTableConfig();
 
-            miscGroupers.Add(new GroupWorker_AllInOne());
-            miscGroupers.Add(new GroupWorker_ByRace());
-            miscGroupers.Add(new GroupWorker_ByGender());
-            miscGroupers.Add(new GroupWorker_ByFaction());
-            if (SimpleSlaveryBridge.Instance.IsActive)
-            {
-                miscGroupers.Add(new GroupWorker_IsSlave());
-            }
-            if (ColonyGroupsBridge.Instance.IsActive)
-            {
-                miscGroupers.Add(new GroupWorker_ByColonyGroup());
-            }
             ActiveGrouper = AllGroupers.First();
 
             LoadData(def);
@@ -230,6 +216,9 @@ namespace PawnTableGrouped
 
 #region Group management
 
+        /// <summary>
+        /// temporary sorting array
+        /// </summary>
         List<Pawn> tmpSortList = new List<Pawn>();
 
         /// <summary>
@@ -302,11 +291,11 @@ namespace PawnTableGrouped
             {
                 if (Mod.Settings.groupByColumnExperimental)
                 {
-                    return miscGroupers.Concat(columnResolvers.Select(x => x.GroupWorker).Where(x => x != null));
+                    return Mod.MiscGroupWorkers.Concat(columnResolvers.Select(x => x.GroupWorker).Where(x => x != null));
                 }
                 else
                 {
-                    return miscGroupers;
+                    return Mod.MiscGroupWorkers;
                 }
             }
         }

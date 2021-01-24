@@ -104,6 +104,9 @@
     <Reference Include="WorkTab">
       <Private>False</Private>
     </Reference>
+    <Reference Condition=" '$(Configuration)' == '1.2' " Include="SimpleSlavery">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompatibilityInfoDef.cs" />
@@ -114,13 +117,11 @@
     <Compile Include="GroupColumns\GroupColumnWorker_AllowedArea.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_WorkPriority.cs" />
     <Compile Include="GroupingProviders\GroupWorker_AllInOne.cs" />
-    <Compile Include="GroupingProviders\GroupWorker_ByColonyGroup.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByColumn.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByFaction.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByGender.cs" />
     <Compile Include="GroupingProviders\GroupWorker_ByRace.cs" />
     <Compile Include="GroupingProviders\GroupWorker_IsSlave.cs" />
-    <Compile Include="ModCompatibility\ColonyGroupsBridge.cs" />
     <Compile Include="ModCompatibility\ModBridge.cs" />
     <Compile Include="ModCompatibility\SimpleSlaveryBridge.cs" />
     <Compile Include="ModCompatibility\WorkTabBridge.cs" />

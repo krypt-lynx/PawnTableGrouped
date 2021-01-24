@@ -5,9 +5,6 @@
 	<Reference Include="SimpleSlavery">
       <Private>False</Private>
     </Reference>
-    <Reference Include="TacticalGroups">
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
 
 	<PropertyGroup>
