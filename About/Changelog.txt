@@ -1,3 +1,10 @@
+1.3.1
+* missing type exception
+
+1.3
++ Colony Groups integration
+* by faction uses host's faction too
+
 1.2
 * Work Tab missing column headers fix
 * correct count of priorities in group header for Work Tab
