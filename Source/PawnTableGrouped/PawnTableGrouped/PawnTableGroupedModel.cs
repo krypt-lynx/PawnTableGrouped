@@ -50,12 +50,10 @@ namespace PawnTableGrouped
             {
                 miscGroupers.Add(new GroupWorker_IsSlave());
             }
-#if rw_1_2
             if (ColonyGroupsBridge.Instance.IsActive)
             {
                 miscGroupers.Add(new GroupWorker_ByColonyGroup());
             }
-#endif
             ActiveGrouper = AllGroupers.First();
 
             LoadData(def);

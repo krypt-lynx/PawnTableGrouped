@@ -19,17 +19,14 @@ namespace PawnTableGrouped
 #if rw_1_2
         static PropertyInfo AllPawnGroupsProp = null;
 
-        public static List<PawnGroup> AllPawnGroups
+        public static List<T> AllPawnGroups<T>()
         {
-            get
+            if (!Instance.IsActive)
             {
-                if (!Instance.IsActive)
-                {
-                    return new List<PawnGroup>();
-                }
-
-                return (List<PawnGroup>)AllPawnGroupsProp.GetValue(null);
+                return null;
             }
+
+            return (List<T>)AllPawnGroupsProp.GetValue(null);
         }
 
         protected override void ApplyPatches(Harmony harmony)
