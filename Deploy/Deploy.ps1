@@ -5,7 +5,7 @@ $outputFormat   = '..\..\PawnTableGrouped-{0}.zip'
 $internalPath   = 'PawnTableGrouped'
 $solution       = '..\Source\PawnTableGrouped.sln'
 $target         = 'PawnTableGrouped'
-$pathsToRemove  = '.git', '.vs', '.gitattributes', '.gitignore', 'Source', 'Deploy', 'Steam', 'Dependencies', '1.1/Assemblies/*.pdb', '1.1/Assemblies/*.xml', '1.2/Assemblies/*.pdb', '1.2/Assemblies/*.xml'
+$pathsToRemove  = '.git', '.vs', '.gitattributes', '.gitignore', 'Source', 'Deploy', 'Steam', 'Dependencies', '1.*/Assemblies/*.pdb', '1.*/Assemblies/*.xml'
 
 $packageName    = 'Grouped Pawns Lists'
 $packageId      = 'name.krypt.rimworld.pawntablegrouped'
