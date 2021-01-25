@@ -166,7 +166,9 @@
     <Compile Include="GroupingProviders\GroupWorker.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="git.txt" />
+    <EmbeddedResource Include="git.txt">
+		<LogicalName>PawnTableGrouped.0.git.txt</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

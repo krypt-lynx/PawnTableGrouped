@@ -102,7 +102,7 @@ namespace PawnTableGrouped
             }
             catch
             {
-                commitInfo = null;
+                commitInfo = "no version info found";
             }
 
             debug = PackageIdOfMine.EndsWith(".dev");
