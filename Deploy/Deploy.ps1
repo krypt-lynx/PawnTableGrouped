@@ -18,7 +18,7 @@ $Id                   = 1
 
 # Complex Progress Bar
 $Step                 = 0
-$TotalSteps           = 9 
+$TotalSteps           = 10 
 $StatusText           = '"Step $($Step.ToString().PadLeft($TotalSteps.ToString().Length)) of $TotalSteps | $Task"' # Single quotes need to be on the outside
 $StatusBlock          = [ScriptBlock]::Create($StatusText) # This script block allows the string above to use the current values of embedded values each time it's run
 
@@ -63,13 +63,22 @@ if (Test-Path $packing) { Remove-Item -Recurse -Force $packing }
 if (Test-Path $output) { Remove-Item $output }
 if (Test-Path $mod) { Remove-Item -Recurse -Force $mod }
 
-$Task = "Building 1.1..."
+$Task = "Updating dependencies..."
+$Step++
+
+pushd "..\Dependencies\"
+& ".\PrepareDependendencies.ps1"
+popd
+
+Echo "Version detected: $version"
+
+$Task = "Building 1.1 ($version)..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
 
 & $msbuild $solution /t:$target /p:Configuration="1.1" /p:Platform="Any CPU" /p:BuildProjectReferences=true
 
-$Task = "Building 1.2..."
+$Task = "Building 1.2 ($version)..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
 
