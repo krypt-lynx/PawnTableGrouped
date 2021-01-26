@@ -16,12 +16,6 @@ namespace PawnTableGrouped
             return "PTG_General".Translate();
         }
 
-        public override void PostLayoutUpdate()
-        {
-            base.PostLayoutUpdate();
-            $"test".Log();
-        }
-
         protected override void ConstructGUI()
         {
             CElement tabFrame = this.AddElement(new CFrame());

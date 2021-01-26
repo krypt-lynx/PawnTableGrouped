@@ -12,6 +12,7 @@ namespace PawnTableGrouped
     {
         static ModPostInit()
         {
+            Mod.DetectMods();
             // enabling supported tables if first run
             if (Mod.Settings.firstRun)
             {

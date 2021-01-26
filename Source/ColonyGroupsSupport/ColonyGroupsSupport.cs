@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ColonyGroupsSupport
 {
-    public class ColonyGroupsSupport : PTGModSupport
+    public class ColonyGroupsSupport : ModMod
     {
-        public static void Initialize()
+        public ColonyGroupsSupport()
         {
             Mod.RegisterModBridge("derekbickley.ltocolonygroupsfinal", ColonyGroupsBridge.Instance);
             Mod.RegisterGroupWorker(new GroupWorker_ByColonyGroup());

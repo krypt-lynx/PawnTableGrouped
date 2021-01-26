@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PawnTableGrouped.ColonyGroups</RootNamespace>
-    <AssemblyName>PawnTableGrouped.ColonyGroups</AssemblyName>
+    <AssemblyName>PawnTableGrouped.1.ColonyGroups</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -103,7 +103,15 @@
     <ProjectReference Include="..\PawnTableGrouped\PawnTableGrouped.csproj">
       <Project>{2a51480c-712d-4ede-bdf8-77f5c671bbde}</Project>
       <Name>PawnTableGrouped</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+
+cd "$(TargetDir)"
+
+del /Q *.*</PreBuildEvent>
+  </PropertyGroup>
 </Project>

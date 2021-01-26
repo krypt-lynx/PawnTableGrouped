@@ -25,7 +25,8 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class PTGModSupport { }
+    public class ModMod { }
+
     public class Mod : CMod
     {
         public static string PackageIdOfMine = null;
@@ -65,17 +66,18 @@ namespace PawnTableGrouped
             MiscGroupWorkers.Add(groupWorker);
         }
 
+        static Harmony harmony = null;
+
         public Mod(ModContentPack content) : base(content)
         {
             ReadModInfo(content);
             Settings = GetSettings<Settings>();
             Instance = this;
 
-            Harmony harmony = new Harmony(PackageIdOfMine);
+            harmony = new Harmony(PackageIdOfMine);
 
             ApplyPatches(harmony);
 
-            DetectMods(harmony);
         }
 
         private static void ApplyPatches(Harmony harmony)
@@ -106,8 +108,28 @@ namespace PawnTableGrouped
             debug = PackageIdOfMine.EndsWith(".dev");
         }
 
-        private static void DetectMods(Harmony harmony)
+        private static IEnumerable<Assembly> AllActiveAssemblies
         {
+            get
+            {
+                yield return Assembly.GetExecutingAssembly();
+                foreach (ModContentPack mod in LoadedModManager.RunningMods)
+                {
+                    for (int i = 0; i < mod.assemblies.loadedAssemblies.Count; i++)
+                    {
+                        yield return mod.assemblies.loadedAssemblies[i];
+                    }
+                }
+            }
+        }
+
+        public static void DetectMods()
+        {
+            foreach (var modmod in typeof(ModMod).AllSubclasses())
+            {
+                Activator.CreateInstance(modmod);
+            }
+
             var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();            
 
             foreach (var info in ModBridges)
