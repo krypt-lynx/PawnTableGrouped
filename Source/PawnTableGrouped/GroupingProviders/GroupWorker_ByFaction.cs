@@ -108,8 +108,8 @@ namespace PawnTableGrouped
 #if rw_1_1
 			return
 				pawn.GetExtraHomeFaction() ??
-				pawn.GetExtraHostFaction(); ??
-				pawn.Faction 
+				pawn.GetExtraHostFaction() ??
+				pawn.Faction; 
 #else
 			return
 				pawn.GetExtraMiniFaction() ??
