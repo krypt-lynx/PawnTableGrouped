@@ -214,7 +214,6 @@ Issues: various render issues</hint>
 					<li>
 						<name>Animals</name>
 						<compatibility>Supported</compatibility>
-						<hint>Filter button overlaps with settings buttons</hint>
 						<defaultGrouping>race</defaultGrouping>
 						<config>
 							<fotterBtnOffset>30</fotterBtnOffset>
