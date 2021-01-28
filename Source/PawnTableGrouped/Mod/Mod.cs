@@ -77,7 +77,6 @@ namespace PawnTableGrouped
             harmony = new Harmony(PackageIdOfMine);
 
             ApplyPatches(harmony);
-
         }
 
         private static void ApplyPatches(Harmony harmony)
@@ -93,8 +92,7 @@ namespace PawnTableGrouped
 
             try
             {
-                using (Stream stream = Assembly.GetExecutingAssembly()
-                        .GetManifestResourceStream(name + ".git.txt"))
+                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name + ".git.txt"))
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     commitInfo = reader.ReadToEnd()?.TrimEndNewlines();
@@ -130,11 +128,13 @@ namespace PawnTableGrouped
                 Activator.CreateInstance(modmod);
             }
 
-            var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();            
+            var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageIdPlayerFacing.ToLowerInvariant()).ToHashSet();            
 
             foreach (var info in ModBridges)
             {
-                info.bridge.Resolve(loadedModIds.Contains(info.packageId), harmony);
+                bool isListed = loadedModIds.Contains(info.packageId);
+                $"Enumerating mod bridges: {info.bridge.ModName()}; is listed: {isListed}".Log(MessageType.Message);
+                info.bridge.Resolve(isListed, harmony);
             }
 
             if (SimpleSlaveryBridge.Instance.IsActive)
