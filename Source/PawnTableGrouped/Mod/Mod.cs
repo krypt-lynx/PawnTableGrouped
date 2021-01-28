@@ -133,7 +133,7 @@ namespace PawnTableGrouped
             foreach (var info in ModBridges)
             {
                 bool isListed = loadedModIds.Contains(info.packageId);
-                $"Enumerating mod bridges: {info.bridge.ModName()}; is listed: {isListed}".Log(MessageType.Message);
+                $"Enumerating mod bridges: {info.bridge.ModName()}; is listed: {isListed}".Log();
                 info.bridge.Resolve(isListed, harmony);
             }
 
