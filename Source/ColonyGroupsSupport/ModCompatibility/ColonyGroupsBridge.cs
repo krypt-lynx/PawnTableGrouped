@@ -17,16 +17,14 @@ namespace PawnTableGrouped
     public class ColonyGroupsBridge : ModBridge<ColonyGroupsBridge>
     {
 #if rw_1_2
-        static PropertyInfo AllPawnGroupsProp = null;
-
-        public static List<T> AllPawnGroups<T>()
+       public static List<PawnGroup> AllPawnGroups()
         {
             if (!Instance.IsActive)
             {
                 return null;
             }
 
-            return (List<T>)AllPawnGroupsProp.GetValue(null);
+            return TacticUtils.AllPawnGroups;
         }
 
         protected override void ApplyPatches(Harmony harmony)
@@ -43,14 +41,14 @@ namespace PawnTableGrouped
 
         protected override bool ResolveInternal(Harmony harmony)
         {
-            var tacticUtilsType = GenTypes.GetTypeInAnyAssembly("TacticalGroups.TacticUtils");
-            AllPawnGroupsProp = tacticUtilsType.GetProperty("AllPawnGroups", BindingFlags.Public | BindingFlags.Static);
-
-            return AllPawnGroupsProp != null;
+            // Enure property exists and have right type.
+            return typeof(IEnumerable<PawnGroup>).IsAssignableFrom(AccessTools.Property(typeof(TacticUtils), nameof(TacticUtils.AllPawnGroups)).ReflectedType);
         }
 #else
         protected override bool ResolveInternal(Harmony harmony)
         {
+            $"rw_1_2 is not defined".Log(MessageType.Error);
+            
             return false;
         }
 #endif
