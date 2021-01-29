@@ -1,14 +1,22 @@
 # Configurable variables
-$repo           = '..'
-$packing        = 'packing'
-$outputFormat   = '..\..\PawnTableGrouped-{0}.zip'
-$internalPath   = 'PawnTableGrouped'
-$solution       = '..\Source\PawnTableGrouped.sln'
-$target         = 'PawnTableGrouped'
-$pathsToRemove  = '.git', '.vs', '.gitattributes', '.gitignore', 'Source', 'Deploy', 'Steam', 'Dependencies', '1.*/Assemblies/*.pdb', '1.*/Assemblies/*.xml'
 
-$packageName    = 'Grouped Pawns Lists'
-$packageId      = 'name.krypt.rimworld.pawntablegrouped'
+
+$config = ".\Deploy.xml"
+
+[string]$packageId = (Select-Xml -Path $config -XPath '/config/about/packageId' | Select-Object -ExpandProperty Node).innerText
+[string]$packageName = (Select-Xml -Path $config -XPath '/config/about/packageName' | Select-Object -ExpandProperty Node).innerText
+
+[string]$solution = (Select-Xml -Path $config -XPath '/config/build/solution' | Select-Object -ExpandProperty Node).innerText
+[string]$target = (Select-Xml -Path $config -XPath '/config/build/target' | Select-Object -ExpandProperty Node).innerText
+
+[string]$repo = (Select-Xml -Path $config -XPath '/config/archive/repository' | Select-Object -ExpandProperty Node).innerText
+[string]$packing = (Select-Xml -Path $config -XPath '/config/archive/temp' | Select-Object -ExpandProperty Node).innerText
+[string]$outputFormat = (Select-Xml -Path $config -XPath '/config/archive/outputTemplate' | Select-Object -ExpandProperty Node).innerText
+[string]$internalPath = (Select-Xml -Path $config -XPath '/config/archive/modDirectory' | Select-Object -ExpandProperty Node).innerText
+
+[string[]]$pathsToRemove = Select-Xml -Path $config -XPath '/config/archive/exclude/path/text()' | Foreach-Object {
+	($_ | Select-Object -ExpandProperty Node).Value
+}
 
 [Console]::ResetColor()
 
@@ -18,7 +26,7 @@ $Id                   = 1
 
 # Complex Progress Bar
 $Step                 = 0
-$TotalSteps           = 10 
+$TotalSteps           = 9 
 $StatusText           = '"Step $($Step.ToString().PadLeft($TotalSteps.ToString().Length)) of $TotalSteps | $Task"' # Single quotes need to be on the outside
 $StatusBlock          = [ScriptBlock]::Create($StatusText) # This script block allows the string above to use the current values of embedded values each time it's run
 
@@ -63,22 +71,13 @@ if (Test-Path $packing) { Remove-Item -Recurse -Force $packing }
 if (Test-Path $output) { Remove-Item $output }
 if (Test-Path $mod) { Remove-Item -Recurse -Force $mod }
 
-$Task = "Updating dependencies..."
-$Step++
-
-pushd "..\Dependencies\"
-& ".\PrepareDependendencies.ps1"
-popd
-
-Echo "Version detected: $version"
-
-$Task = "Building 1.1 ($version)..."
+$Task = "Building 1.1..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
 
 & $msbuild $solution /t:$target /p:Configuration="1.1" /p:Platform="Any CPU" /p:BuildProjectReferences=true
 
-$Task = "Building 1.2 ($version)..."
+$Task = "Building 1.2..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
 

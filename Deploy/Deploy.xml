@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<about>
+		<packageId>name.krypt.rimworld.pawntablegrouped</packageId>
+		<packageName>Grouped Pawns Lists</packageName>
+	</about>
+	<build>
+		<solution>..\Source\PawnTableGrouped.sln</solution>
+		<target>PawnTableGrouped</target>
+	</build>
+	<archive>
+		<repository>..</repository>
+		<temp>packing</temp>
+		<outputTemplate>..\..\PawnTableGrouped-{0}.zip</outputTemplate>
+		<modDirectory>PawnTableGrouped</modDirectory>
+		<exclude>
+			<path>.git</path>
+			<path>.gitattributes</path>
+			<path>.gitignore</path>
+			<path>Source</path>
+			<path>Deploy</path>
+			<path>Steam</path>
+			<path>Dependencies</path>
+			<path>1.*/Assemblies/*.pdb</path>
+			<path>1.*/Assemblies/*.xml</path>
+		</exclude>
+	</archive>
+</config>
