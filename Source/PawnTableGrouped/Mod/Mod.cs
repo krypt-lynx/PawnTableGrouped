@@ -149,11 +149,16 @@ namespace PawnTableGrouped
             return "Grouped Pawns Lists";
         }
 
-        bool invalidateOnce = false;
-        public override void ConstructGui()
+        public override string Version()
         {
-            Gui.Embed(Gui.AddElement(new SettingsView()));
+            return Mod.CommitInfo;
+        }
+
+        bool invalidateOnce = false;
+        public override CElement CreateSettingsView()
+        {
             invalidateOnce = true;
+            return new SettingsView();
         }
 
         public override void DoSettingsWindowContents(Rect inRect)
