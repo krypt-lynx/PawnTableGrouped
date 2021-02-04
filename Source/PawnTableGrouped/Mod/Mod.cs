@@ -106,21 +106,6 @@ namespace PawnTableGrouped
             debug = PackageIdOfMine.EndsWith(".dev");
         }
 
-        private static IEnumerable<Assembly> AllActiveAssemblies
-        {
-            get
-            {
-                yield return Assembly.GetExecutingAssembly();
-                foreach (ModContentPack mod in LoadedModManager.RunningMods)
-                {
-                    for (int i = 0; i < mod.assemblies.loadedAssemblies.Count; i++)
-                    {
-                        yield return mod.assemblies.loadedAssemblies[i];
-                    }
-                }
-            }
-        }
-
         public static void DetectMods()
         {
             foreach (var modmod in typeof(ModMod).AllSubclasses())
