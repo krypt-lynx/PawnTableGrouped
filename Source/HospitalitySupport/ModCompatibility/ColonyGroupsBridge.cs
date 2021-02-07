@@ -26,7 +26,8 @@ namespace PawnTableGrouped
 
         protected override bool ResolveInternal(Harmony harmony)
         {
-            return true;
+            // test basic compatibility
+            return GenTypes.GetTypeInAnyAssembly("Hospitality.CompUtility").GetMethod("CompGuest", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic) != null;
         }
 
         public override string ModName()
