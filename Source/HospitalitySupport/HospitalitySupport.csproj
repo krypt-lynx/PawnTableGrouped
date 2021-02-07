@@ -93,6 +93,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GroupColumns\GroupColumnWorker_ShoppingArea.cs" />
+    <Compile Include="GroupColumns\GroupColumnWorker_AccommodationArea.cs" />
     <Compile Include="HospitalitySupport.cs" />
     <Compile Include="ModCompatibility\ColonyGroupsBridge.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,9 +106,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GroupingProviders\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

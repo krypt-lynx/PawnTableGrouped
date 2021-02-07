@@ -56,7 +56,7 @@ namespace PawnTableGrouped
         }
 
 
-		public static void DoAllowedAreaSelectors(Rect rect, PawnTableGroupColumn column)
+		public static void DoAllowedAreaSelectors(Rect rect, PawnTableGroupColumn column, Func<Area, string> getAreaTitle)
 		{
 			if (Find.CurrentMap == null)
 			{
@@ -74,14 +74,14 @@ namespace PawnTableGrouped
 			float zoneWidth = rect.width / areasCount;
 			Text.WordWrap = false;
 			Text.Font = GameFont.Tiny;
-			DoAreaSelector(new Rect(rect.x + 0f, rect.y, zoneWidth, rect.height), column, null);
+			DoAreaSelector(new Rect(rect.x + 0f, rect.y, zoneWidth, rect.height), column, null, getAreaTitle);
 			int num3 = 1;
 			for (int j = 0; j < allAreas.Count; j++)
 			{
 				if (allAreas[j].AssignableAsAllowed())
 				{
 					float num4 = (float)num3 * zoneWidth;
-					DoAreaSelector(new Rect(rect.x + num4, rect.y, zoneWidth, rect.height), column, allAreas[j]);
+					DoAreaSelector(new Rect(rect.x + num4, rect.y, zoneWidth, rect.height), column, allAreas[j], getAreaTitle);
 					num3++;
 				}
 			}
@@ -90,13 +90,13 @@ namespace PawnTableGrouped
 		}
 
 		// Token: 0x06005B24 RID: 23332 RVA: 0x001E4F30 File Offset: 0x001E3130
-		private static void DoAreaSelector(Rect rect, PawnTableGroupColumn column, Area area)
+		private static void DoAreaSelector(Rect rect, PawnTableGroupColumn column, Area area, Func<Area, string> getAreaTitle)
 		{
 			MouseoverSounds.DoRegion(rect);
 			rect = rect.ContractedBy(1f);
 			GUI.DrawTexture(rect, (area != null) ? area.ColorTexture : BaseContent.GreyTex);
 			Text.Anchor = TextAnchor.MiddleLeft;
-			string text = AreaUtility.AreaAllowedLabel_Area(area);
+			string text = getAreaTitle(area);
 			Rect rect2 = rect;
 			rect2.xMin += 3f;
 			rect2.yMin += 2f;
