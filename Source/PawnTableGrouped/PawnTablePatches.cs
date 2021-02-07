@@ -15,11 +15,14 @@ namespace PawnTableGrouped
 {
     public static class PawnTableExtentions
     {
+        static Func<PawnTable, PawnTableDef> _get_PawnTable_def = FastAccess.CreateGetInstanceFieldWrapper<PawnTable, PawnTableDef>("def");
+
+
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl> implementations;
 
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>.CreateValueCallback instantiateTableImpl = table =>
         {
-            var def = GetPawnTableDef(table);
+            var def = _get_PawnTable_def(table);
             if (Mod.Settings.pawnTablesEnabled.Contains(def.defName))
             {
                 return new PawnTableGroupedImpl(table, def);
@@ -44,10 +47,6 @@ namespace PawnTableGrouped
             implementations = new ConditionalWeakTable<PawnTable, PawnTableGroupedImpl>();
         }
 
-        static PawnTableDef GetPawnTableDef(PawnTable table)
-        {
-            return (PawnTableDef)typeof(PawnTable).GetField("def", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(table);
-        }
 
         public static bool TryGetImplementation(PawnTable table, out PawnTableGroupedImpl implementation)
         {
@@ -71,17 +70,14 @@ namespace PawnTableGrouped
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "PostClose_postfix"));
         }
 
+        static Func<MainTabWindow_PawnTable, PawnTable> _get_MainTabWindow_PawnTable_table = FastAccess.CreateGetInstanceFieldWrapper<MainTabWindow_PawnTable, PawnTable>("table");
 
-        public static PawnTable GetTable(MainTabWindow_PawnTable window)
-        {
-            return (PawnTable)typeof(MainTabWindow_PawnTable).GetField("table", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(window);
-        }
 
         static void PostClose_postfix(Window __instance)
         {
             if (__instance is MainTabWindow_PawnTable tableWindow)
             {
-                var table = GetTable(tableWindow);
+                var table = _get_MainTabWindow_PawnTable_table(tableWindow);
 
                 if (table != null && PawnTableExtentions.TryGetImplementation(table, out var impl))
                 {

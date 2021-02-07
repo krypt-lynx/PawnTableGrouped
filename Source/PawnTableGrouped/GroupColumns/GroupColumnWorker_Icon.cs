@@ -13,39 +13,56 @@ namespace PawnTableGrouped
 {
 	public class GroupColumnWorker_Icon : GroupColumnWorker
     {
-        public Texture2D GetIconFor(Pawn pawn)
+		static Func<PawnColumnWorker_Icon, Pawn, Texture2D> getIconFor = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Icon, Pawn, Texture2D>(
+			typeof(PawnColumnWorker_Icon).GetMethod("GetIconFor", BindingFlags.NonPublic | BindingFlags.Instance));
+		static Func<PawnColumnWorker_Icon, Pawn, Vector2> setIconSize = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Icon, Pawn, Vector2>(
+			typeof(PawnColumnWorker_Icon).GetMethod("GetIconSize", BindingFlags.NonPublic | BindingFlags.Instance));
+		static Func<PawnColumnWorker_Icon, Pawn, Color> getIconColor = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Icon, Pawn, Color>(
+			typeof(PawnColumnWorker_Icon).GetMethod("GetIconColor", BindingFlags.NonPublic | BindingFlags.Instance));
+		static Func<PawnColumnWorker_Icon, Pawn, string> getIconTip = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Icon, Pawn, string>(
+			typeof(PawnColumnWorker_Icon).GetMethod("GetIconTip", BindingFlags.NonPublic | BindingFlags.Instance));
+
+		static Action<PawnColumnWorker_Icon, Pawn> clickedIcon = FastAccess.CreateInstanceVoidMethodWrapper<PawnColumnWorker_Icon, Pawn>(
+			typeof(PawnColumnWorker_Icon).GetMethod("ClickedIcon", BindingFlags.NonPublic | BindingFlags.Instance));
+		static Action<PawnColumnWorker_Icon, Pawn> paintedIcon = FastAccess.CreateInstanceVoidMethodWrapper<PawnColumnWorker_Icon, Pawn>(
+			typeof(PawnColumnWorker_Icon).GetMethod("PaintedIcon", BindingFlags.NonPublic | BindingFlags.Instance));
+		static Func<PawnColumnWorker_Icon, int> padding = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Icon, int>(
+			typeof(PawnColumnWorker_Icon).GetMethod("get_Padding", BindingFlags.NonPublic | BindingFlags.Instance));
+
+
+		public Texture2D GetIconFor(Pawn pawn)
         {
-            return (Texture2D)typeof(PawnColumnWorker_Icon).GetMethod("GetIconFor", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(ColumnDef.Worker, new object[] { pawn });
+			return getIconFor((PawnColumnWorker_Icon)ColumnDef.Worker, pawn);
         }
 
 		public Vector2 GetIconSize(Pawn pawn)
 		{
-			return (Vector2)typeof(PawnColumnWorker_Icon).GetMethod("GetIconSize", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(ColumnDef.Worker, new object[] { pawn });
+			return setIconSize((PawnColumnWorker_Icon)ColumnDef.Worker, pawn);
 		}
 
 		public Color GetIconColor(Pawn pawn)
 		{
-			return (Color)typeof(PawnColumnWorker_Icon).GetMethod("GetIconColor", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(ColumnDef.Worker, new object[] { pawn });
+			return getIconColor((PawnColumnWorker_Icon)ColumnDef.Worker, pawn);
 		}
 
 		public string GetIconTip(Pawn pawn)
 		{
-			return (string)typeof(PawnColumnWorker_Icon).GetMethod("GetIconTip", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(ColumnDef.Worker, new object[] { pawn });
+			return getIconTip((PawnColumnWorker_Icon)ColumnDef.Worker, pawn);
 		}
 
 		public void ClickedIcon(Pawn pawn)
 		{
-			typeof(PawnColumnWorker_Icon).GetMethod("ClickedIcon", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(ColumnDef.Worker, new object[] { pawn });
+			clickedIcon((PawnColumnWorker_Icon)ColumnDef.Worker, pawn);
 		}
 
 		public void PaintedIcon(Pawn pawn)
 		{
-			typeof(PawnColumnWorker_Icon).GetMethod("PaintedIcon", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(ColumnDef.Worker, new object[] { pawn });
+			paintedIcon((PawnColumnWorker_Icon)ColumnDef.Worker, pawn);
 		}
 
 		public int Padding()
 		{
-			return (int)typeof(PawnColumnWorker_Icon).GetProperty("Padding", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(ColumnDef.Worker);
+			return padding((PawnColumnWorker_Icon)ColumnDef.Worker);
 		}
 
 		public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)

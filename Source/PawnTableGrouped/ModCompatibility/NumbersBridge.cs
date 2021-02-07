@@ -18,6 +18,7 @@ namespace PawnTableGrouped
             return Instance.IsActive && table != null && tableType.IsAssignableFrom(table.GetType());
         }
 
+
         public static int ReorderableGroup(PawnTable pawnTable)
         {
             if (!Instance.IsActive)
@@ -27,7 +28,7 @@ namespace PawnTableGrouped
 
             try
             {
-                return (int)typeof(Numbers.Numbers).GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { pawnTable });
+                return numbersReorderableGroup(pawnTable);                
             }
             catch
             {
@@ -46,7 +47,7 @@ namespace PawnTableGrouped
 
             try
             {
-                typeof(Numbers.Numbers).GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { groupId, rect });
+                numbersCallReorderableWidget(groupId, rect);
             }
             catch
             {
@@ -54,11 +55,20 @@ namespace PawnTableGrouped
             }
         }
 
+        static Func<PawnTable, int> numbersReorderableGroup;
+        static Action<int, Rect> numbersCallReorderableWidget;
+
         protected override bool ResolveInternal(HarmonyLib.Harmony harmony)
         {
             tableType = typeof(PawnTable_NumbersMain);
-            return GenTypes.GetTypeInAnyAssembly("Numbers.Numbers") != null &&
-                GenTypes.GetTypeInAnyAssembly("Numbers.PawnTable_NumbersMain") != null;
+            numbersReorderableGroup = FastAccess.CreateStaticRetMethodWrapper<PawnTable, int>(typeof(Numbers.Numbers).GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
+
+            numbersCallReorderableWidget = FastAccess.CreateStaticVoidMethodWrapper<int, Rect>(typeof(Numbers.Numbers).GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
+
+            return 
+                numbersReorderableGroup != null &&
+                numbersCallReorderableWidget != null &&
+                tableType != null;
         }
 
         public override string ModName()

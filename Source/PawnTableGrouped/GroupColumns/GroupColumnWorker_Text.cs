@@ -20,14 +20,19 @@ namespace PawnTableGrouped
 
     public class GroupColumnWorker_Text : GroupColumnWorker
     {
+        static Func<PawnColumnWorker_Text, Pawn, string> getTextFor = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Text, Pawn, string>(
+            typeof(PawnColumnWorker_Text).GetMethod("GetTextFor", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance));
+        static Func<PawnColumnWorker_Text, Pawn, string> getTip = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Text, Pawn, string>(
+            typeof(PawnColumnWorker_Text).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance));
+
         public string GetTextFor(Pawn pawn)
         {
-            return (string)typeof(PawnColumnWorker_Text).GetMethod("GetTextFor", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Text)ColumnDef.Worker, new object[] { pawn });
+            return getTextFor((PawnColumnWorker_Text)ColumnDef.Worker, pawn);
         }
 
         public string GetTip(Pawn pawn)
         {
-            return (string)typeof(PawnColumnWorker_Text).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Text)ColumnDef.Worker, new object[] { pawn });
+            return getTip((PawnColumnWorker_Text)ColumnDef.Worker, pawn);
         }
 
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)

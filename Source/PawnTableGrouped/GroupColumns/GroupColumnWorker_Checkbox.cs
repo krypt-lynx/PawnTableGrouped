@@ -20,27 +20,37 @@ namespace PawnTableGrouped
 
     public class GroupColumnWorker_Checkbox : GroupColumnWorker
     {
+        static Func<PawnColumnWorker_Checkbox, Pawn, bool> getValue = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Checkbox, Pawn, bool>(
+            typeof(PawnColumnWorker_Checkbox).GetMethod("GetValue", BindingFlags.NonPublic | BindingFlags.Instance));
+        static Action<PawnColumnWorker_Checkbox, Pawn, bool> setValue = FastAccess.CreateInstanceVoidMethodWrapper<PawnColumnWorker_Checkbox, Pawn, bool>(
+            typeof(PawnColumnWorker_Checkbox).GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance));
+
+        static Func<PawnColumnWorker_Checkbox, Pawn, bool> hasCheckbox = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Checkbox, Pawn, bool>(
+            typeof(PawnColumnWorker_Checkbox).GetMethod("HasCheckbox", BindingFlags.NonPublic | BindingFlags.Instance));
+        static Func<PawnColumnWorker_Checkbox, Pawn, string> getTip = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Checkbox, Pawn, string>(
+            typeof(PawnColumnWorker_Checkbox).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance));
+
         public override object GetValue(Pawn pawn)
         {
-            return (bool)typeof(PawnColumnWorker_Checkbox).GetMethod("GetValue", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Checkbox)ColumnDef.Worker, new object[] { pawn });
+            return getValue((PawnColumnWorker_Checkbox)ColumnDef.Worker, pawn);
         }
 
         public override void SetValue(Pawn pawn, object value)
         {
             if (HasCheckbox(pawn))
             {
-                typeof(PawnColumnWorker_Checkbox).GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Checkbox)ColumnDef.Worker, new object[] { pawn, value });
+                setValue((PawnColumnWorker_Checkbox)ColumnDef.Worker, pawn, (bool)value);
             }
         }
 
         public bool HasCheckbox(Pawn pawn)
         {
-            return (bool)typeof(PawnColumnWorker_Checkbox).GetMethod("HasCheckbox", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Checkbox)ColumnDef.Worker, new object[] { pawn });
+            return hasCheckbox((PawnColumnWorker_Checkbox)ColumnDef.Worker, pawn);
         }
 
         public string GetTip(Pawn pawn)
         {
-            return (string)typeof(PawnColumnWorker_Checkbox).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance).Invoke((PawnColumnWorker_Checkbox)ColumnDef.Worker, new object[] { pawn });
+            return getTip((PawnColumnWorker_Checkbox)ColumnDef.Worker, pawn);
         }
 
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)

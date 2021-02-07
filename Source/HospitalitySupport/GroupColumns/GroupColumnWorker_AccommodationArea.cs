@@ -14,7 +14,7 @@ namespace PawnTableGrouped.Hospitality
 {
     class GroupColumnWorker_AccommodationArea : GroupColumnWorker_Area
     {
-        private static Func<Pawn, CompGuest> call_Pawn_CompGuest = FastReflection.CreateCallStaticMethodDelegate<Pawn, CompGuest>(GenTypes.GetTypeInAnyAssembly("Hospitality.CompUtility").GetMethod("CompGuest", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
+        private static Func<Pawn, CompGuest> call_Pawn_CompGuest = FastAccess.CreateStaticRetMethodWrapper<Pawn, CompGuest>(GenTypes.GetTypeInAnyAssembly("Hospitality.CompUtility").GetMethod("CompGuest", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
 
         public override object DefaultValue(IEnumerable<Pawn> pawns)
         {

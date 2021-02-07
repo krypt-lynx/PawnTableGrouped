@@ -19,10 +19,8 @@ namespace PawnTableGrouped
 
     public class GroupColumnWorker_Trainable : GroupColumnWorker
     {
-        private static void DoTrainableTooltip(Rect rect, Pawn pawn, TrainableDef td, AcceptanceReport canTrain)
-        {
-            typeof(TrainingCardUtility).GetMethod("DoTrainableTooltip", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { rect, pawn, td, canTrain });
-        }
+        // static Action<Rect, Pawn, TrainableDef, AcceptanceReport> doTrainableTooltip = FastAccess.CreateStaticRetMethodWrapper<Rect, Pawn, TrainableDef, AcceptanceReport>(
+        //     typeof(TrainingCardUtility).GetMethod("DoTrainableTooltip", BindingFlags.NonPublic | BindingFlags.Static));
 
 
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
