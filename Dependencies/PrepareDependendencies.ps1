@@ -1,5 +1,13 @@
+
+# 1414302321 Mehni.Numbers                        Numbers
+# 2144935009 syl.simpleslavery                    Simple Slavery [1.2]
+# 2345493945 DerekBickley.LTOColonyGroupsFinal    [LTO] Colony Groups
+#  725219116 fluffy.worktab                       Work Tab
+#  753498552 Orion.Hospitality                    Hospitality
+# 2009463077 brrainz.harmony                      Harmony
+
 $appId = 294100
-$modIds = @(2009463077, 1414302321, 2144935009, 2345493945,  725219116)
+$modIds = @(1414302321, 2144935009, 2345493945, 725219116, 753498552, 2009463077)
 
 
 [string]$startupPath = Get-Location
@@ -32,12 +40,6 @@ if (-Not (Test-Path $steamcmd)) {
 	Remove-Item -Recurse -Force $steamcmd_archPath
 }
 
-
-# 2009463077 brrainz.harmony                      Harmony
-# 1414302321 Mehni.Numbers                        Numbers
-# 2144935009 syl.simpleslavery                    Simple Slavery [1.2]
-# 2345493945 DerekBickley.LTOColonyGroupsFinal    [LTO] Colony Groups
-#  725219116 fluffy.worktab                       Work Tab
 
 Echo "Downloading mods..."
 

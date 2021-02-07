@@ -157,7 +157,6 @@
     <Compile Include="Mod\Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\ColumnGuide.cs" />
-    <Compile Include="GUI\CTabsView.cs" />
     <Compile Include="Settings\ColumnsSettingsTab.cs" />
     <Compile Include="Settings\GeneralSettingsTab.cs" />
     <Compile Include="Settings\SettingsView.cs" />
@@ -167,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="git.txt">
-		<LogicalName>PawnTableGrouped.0.git.txt</LogicalName>
+      <LogicalName>PawnTableGrouped.0.git.txt</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

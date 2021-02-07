@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawnTableGrouped", "PawnTab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColonyGroupsSupport", "ColonyGroupsSupport\ColonyGroupsSupport.csproj", "{0C420941-23CE-4CD9-B7FF-980625A25856}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalitySupport", "HospitalitySupport\HospitalitySupport.csproj", "{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		1.1|Any CPU = 1.1|Any CPU
@@ -32,6 +34,14 @@ Global
 		{0C420941-23CE-4CD9-B7FF-980625A25856}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C420941-23CE-4CD9-B7FF-980625A25856}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C420941-23CE-4CD9-B7FF-980625A25856}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}.1.1|Any CPU.ActiveCfg = 1.1|Any CPU
+		{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}.1.1|Any CPU.Build.0 = 1.1|Any CPU
+		{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}.1.2|Any CPU.ActiveCfg = 1.2|Any CPU
+		{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}.1.2|Any CPU.Build.0 = 1.2|Any CPU
+		{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

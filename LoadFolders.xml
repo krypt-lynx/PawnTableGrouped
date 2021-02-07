@@ -2,10 +2,12 @@
 	<v1.1>
 		<li/>
 		<li>1.1</li>
+		<li IfModActive="orion.hospitality">1.1+Hospitality</li>
 	</v1.1>
 	<v1.2>
 		<li/>
 		<li>1.2</li>
 		<li IfModActive="derekbickley.ltocolonygroupsfinal">1.2+ColonyGroups</li>
+		<li IfModActive="orion.hospitality">1.2+Hospitality</li>
 	</v1.2>
 </loadFolders>

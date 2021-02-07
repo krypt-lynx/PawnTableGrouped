@@ -30,7 +30,6 @@ namespace PawnTableGrouped
             }
         };
 
-
         static PawnTableExtentions()
         {
             ResetImplementationsCache();
@@ -53,10 +52,8 @@ namespace PawnTableGrouped
         public static bool TryGetImplementation(PawnTable table, out PawnTableGroupedImpl implementation)
         {
             implementation = implementations.GetValue(table, instantiateTableImpl);
-
             return implementation != null;
         }
-
     }
 
     public class PawnTablePatches
