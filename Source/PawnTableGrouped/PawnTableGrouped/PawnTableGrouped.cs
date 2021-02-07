@@ -78,8 +78,15 @@ namespace PawnTableGrouped
             model.SaveData();
         }
 
+        bool NeedUpdateVews = true;
         public virtual void PawnTableOnGUI(Vector2 position)
         {
+            if (NeedUpdateVews)
+            {
+                view.PopulateList();
+                model.DoGroupsStateChanged();
+                NeedUpdateVews = false;
+            }
 
             if (Event.current.type == EventType.Layout)
             {
@@ -128,8 +135,7 @@ namespace PawnTableGrouped
 
             accessor.RecacheLookTargets();
 
-            view.PopulateList();
-            model.DoGroupsStateChanged();
+            NeedUpdateVews = true;
         }
 
         private bool UpdateColumnWidths(out float width)
