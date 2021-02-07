@@ -61,9 +61,9 @@ namespace PawnTableGrouped
         protected override bool ResolveInternal(HarmonyLib.Harmony harmony)
         {
             tableType = typeof(PawnTable_NumbersMain);
-            numbersReorderableGroup = FastAccess.CreateStaticRetMethodWrapper<PawnTable, int>(typeof(Numbers.Numbers).GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
+            numbersReorderableGroup = FastAccess.StaticRetMethod<PawnTable, int>(typeof(Numbers.Numbers).GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
 
-            numbersCallReorderableWidget = FastAccess.CreateStaticVoidMethodWrapper<int, Rect>(typeof(Numbers.Numbers).GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
+            numbersCallReorderableWidget = FastAccess.StaticVoidMethod<int, Rect>(typeof(Numbers.Numbers).GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
 
             return 
                 numbersReorderableGroup != null &&

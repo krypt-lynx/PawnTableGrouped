@@ -8,8 +8,54 @@ using System.Threading.Tasks;
 
 namespace PawnTableGrouped
 {
-    public class FastAccess
-    {    
+    static class ILGeneratorExtensions
+    {
+        public static void EmitLdarg(this ILGenerator gen, byte argIndex)
+        {
+            switch (argIndex)
+            {
+                case 0:
+                    gen.Emit(OpCodes.Ldarg_0);
+                    break;
+                case 1:
+                    gen.Emit(OpCodes.Ldarg_1);
+                    break;
+                case 2:
+                    gen.Emit(OpCodes.Ldarg_2);
+                    break;
+                case 3:
+                    gen.Emit(OpCodes.Ldarg_3);
+                    break;
+                default:
+                    gen.Emit(OpCodes.Ldarg_S, argIndex);
+                    break;
+            }
+        }
+    }
+
+    public partial class FastAccess
+    {
+
+        public static Delegate CreateMethodCaller(Type delegateType, MethodInfo method, Type ret, params Type[] args)
+        {
+            DynamicMethod wrapper = new DynamicMethod($"method_{method.DeclaringType.Name}_{method.Name}", ret, args, true);
+            ILGenerator gen = wrapper.GetILGenerator();
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                gen.EmitLdarg((byte)i);
+            }
+            gen.Emit(OpCodes.Call, method);
+            gen.Emit(OpCodes.Ret);
+
+            return wrapper.CreateDelegate(delegateType);
+        }
+    }
+
+    public class FastAccess2
+    {
+
+
         // static func
 
         public static Func<TArg0, TResult> CreateStaticRetMethodWrapper<TArg0, TResult>(MethodInfo method)
@@ -216,58 +262,5 @@ namespace PawnTableGrouped
             return (Func<TField>)getter.CreateDelegate(typeof(Func<TField>));
         }
         // instance field
-
-        public static Func<TInstance, TField> CreateGetInstanceFieldWrapper<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-        {
-            return CreateGetInstanceFieldWrapper<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
-        }
-
-        public static Func<TInstance, TField> CreateGetInstanceFieldWrapper<TInstance, TField>(FieldInfo field)
-        {
-            DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(TField), new Type[] { typeof(TInstance) }, true);
-            ILGenerator gen = getter.GetILGenerator();
-
-            if (field.IsStatic)
-            {
-                throw new InvalidOperationException($"method {field} is static");
-            }
-            else
-            {
-                gen.Emit(OpCodes.Ldarg_0);
-                gen.Emit(OpCodes.Ldfld, field);
-                gen.Emit(OpCodes.Ret);
-            }
-
-            return (Func<TInstance, TField>)getter.CreateDelegate(typeof(Func<TInstance, TField>));
-        }
-
-        public static Action<TInstance, TField> CreateSetInstanceFieldWrapper<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-        {
-            return CreateSetInstanceFieldWrapper<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
-        }
-
-
-        public static Action<TInstance, TField> CreateSetInstanceFieldWrapper<TInstance, TField>(FieldInfo field)
-        {
-            DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(object), typeof(TField) }, true);
-            ILGenerator gen = getter.GetILGenerator();
-
-            if (field.IsStatic)
-            {
-                throw new InvalidOperationException($"method {field} is static");
-            }
-            else
-            {
-                gen.Emit(OpCodes.Ldarg_0);
-                gen.Emit(OpCodes.Ldarg_1);
-                gen.Emit(OpCodes.Stfld, field);
-                gen.Emit(OpCodes.Ret);
-            }
-
-            return (Action<TInstance, TField>)getter.CreateDelegate(typeof(Action<TInstance, TField>));
-        }
-
-
-
     }
 }

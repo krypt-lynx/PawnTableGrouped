@@ -20,9 +20,9 @@ namespace PawnTableGrouped
 
     public class GroupColumnWorker_Text : GroupColumnWorker
     {
-        static Func<PawnColumnWorker_Text, Pawn, string> getTextFor = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Text, Pawn, string>(
+        static Func<PawnColumnWorker_Text, Pawn, string> getTextFor = FastAccess.InstanceRetMethod<PawnColumnWorker_Text, Pawn, string>(
             typeof(PawnColumnWorker_Text).GetMethod("GetTextFor", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance));
-        static Func<PawnColumnWorker_Text, Pawn, string> getTip = FastAccess.CreateInstanceRetMethodWrapper<PawnColumnWorker_Text, Pawn, string>(
+        static Func<PawnColumnWorker_Text, Pawn, string> getTip = FastAccess.InstanceRetMethod<PawnColumnWorker_Text, Pawn, string>(
             typeof(PawnColumnWorker_Text).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance));
 
         public string GetTextFor(Pawn pawn)

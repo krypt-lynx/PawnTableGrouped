@@ -107,6 +107,12 @@
     <Reference Condition=" '$(Configuration)' == '1.2' " Include="SimpleSlavery">
       <Private>False</Private>
     </Reference>
+    <Reference Condition=" '$(Configuration)' == 'Debug' " Include="SimpleSlavery">
+      <Private>False</Private>
+    </Reference>	
+    <Reference Condition=" '$(Configuration)' == 'Release' " Include="SimpleSlavery">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompatibilityInfoDef.cs" />
@@ -114,7 +120,12 @@
     <Compile Include="EventBus\EventBus.cs" />
     <Compile Include="EventBus\PawnTableInvalidateMessage.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FastAccess.cs" />
+    <Compile Include="FastAccess\FastAccess+InstanceRetMethod.cs" />
+    <Compile Include="FastAccess\FastAccess+InstanceVoidMethod.cs" />
+    <Compile Include="FastAccess\FastAccess+Field.cs" />
+    <Compile Include="FastAccess\FastAccess+StaticRetMethod.cs" />
+    <Compile Include="FastAccess\FastAccess+StaticVoidMethod.cs" />
+    <Compile Include="FastAccess\FastAccess.cs" />
     <Compile Include="GroupColumns\Base\GroupColumnWorker_Area.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_AllowedArea.cs" />
     <Compile Include="GroupColumns\GroupColumnWorker_WorkPriority.cs" />

@@ -15,7 +15,7 @@ namespace PawnTableGrouped
 {
     public static class PawnTableExtentions
     {
-        static Func<PawnTable, PawnTableDef> _get_PawnTable_def = FastAccess.CreateGetInstanceFieldWrapper<PawnTable, PawnTableDef>("def");
+        static Func<PawnTable, PawnTableDef> _get_PawnTable_def = FastAccess.InstanceGetField<PawnTable, PawnTableDef>("def");
 
 
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl> implementations;
@@ -70,7 +70,7 @@ namespace PawnTableGrouped
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "PostClose_postfix"));
         }
 
-        static Func<MainTabWindow_PawnTable, PawnTable> _get_MainTabWindow_PawnTable_table = FastAccess.CreateGetInstanceFieldWrapper<MainTabWindow_PawnTable, PawnTable>("table");
+        static Func<MainTabWindow_PawnTable, PawnTable> _get_MainTabWindow_PawnTable_table = FastAccess.InstanceGetField<MainTabWindow_PawnTable, PawnTable>("table");
 
 
         static void PostClose_postfix(Window __instance)
