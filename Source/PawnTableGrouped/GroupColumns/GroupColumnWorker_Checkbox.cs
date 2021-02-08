@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using RWLayout.alpha2;
+using RWLayout.alpha2.FastAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,14 @@ namespace PawnTableGrouped
 
     public class GroupColumnWorker_Checkbox : GroupColumnWorker
     {
-        static Func<PawnColumnWorker_Checkbox, Pawn, bool> getValue = FastAccess.InstanceRetMethod<PawnColumnWorker_Checkbox, Pawn, bool>(
+        static Func<PawnColumnWorker_Checkbox, Pawn, bool> getValue = Dynamic.InstanceRetMethod<PawnColumnWorker_Checkbox, Pawn, bool>(
             typeof(PawnColumnWorker_Checkbox).GetMethod("GetValue", BindingFlags.NonPublic | BindingFlags.Instance));
-        static Action<PawnColumnWorker_Checkbox, Pawn, bool> setValue = FastAccess.InstanceVoidMethod<PawnColumnWorker_Checkbox, Pawn, bool>(
+        static Action<PawnColumnWorker_Checkbox, Pawn, bool> setValue = Dynamic.InstanceVoidMethod<PawnColumnWorker_Checkbox, Pawn, bool>(
             typeof(PawnColumnWorker_Checkbox).GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance));
 
-        static Func<PawnColumnWorker_Checkbox, Pawn, bool> hasCheckbox = FastAccess.InstanceRetMethod<PawnColumnWorker_Checkbox, Pawn, bool>(
+        static Func<PawnColumnWorker_Checkbox, Pawn, bool> hasCheckbox = Dynamic.InstanceRetMethod<PawnColumnWorker_Checkbox, Pawn, bool>(
             typeof(PawnColumnWorker_Checkbox).GetMethod("HasCheckbox", BindingFlags.NonPublic | BindingFlags.Instance));
-        static Func<PawnColumnWorker_Checkbox, Pawn, string> getTip = FastAccess.InstanceRetMethod<PawnColumnWorker_Checkbox, Pawn, string>(
+        static Func<PawnColumnWorker_Checkbox, Pawn, string> getTip = Dynamic.InstanceRetMethod<PawnColumnWorker_Checkbox, Pawn, string>(
             typeof(PawnColumnWorker_Checkbox).GetMethod("GetTip", BindingFlags.NonPublic | BindingFlags.Instance));
 
         public override object GetValue(Pawn pawn)

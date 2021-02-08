@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Numbers;
+using RWLayout.alpha2.FastAccess;
 
 namespace PawnTableGrouped
 {
@@ -61,9 +62,9 @@ namespace PawnTableGrouped
         protected override bool ResolveInternal(HarmonyLib.Harmony harmony)
         {
             tableType = typeof(PawnTable_NumbersMain);
-            numbersReorderableGroup = FastAccess.StaticRetMethod<PawnTable, int>(typeof(Numbers.Numbers).GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
+            numbersReorderableGroup = Dynamic.StaticRetMethod<PawnTable, int>(typeof(Numbers.Numbers).GetMethod("ReorderableGroup", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
 
-            numbersCallReorderableWidget = FastAccess.StaticVoidMethod<int, Rect>(typeof(Numbers.Numbers).GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
+            numbersCallReorderableWidget = Dynamic.StaticVoidMethod<int, Rect>(typeof(Numbers.Numbers).GetMethod("CallReorderableWidget", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static));
 
             return 
                 numbersReorderableGroup != null &&

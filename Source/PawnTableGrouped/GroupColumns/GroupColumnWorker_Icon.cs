@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using RWLayout.alpha2;
+using RWLayout.alpha2.FastAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,20 +14,20 @@ namespace PawnTableGrouped
 {
 	public class GroupColumnWorker_Icon : GroupColumnWorker
     {
-		static Func<PawnColumnWorker_Icon, Pawn, Texture2D> getIconFor = FastAccess.InstanceRetMethod<PawnColumnWorker_Icon, Pawn, Texture2D>(
+		static Func<PawnColumnWorker_Icon, Pawn, Texture2D> getIconFor = Dynamic.InstanceRetMethod<PawnColumnWorker_Icon, Pawn, Texture2D>(
 			typeof(PawnColumnWorker_Icon).GetMethod("GetIconFor", BindingFlags.NonPublic | BindingFlags.Instance));
-		static Func<PawnColumnWorker_Icon, Pawn, Vector2> setIconSize = FastAccess.InstanceRetMethod<PawnColumnWorker_Icon, Pawn, Vector2>(
+		static Func<PawnColumnWorker_Icon, Pawn, Vector2> setIconSize = Dynamic.InstanceRetMethod<PawnColumnWorker_Icon, Pawn, Vector2>(
 			typeof(PawnColumnWorker_Icon).GetMethod("GetIconSize", BindingFlags.NonPublic | BindingFlags.Instance));
-		static Func<PawnColumnWorker_Icon, Pawn, Color> getIconColor = FastAccess.InstanceRetMethod<PawnColumnWorker_Icon, Pawn, Color>(
+		static Func<PawnColumnWorker_Icon, Pawn, Color> getIconColor = Dynamic.InstanceRetMethod<PawnColumnWorker_Icon, Pawn, Color>(
 			typeof(PawnColumnWorker_Icon).GetMethod("GetIconColor", BindingFlags.NonPublic | BindingFlags.Instance));
-		static Func<PawnColumnWorker_Icon, Pawn, string> getIconTip = FastAccess.InstanceRetMethod<PawnColumnWorker_Icon, Pawn, string>(
+		static Func<PawnColumnWorker_Icon, Pawn, string> getIconTip = Dynamic.InstanceRetMethod<PawnColumnWorker_Icon, Pawn, string>(
 			typeof(PawnColumnWorker_Icon).GetMethod("GetIconTip", BindingFlags.NonPublic | BindingFlags.Instance));
 
-		static Action<PawnColumnWorker_Icon, Pawn> clickedIcon = FastAccess.InstanceVoidMethod<PawnColumnWorker_Icon, Pawn>(
+		static Action<PawnColumnWorker_Icon, Pawn> clickedIcon = Dynamic.InstanceVoidMethod<PawnColumnWorker_Icon, Pawn>(
 			typeof(PawnColumnWorker_Icon).GetMethod("ClickedIcon", BindingFlags.NonPublic | BindingFlags.Instance));
-		static Action<PawnColumnWorker_Icon, Pawn> paintedIcon = FastAccess.InstanceVoidMethod<PawnColumnWorker_Icon, Pawn>(
+		static Action<PawnColumnWorker_Icon, Pawn> paintedIcon = Dynamic.InstanceVoidMethod<PawnColumnWorker_Icon, Pawn>(
 			typeof(PawnColumnWorker_Icon).GetMethod("PaintedIcon", BindingFlags.NonPublic | BindingFlags.Instance));
-		static Func<PawnColumnWorker_Icon, int> padding = FastAccess.InstanceRetMethod<PawnColumnWorker_Icon, int>(
+		static Func<PawnColumnWorker_Icon, int> padding = Dynamic.InstanceRetMethod<PawnColumnWorker_Icon, int>(
 			typeof(PawnColumnWorker_Icon).GetMethod("get_Padding", BindingFlags.NonPublic | BindingFlags.Instance));
 
 
