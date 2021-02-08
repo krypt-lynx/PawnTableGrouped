@@ -78,14 +78,14 @@ namespace PawnTableGrouped
             model.SaveData();
         }
 
-        bool NeedUpdateVews = true;
+        bool NeedUpdateViews = true;
         public virtual void PawnTableOnGUI(Vector2 position)
         {
-            if (NeedUpdateVews)
+            if (NeedUpdateViews)
             {
                 view.PopulateList();
                 model.DoGroupsStateChanged();
-                NeedUpdateVews = false;
+                NeedUpdateViews = false;
             }
 
             if (Event.current.type == EventType.Layout)
@@ -125,17 +125,22 @@ namespace PawnTableGrouped
             accessor.RecacheColumnWidths();
             //var columnWidths = accessor.cachedColumnWidths; 
 
+            AdjastTableWidth();
+
+            accessor.RecacheLookTargets();
+
+            NeedUpdateViews = true;
+        }
+
+        private void AdjastTableWidth()
+        {
             float totalColumnsWidth;
             var fits = UpdateColumnWidths(out totalColumnsWidth);
             view.SetInnerWidth(totalColumnsWidth + Metrics.TableLeftMargin);
 
-            size = accessor.cachedSize;
-            accessor.cachedSize = new Vector2(size.x + Metrics.TableLeftMargin,                 
-                Mathf.Min(size.y + (fits ? 0:Metrics.ScrollBar), accessor.maxTableHeight)); // expand table for collapse indicator and horizontal scrollbar
-
-            accessor.RecacheLookTargets();
-
-            NeedUpdateVews = true;
+            var size = accessor.cachedSize;
+            accessor.cachedSize = new Vector2(size.x + Metrics.TableLeftMargin,
+                Mathf.Min(size.y + (fits ? 0 : Metrics.ScrollBar), accessor.maxTableHeight)); // expand table for collapse indicator and horizontal scrollbar
         }
 
         private bool UpdateColumnWidths(out float width)

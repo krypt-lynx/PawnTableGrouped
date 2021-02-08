@@ -255,7 +255,6 @@ namespace PawnTableGrouped
 
         public void RecacheGroups()
         {
-
             Groups = ActiveGrouper.CreateGroups(Table.PawnsListForReading, DefaultPawnSort, columnResolvers).ToList();
 
             SortGroups();
