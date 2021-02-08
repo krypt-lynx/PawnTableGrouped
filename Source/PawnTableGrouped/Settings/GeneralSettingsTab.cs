@@ -23,6 +23,7 @@ namespace PawnTableGrouped
 
 
             CElement debug;
+            CElement showDummy;
             CElement hideHeader;
             CElement primarySort;
             CElement byColumn;
@@ -39,6 +40,13 @@ namespace PawnTableGrouped
                     Checked = Mod.Settings.debug,
                     Changed = (_, value) => Mod.Settings.debug = value,
                 }), debug.intrinsicHeight),
+                2,
+                (AddElement(showDummy = new CCheckboxLabeled
+                {
+                    Title = "Show placeholder group cells",
+                    Checked = Mod.Settings.showDummyColumns,
+                    Changed = (_, value) => Mod.Settings.showDummyColumns = value,
+                }), showDummy.intrinsicHeight),
                 2,
                 (AddElement(hideHeader = new CCheckboxLabeled
                 {

@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using RWLayout.alpha2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace PawnTableGrouped
 
         public override bool IsGroupVisible(IEnumerable<Pawn> pawns)
         {
-            return false;
+            return Mod.Settings.showDummyColumns;
         }
 
         public override bool IsVisible(Pawn pawn)
@@ -48,7 +49,14 @@ namespace PawnTableGrouped
 
         public override void DoCell(Rect cellRect, PawnTableGroupColumn column, PawnTable table)
         {
-            
+            if (Mod.Settings.showDummyColumns)
+            {
+                GuiTools.PushColor(Color.yellow);
+                GuiTools.Box(cellRect.ContractedBy(1), EdgeInsets.One);
+                GuiTools.PopColor();
+                
+                TooltipHandler.TipRegion(cellRect, $"{ColumnDef.defName}: {ColumnDef.workerClass.FullName}");
+            }   
         }
 
         public override bool IsDummy()

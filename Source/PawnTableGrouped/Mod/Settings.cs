@@ -11,6 +11,7 @@ namespace PawnTableGrouped
     {
         public bool firstRun = true;
         public bool debug = false;
+        public bool showDummyColumns = false;
         public bool hideHeaderIfOnlyOneGroup = false;
         public bool usePrimarySortFunction = true;
         public bool groupByColumnExperimental = false;
@@ -22,6 +23,7 @@ namespace PawnTableGrouped
             Scribe_Values.Look(ref firstRun, "firstRun2", true);
 
             Scribe_Values.Look(ref debug, "debug", false);
+            Scribe_Values.Look(ref showDummyColumns, nameof(showDummyColumns), false);
             Scribe_Values.Look(ref hideHeaderIfOnlyOneGroup, "hideHeaderIfOnlyOneGroup", false);
             Scribe_Values.Look(ref usePrimarySortFunction, "usePrimarySortFunction", true);
             Scribe_Values.Look(ref groupByColumnExperimental, "groupByColumnExperimental", false);
