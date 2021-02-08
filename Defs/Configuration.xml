@@ -84,6 +84,7 @@
 	-->
 
 
+
 	<PawnTableGrouped.CompatibilityInfoDef>
 		<defName>ModCompatibility</defName>
 		<compatibilityList>
@@ -123,7 +124,8 @@
 				<tables>
 					<li>
 						<name>Numbers_MainTable</name>
-						<compatibility>Supported</compatibility>
+						<compatibility>Issues</compatibility>
+						<hint>Exception after switching from Animal/Wildlife tab. Numbers feeds incompatible data into this table, and I can do nothing about it</hint>
 						<defaultGrouping>faction</defaultGrouping>
 					</li>
 					<li>
