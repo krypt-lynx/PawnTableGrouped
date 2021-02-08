@@ -3,13 +3,13 @@
 		<li/>
 		<li>1.1</li>
 		<li IfModActive="orion.hospitality">Hospitality</li>
-		<li IfModActive="orion.hospitality">1.1+Hospitality</li>
+		<li IfModActive="orion.hospitality">Hospitality/1.1</li>
 	</v1.1>
 	<v1.2>
 		<li/>
 		<li>1.2</li>
-		<li IfModActive="derekbickley.ltocolonygroupsfinal">1.2+ColonyGroups</li>
+		<li IfModActive="derekbickley.ltocolonygroupsfinal">ColonyGroups/1.2</li>
 		<li IfModActive="orion.hospitality">Hospitality</li>
-		<li IfModActive="orion.hospitality">1.2+Hospitality</li>
+		<li IfModActive="orion.hospitality">Hospitality/1.2</li>
 	</v1.2>
 </loadFolders>
