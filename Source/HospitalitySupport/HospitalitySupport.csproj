@@ -31,7 +31,15 @@
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\1.1+Hospitality\Assemblies\</OutputPath>
+    <DefineConstants>TRACE;rw_1_1</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' ">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\1.2+Hospitality\Assemblies\</OutputPath>

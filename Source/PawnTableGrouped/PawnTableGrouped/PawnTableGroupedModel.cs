@@ -43,6 +43,14 @@ namespace PawnTableGrouped
             ActiveGrouper = AllGroupers.First();
 
             LoadData(def);
+
+            new EventBusListener<PawnTableGroupedModel, PawnTableSaveDataMessage>(this, (x, sender, args) =>
+            {
+                if (x.def.defName == args.Message.DefName)
+                {
+                    x.SaveData();
+                }
+            });
         }
 
         public float TableExtendedArea = 0;
@@ -65,6 +73,11 @@ namespace PawnTableGrouped
 
         private void LoadData(PawnTableDef def)
         {
+            EventBus<PawnTableSaveDataMessage>.SendMessage(this, new PawnTableSaveDataMessage
+            {
+                DefName = def.defName,
+            });
+
             $"LoadData {def.defName}...".Log();
             
             // trying to access data saved in savegame

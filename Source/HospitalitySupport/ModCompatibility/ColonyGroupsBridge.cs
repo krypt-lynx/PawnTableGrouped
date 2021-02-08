@@ -14,16 +14,6 @@ namespace PawnTableGrouped
 
     public class HospitalityBridge : ModBridge<HospitalityBridge>
     {
-        protected override void ApplyPatches(Harmony harmony)
-        {
-     
-        }
-
-        static void MarkColonistsDirty_postfix()
-        {
-            EventBus<PawnTableInvalidateMessage>.SendMessage(null, new PawnTableInvalidateMessage());
-        }
-
         protected override bool ResolveInternal(Harmony harmony)
         {
             // test basic compatibility

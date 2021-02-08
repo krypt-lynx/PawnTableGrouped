@@ -74,11 +74,6 @@ namespace PawnTableGrouped
         {
             Instance.MessageRecieved?.Invoke(sender, new EventBusEventArgs<T>(Message));
         }
-
-        public void Instance_MessageRecieved(object sender, EventBusEventArgs<T> e)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }
