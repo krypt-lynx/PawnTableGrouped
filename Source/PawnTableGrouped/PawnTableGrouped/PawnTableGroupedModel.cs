@@ -40,7 +40,7 @@ namespace PawnTableGrouped
 
             ReadTableConfig();
 
-            ActiveGrouper = AllGroupers.First();
+            ActiveGrouper = PredefinedGroupWorkers.First();
 
             LoadData(def);
 
@@ -102,7 +102,7 @@ namespace PawnTableGrouped
                     var groupingKey = (value as ValueContainer<string>)?.Value;
                     if (groupingKey != null)
                     {
-                        ActiveGrouper = AllGroupers.FirstOrDefault(x => groupingKey == x.Key()) ?? AllGroupers.First();
+                        ActiveGrouper = PredefinedGroupWorkers.FirstOrDefault(x => groupingKey == x.Key()) ?? PredefinedGroupWorkers.First();
                     }
                 }
             } 
@@ -113,11 +113,11 @@ namespace PawnTableGrouped
                 TableInfo info = null;
                 if (CompatibilityInfoDef.CurrentTables.TryGetValue(def.defName, out info))
                 {
-                    ActiveGrouper = AllGroupers.FirstOrDefault(x => info.defaultGrouping == x.Key()) ?? AllGroupers.First();
+                    ActiveGrouper = PredefinedGroupWorkers.FirstOrDefault(x => info.defaultGrouping == x.Key()) ?? PredefinedGroupWorkers.First();
                 } 
                 else
                 {
-                    ActiveGrouper = AllGroupers.First();
+                    ActiveGrouper = PredefinedGroupWorkers.First();
                 }
             }
         }
@@ -297,22 +297,25 @@ namespace PawnTableGrouped
             SortGroups();
         }
 
-        public IEnumerable<GroupWorker> AllGroupers
+        public IEnumerable<GroupWorker> PredefinedGroupWorkers
         {
             get
             {
-                if (Mod.Settings.groupByColumnExperimental)
-                {
-                    return Mod.MiscGroupWorkers.Concat(columnResolvers.Select(x => x.GroupWorker).Where(x => x != null));
-                }
-                else
-                {
-                    return Mod.MiscGroupWorkers;
-                }
+                return Mod.MiscGroupWorkers;
             }
         }
 
-#endregion
+        public IEnumerable<GroupWorker> ColumnGroupWorkers
+        {
+            get
+            {
+                return columnResolvers.Select(x => x.GroupWorker).Where(x => x != null);
+            }
+        }
+
+
+
+        #endregion
 
 
         public void RecacheColumnResolvers()

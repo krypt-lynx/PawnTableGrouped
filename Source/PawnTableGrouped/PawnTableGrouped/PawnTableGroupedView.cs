@@ -53,24 +53,16 @@ namespace PawnTableGrouped
             headerSegment.AddConstraint(headerSegment.height ^ headerSegment.intrinsicHeight);
             bodySegment.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
 
-            Texture2D img1 = new Resource<Texture2D>("UI/Settings");
+            Texture2D settingsTex = new Resource<Texture2D>("UI/Settings");
             var GroupBtn = footer.AddElement(new CWidget
             {
                 DoWidgetContent = (_, bounds) =>
                 {
-                    Widgets.Dropdown(bounds, model.ActiveGrouper, g => g,
+                    Widgets.Dropdown(bounds, weakThis?.Target, t => t,
                     t =>
                     {
-                        var this_ = weakThis.Target;
-                        return this_.model.AllGroupers.Select(g =>
-                            new Widgets.DropdownMenuElement<GroupWorker>
-                            {
-                                option = new FloatMenuOption(g.MenuItemTitle(), () =>
-                                {
-                                    this_.model.SetGrouper(g);
-                                })
-                            });
-                    }, null, img1);
+                        return t.CreateGroupingMenuOptions();
+                    }, null, settingsTex);
                 }
             });
             var DecendingSortBtn = footer.AddElement(new CCheckbox
@@ -100,7 +92,6 @@ namespace PawnTableGrouped
             host.AddConstraints(list.left ^ host.left, list.top ^ host.top, 
                 list.right ^ host.right, list.bottom ^ host.bottom);
 
-
             // attaching footer bellow table
             host.AddConstraints(footer.top ^ list.bottom, footer.left ^ list.left, footer.right ^ list.right, footer.height ^ Metrics.PawnTableFooterHeight);
             //fotterBtnOffset = 50;
@@ -114,6 +105,35 @@ namespace PawnTableGrouped
                 collapseBtn.Checked = !m.Groups.Any(x => m.IsExpanded(x));
             };
         }
+
+        private IEnumerable<Widgets.DropdownMenuElement<PawnTableGroupedGUI>> CreateGroupingMenuOptions()
+        {
+            foreach (var worker in model.PredefinedGroupWorkers)
+            {
+                yield return new Widgets.DropdownMenuElement<PawnTableGroupedGUI>
+                {
+                    option = new FloatMenuOption(worker.MenuItemTitle(), () =>
+                    {
+                        model.SetGrouper(worker);
+                    })
+                };
+            }
+
+            if (Mod.Settings.groupByColumnExperimental)
+            {
+                yield return new Widgets.DropdownMenuElement<PawnTableGroupedGUI>
+                {
+                    option = new FloatSubmenuOption("by column:", () =>
+                    {
+                        return model.ColumnGroupWorkers.Select(x => new FloatMenuOption(x.MenuItemTitle(), () =>
+                        {
+                            model.SetGrouper(x);
+                        })).ToList();
+                    })
+                };
+            }
+        }
+
 
         public void PopulateList()
         {

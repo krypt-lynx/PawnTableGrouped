@@ -19,7 +19,6 @@ namespace PawnTableGrouped
         private PawnTableAccessor accessor;
         PawnTableGroup Group;
 
-
         public override Vector2 tryFit(Vector2 size)
         {
             return new Vector2(0, Metrics.GroupHeaderHeight);
