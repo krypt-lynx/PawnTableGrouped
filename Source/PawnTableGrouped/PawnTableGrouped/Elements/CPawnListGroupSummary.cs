@@ -69,6 +69,10 @@ namespace PawnTableGrouped
                     {
                         Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, BoundsRounded.height);
                         resolver.DoCell(cellRect, Group.Columns[columnIndex], table);
+                        if (Mod.Settings.showDummyColumns)
+                        {
+                            TooltipHandler.TipRegion(cellRect, $"{resolver.ColumnDef.defName}: {resolver.ColumnDef.workerClass.FullName}");
+                        }
                     }
                 }
                 x += columnWidth;

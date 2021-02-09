@@ -54,8 +54,6 @@ namespace PawnTableGrouped
                 GuiTools.PushColor(Color.yellow);
                 GuiTools.Box(cellRect.ContractedBy(1), EdgeInsets.One);
                 GuiTools.PopColor();
-                
-                TooltipHandler.TipRegion(cellRect, $"{ColumnDef.defName}: {ColumnDef.workerClass.FullName}");
             }   
         }
 
