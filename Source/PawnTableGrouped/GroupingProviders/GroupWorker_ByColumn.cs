@@ -58,7 +58,7 @@ namespace PawnTableGrouped
 
         public override string MenuItemTitle()
         {
-            return $"by column: {resolver.Target?.ColumnDef?.defName}";
+            return $"{resolver.Target?.ColumnDef?.defName}";
         }
 
         public override string Key()
