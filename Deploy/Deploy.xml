@@ -18,7 +18,7 @@
 		<modDirectory>PawnTableGrouped</modDirectory>
 		<prebuild>
 			<remove>
-				<!-- mod assemblies already present in working folders (we are rebuilding them) -->
+				<!-- remove mod assemblies already present in working folders (we are rebuilding them) -->
 				<path>1.*</path>
 				<path>Hospitality/1.*</path>
 				<path>ColonyGroups/1.*</path>
