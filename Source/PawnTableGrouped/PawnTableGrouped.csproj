@@ -138,6 +138,7 @@
     <Compile Include="ModCompatibility\WorkTabBridge.cs" />
     <Compile Include="Mod\ModPostInit.cs" />
     <Compile Include="Mod\Settings.cs" />
+    <Compile Include="PawnTableGrouped\Elements\CPawnListGroupNoSummary.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnListHighlight.cs" />
     <Compile Include="PawnTableGrouped\Elements\CPawnTable.cs" />
     <Compile Include="ModCompatibility\NumbersBridge.cs" />

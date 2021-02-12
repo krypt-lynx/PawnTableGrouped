@@ -150,7 +150,7 @@ namespace PawnTableGrouped
                 if (!Mod.Settings.hideHeaderIfOnlyOneGroup || model.Groups.Count > 1)
                 {
                     CPawnListGroupFixed headerSegment = new CPawnListGroupFixed(group, model.IsExpanded(group));
-                    CRowSegment bodySegment = Mod.Settings.disableGroupCells ? new CRowSegment() : new CPawnListGroupSummary(model.Table, model.accessor, group);
+                    CRowSegment bodySegment = Mod.Settings.disableGroupCells ? (CRowSegment)new CPawnListGroupNoSummary() : (CRowSegment)new CPawnListGroupSummary(model.Table, model.accessor, group);
                     var groupRow = list.AppendRow(
                         new CPawnListGroupRow
                         {
@@ -165,7 +165,7 @@ namespace PawnTableGrouped
 
 
                     headerSegment.AddConstraint(headerSegment.height ^ headerSegment.intrinsicHeight);
-                    bodySegment?.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
+                    bodySegment.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
                     
 
                 }
