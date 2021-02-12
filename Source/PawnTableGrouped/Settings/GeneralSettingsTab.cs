@@ -26,6 +26,7 @@ namespace PawnTableGrouped
             CElement showDummy;
             CElement hideHeader;
             CElement primarySort;
+            CElement disableGroupCells;
             CElement byColumn;
             CElement tmp; // lets hope I will not hit undefined behavior 
 
@@ -61,6 +62,13 @@ namespace PawnTableGrouped
                     Checked = Mod.Settings.usePrimarySortFunction,
                     Changed = (_, value) => Mod.Settings.usePrimarySortFunction = value,
                 }), hideHeader.intrinsicHeight),
+                2,
+                (AddElement(disableGroupCells = new CCheckboxLabeled
+                {
+                    Title = "DisableGroupCells".Translate(),
+                    Checked = Mod.Settings.disableGroupCells,
+                    Changed = (_, value) => Mod.Settings.disableGroupCells = value,
+                }), disableGroupCells.intrinsicHeight),
                 2,
                 (AddElement(byColumn = new CCheckboxLabeled
                 {

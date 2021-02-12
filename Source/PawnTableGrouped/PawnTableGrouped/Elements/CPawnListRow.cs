@@ -69,7 +69,7 @@ namespace PawnTableGrouped
                 else
                 {
                     columnWidth = (int)cachedColumnWidths[columnIndex];
-                } 
+                }
 
                 if (x + columnWidth > xScrollOffset && x <= xScrollOffset + visibleRectWidth)
                 {
@@ -77,12 +77,15 @@ namespace PawnTableGrouped
 
                     columns[columnIndex].Worker.DoCell(cellRect, pawn, table);
 
-                    object cellValue = group.GetValue(columnIndex, pawn);
-
-                    if (!object.Equals(cellValue, oldValues[columnIndex]))
+                    if (!Mod.Settings.disableGroupCells)
                     {
-                        oldValues[columnIndex] = cellValue;
-                        needUpdateSectionHeader = true;
+                        object cellValue = group.GetValue(columnIndex, pawn);
+
+                        if (!object.Equals(cellValue, oldValues[columnIndex]))
+                        {
+                            oldValues[columnIndex] = cellValue;
+                            needUpdateSectionHeader = true;
+                        }
                     }
                 }
 

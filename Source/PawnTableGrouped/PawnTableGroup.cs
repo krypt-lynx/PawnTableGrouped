@@ -131,6 +131,11 @@ namespace PawnTableGrouped
 
         private void RecacheValues()
         {
+            if (Mod.Settings.disableGroupCells)
+            {
+                return;
+            }
+
             columnsIsUniform.Clear();
             columnValues.Clear();
             columnVisible.Clear();

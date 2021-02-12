@@ -14,6 +14,7 @@ namespace PawnTableGrouped
         public bool showDummyColumns = false;
         public bool hideHeaderIfOnlyOneGroup = false;
         public bool usePrimarySortFunction = true;
+        public bool disableGroupCells = false;
         public bool groupByColumnExperimental = false;
 
         public HashSet<string> pawnTablesEnabled = new HashSet<string>();
@@ -22,11 +23,12 @@ namespace PawnTableGrouped
         {
             Scribe_Values.Look(ref firstRun, "firstRun2", true);
 
-            Scribe_Values.Look(ref debug, "debug", false);
+            Scribe_Values.Look(ref debug, nameof(debug), false);
             Scribe_Values.Look(ref showDummyColumns, nameof(showDummyColumns), false);
-            Scribe_Values.Look(ref hideHeaderIfOnlyOneGroup, "hideHeaderIfOnlyOneGroup", false);
-            Scribe_Values.Look(ref usePrimarySortFunction, "usePrimarySortFunction", true);
-            Scribe_Values.Look(ref groupByColumnExperimental, "groupByColumnExperimental", false);
+            Scribe_Values.Look(ref hideHeaderIfOnlyOneGroup, nameof(hideHeaderIfOnlyOneGroup), false);
+            Scribe_Values.Look(ref usePrimarySortFunction, nameof(usePrimarySortFunction), true);
+            Scribe_Values.Look(ref disableGroupCells, nameof(disableGroupCells), false);
+            Scribe_Values.Look(ref groupByColumnExperimental, nameof(groupByColumnExperimental), false);
 
             Scribe_Collections.Look(ref pawnTablesEnabled, "pawnTablesEnabled");
 
