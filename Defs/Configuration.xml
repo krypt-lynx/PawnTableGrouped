@@ -48,16 +48,20 @@
 					<priorityColorMethod>WorkTab.DrawUtilities:ColorOfPriority</priorityColorMethod>
 				</workerConfig>
 			</li>
-			<!-- allowed area -->	
+			<!-- allowed area -->
 			<li>
 				<columnWorkerType>PawnColumnWorker_AllowedArea</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_AllowedArea</groupWorkerType>
-			</li>			
+			</li>
 			<li>
 				<columnWorkerType>AnimalTab.PawnColumnWorker_AllowedArea</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_AllowedArea</groupWorkerType>
 			</li>
-
+			<!-- decorative gaps -->
+			<li>
+				<columnWorkerType>PawnColumnWorker_Gap</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Gap</groupWorkerType>
+			</li>
 
 		</mapping>
 	</PawnTableGrouped.ClassMappingDef>
