@@ -47,18 +47,27 @@ namespace PawnTableGrouped
                 yield break;
             }
 
+            HashSet<Pawn> tablePawns = new HashSet<Pawn>(pawns);
             HashSet<Pawn> ungrouped = new HashSet<Pawn>(pawns);
 
             foreach (var cgGroup in ColonyGroupsBridge.AllPawnGroups().Reverse<PawnGroup>())
             {
                 ungrouped.ExceptWith(cgGroup.ActivePawns);
-                yield return new PawnTableGroup(cgGroup.curGroupName ?? "", null, cgGroup.ActivePawns, columnResolvers);
+
+                var groupPawns = cgGroup.ActivePawns.Intersect(tablePawns).ToArray();
+                if (groupPawns.Length > 0)
+                {
+                    yield return new PawnTableGroup(cgGroup.curGroupName ?? "", null, cgGroup.ActivePawns.Intersect(tablePawns), columnResolvers, () =>
+                    {
+                        return groupPawns.Length != cgGroup.ActivePawns.Count ? $"{groupPawns.Length} of {cgGroup.ActivePawns.Count}" : $"{groupPawns.Length}";
+                    });
+                }
             }
 
             if (ungrouped.Count > 0)
             {
                 var pawnsPreservingOrder = pawns.Where(p => ungrouped.Contains(p));
-                yield return new PawnTableGroup("Ungrouped", null, pawnsPreservingOrder, columnResolvers);
+                yield return new PawnTableGroup("Ungrouped", null, defaultPawnSort(pawnsPreservingOrder), columnResolvers);
             }
         }
     }

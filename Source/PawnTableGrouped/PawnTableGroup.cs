@@ -88,13 +88,17 @@ namespace PawnTableGrouped
     {
         public List<Pawn> Pawns = null;
         public Pawn KeyPawn = null;
-        public TaggedString Title = null;
+        public TaggedString title = null;
 
         public List<GroupColumnWorker> ColumnResolvers = null;
         private List<bool> columnsIsUniform = new List<bool>();
         private List<object> columnValues = new List<object>();
         private List<bool> columnVisible = new List<bool>();
         private List<PawnTableGroupColumn> columns;
+
+        public TaggedString Title { get => title; }
+        public string Key { get; set; }
+
 
         public IReadOnlyList<PawnTableGroupColumn> Columns
         {
@@ -104,14 +108,20 @@ namespace PawnTableGrouped
             }
         }
 
-        public PawnTableGroup(TaggedString title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers)
+        public PawnTableGroup(TaggedString title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers, Func<TaggedString> countInfoGenerator = null)
         {
-            Title = title;
+            Key = title.RawText;
             KeyPawn = keyPawn;
             ColumnResolvers = columnResolvers;
             Pawns = pawns.ToList();
             columns = columnResolvers.Select((r, i) => new PawnTableGroupColumn(this, i)).ToList();
+            this.title = title + $" ({(countInfoGenerator ?? PawnsCountString).Invoke()})";
             RecacheValues();
+        }
+
+        TaggedString PawnsCountString()
+        {
+            return $"{Pawns?.Count ?? 0}";
         }
 
         public bool HasResolver(int columnIndex)

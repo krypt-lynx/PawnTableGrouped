@@ -162,15 +162,15 @@ namespace PawnTableGrouped
 
         public bool IsExpanded(PawnTableGroup group)
         {
-            if (group?.Title.RawText == null)
+            if (group?.Key == null)
             {
                 $"trying to get expanded flag for group with 'null' title".Log(MessageType.Warning);
                 return true;
             }
 
-            if (ExpandedState.ContainsKey(group.Title))
+            if (ExpandedState.ContainsKey(group.Key))
             {
-                return ExpandedState[group.Title];
+                return ExpandedState[group.Key];
             }
             else
             {
@@ -186,13 +186,13 @@ namespace PawnTableGrouped
 
         void SetExpanded(PawnTableGroup group, bool expanded, bool updateBtnState = true)
         {
-            if (group?.Title.RawText == null)
+            if (group?.Key == null)
             {
                 $"trying to set expanded flag for group with 'null' title".Log(MessageType.Warning);
                 return;
             }
 
-            ExpandedState[group.Title] = expanded;
+            ExpandedState[group.Key] = expanded;
 
             if (updateBtnState)
             {

@@ -35,7 +35,7 @@ namespace PawnTableGrouped
 
             var label = this.AddElement(new CLabel
             {
-                TaggedTitle = group.Title + $" ({group.Pawns?.Count ?? 0})",
+                TaggedTitle = group.Title,
                 Font = GameFont.Small,
                 Color = new Color(1, 1, 1, 0.6f),
                 TextAlignment = TextAnchor.MiddleLeft,
