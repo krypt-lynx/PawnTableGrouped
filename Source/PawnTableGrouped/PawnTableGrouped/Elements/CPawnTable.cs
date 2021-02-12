@@ -297,11 +297,14 @@ namespace PawnTableGrouped
 
             foreach (var row in rows)
             {
-                if ((row.Row.BoundsRounded.yMax > windowYMin) && (row.Row.BoundsRounded.yMin < windowYMax))
+                if (row.Background != null)
                 {
-                    row.xScrollOffset = hScrollPosition;
-                    row.visibleRectWidth = hScrollClipRect.width;
-                    row.Background?.DoElementContent();
+                    if ((row.Background.BoundsRounded.yMax > windowYMin) && (row.Background.BoundsRounded.yMin < windowYMax))
+                    {
+                        row.xScrollOffset = hScrollPosition;
+                        row.visibleRectWidth = hScrollClipRect.width;
+                        row.Background.DoElementContent();
+                    }
                 }
             }
 
@@ -312,11 +315,14 @@ namespace PawnTableGrouped
 
             foreach (var row in rows)
             {
-                if ((row.Row.BoundsRounded.yMax > windowYMin) && (row.Row.BoundsRounded.yMin < windowYMax))
+                if (row.Row != null)
                 {
-                    row.xScrollOffset = hScrollPosition;
-                    row.visibleRectWidth = hScrollClipRect.width;
-                    row.Row?.DoElementContent();
+                    if ((row.Row.BoundsRounded.yMax > windowYMin) && (row.Row.BoundsRounded.yMin < windowYMax))
+                    {
+                        row.xScrollOffset = hScrollPosition;
+                        row.visibleRectWidth = hScrollClipRect.width;
+                        row.Row.DoElementContent();
+                    }
                 }
             }
 
@@ -325,11 +331,14 @@ namespace PawnTableGrouped
 
             foreach (var row in rows)
             {
-                if ((row.Row.BoundsRounded.yMax > windowYMin) && (row.Row.BoundsRounded.yMin < windowYMax))
+                if (row.Fixed != null)
                 {
-                    row.xScrollOffset = 0;
-                    row.visibleRectWidth = FixedSegmentWidth;
-                    row.Fixed?.DoElementContent();
+                    if ((row.Fixed.BoundsRounded.yMax > windowYMin) && (row.Fixed.BoundsRounded.yMin < windowYMax))
+                    {
+                        row.xScrollOffset = 0;
+                        row.visibleRectWidth = FixedSegmentWidth;
+                        row.Fixed.DoElementContent();
+                    }
                 }
             }
 
