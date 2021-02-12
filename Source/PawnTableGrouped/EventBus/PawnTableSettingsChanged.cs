@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace PawnTableGrouped
 {
-    public struct PawnTableSaveDataMessage
+    public struct PawnTableSettingsChanged
     {
-        public string DefName;
     }
 }

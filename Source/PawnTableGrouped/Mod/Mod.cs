@@ -40,8 +40,6 @@ namespace PawnTableGrouped
         
         public static Verse.Mod Instance = null;
         
-        public static Action ActiveTablesChanged = null;
-
         public static List<(string packageId, ModBridge bridge)> ModBridges = new List<(string packageId, ModBridge bridge)> {
             ("mehni.numbers", NumbersBridge.Instance),
             ("fluffy.worktab", WorkTabBridge.Instance),
@@ -156,12 +154,6 @@ namespace PawnTableGrouped
             }
             base.DoSettingsWindowContents(inRect);
         }
-
-        public static void DoActiveTablesChanged()
-        {
-            ActiveTablesChanged?.Invoke();
-        }
-
     }
 
 

@@ -92,8 +92,8 @@ namespace PawnTableGrouped
             {
                 Mod.Settings.pawnTablesEnabled.Remove(table.DefName);
             }
-            table.NotifySettingsWorker(); 
-            Mod.DoActiveTablesChanged();
+            table.NotifySettingsWorker();
+            EventBus<PawnTableSettingsChanged>.SendMessage(this, new PawnTableSettingsChanged());
         }
 
         public void SelectAllAtLeast(TableCompatibility compatibility)
@@ -115,7 +115,7 @@ namespace PawnTableGrouped
                 table.DoChanged();
             }
 
-            Mod.DoActiveTablesChanged();
+            EventBus<PawnTableSettingsChanged>.SendMessage(this, new PawnTableSettingsChanged());
         }
 
         public void SelectNone()
@@ -129,7 +129,7 @@ namespace PawnTableGrouped
                 table.DoChanged();
             }
 
-            Mod.DoActiveTablesChanged();
+            EventBus<PawnTableSettingsChanged>.SendMessage(this, new PawnTableSettingsChanged());
         }
     }
 

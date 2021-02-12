@@ -37,11 +37,13 @@ namespace PawnTableGrouped
         static PawnTableExtentions()
         {
             ResetImplementationsCache();
-            Mod.ActiveTablesChanged = () =>
+
+            EventBus<PawnTableSettingsChanged>.Instance.MessageRecieved += (sender, args) =>
             {
                 ResetImplementationsCache();
             };
         }
+
 
         public static void ResetImplementationsCache()
         {
