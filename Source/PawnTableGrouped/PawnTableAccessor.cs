@@ -21,8 +21,8 @@ namespace PawnTableGrouped
             this.table = new Verse.WeakReference<PawnTable>(table);
         }
 
-        static Func<PawnTable, bool> _get_dirty = Dynamic.InstanceGetField<PawnTable, bool>("dirty");
-        static Action<PawnTable, bool> _set_dirty = Dynamic.InstanceSetField<PawnTable, bool>("dirty");
+        static Getter<PawnTable, bool> _get_dirty = Dynamic.InstanceGetField<PawnTable, bool>("dirty");
+        static Setter<PawnTable, bool> _set_dirty = Dynamic.InstanceSetField<PawnTable, bool>("dirty");
 
         public bool dirty
         {
@@ -30,8 +30,8 @@ namespace PawnTableGrouped
             set => _set_dirty(Table, value);
         }
 
-        static Func<PawnTable, bool> _get_hasFixedSize = Dynamic.InstanceGetField<PawnTable, bool>("hasFixedSize");
-        static Action<PawnTable, bool> _set_hasFixedSize = Dynamic.InstanceSetField<PawnTable, bool>("hasFixedSize");
+        static Getter<PawnTable, bool> _get_hasFixedSize = Dynamic.InstanceGetField<PawnTable, bool>("hasFixedSize");
+        static Setter<PawnTable, bool> _set_hasFixedSize = Dynamic.InstanceSetField<PawnTable, bool>("hasFixedSize");
 
         public bool hasFixedSize
         {
@@ -39,32 +39,32 @@ namespace PawnTableGrouped
             set => _set_hasFixedSize(Table, value);
         }
 
-        static Func<PawnTable, float> _get_cachedHeaderHeight = Dynamic.InstanceGetField<PawnTable, float>("cachedHeaderHeight");
-        static Action<PawnTable, float> _set_cachedHeaderHeight = Dynamic.InstanceSetField<PawnTable, float>("cachedHeaderHeight");
+        static Getter<PawnTable, float> _get_cachedHeaderHeight = Dynamic.InstanceGetField<PawnTable, float>("cachedHeaderHeight");
+        static Setter<PawnTable, float> _set_cachedHeaderHeight = Dynamic.InstanceSetField<PawnTable, float>("cachedHeaderHeight");
         public float cachedHeaderHeight
         {
             get => _get_cachedHeaderHeight(Table);
             set => _set_cachedHeaderHeight(Table, value);
         }
 
-        static Func<PawnTable, float> _get_cachedHeightNoScrollbar = Dynamic.InstanceGetField<PawnTable, float>("cachedHeightNoScrollbar");
-        static Action<PawnTable, float> _set_cachedHeightNoScrollbar = Dynamic.InstanceSetField<PawnTable, float>("cachedHeightNoScrollbar");
+        static Getter<PawnTable, float> _get_cachedHeightNoScrollbar = Dynamic.InstanceGetField<PawnTable, float>("cachedHeightNoScrollbar");
+        static Setter<PawnTable, float> _set_cachedHeightNoScrollbar = Dynamic.InstanceSetField<PawnTable, float>("cachedHeightNoScrollbar");
         public float cachedHeightNoScrollbar
         {
             get => _get_cachedHeightNoScrollbar(Table);
             set => _set_cachedHeightNoScrollbar(Table, value);
         }
 
-        static Func<PawnTable, List<Pawn>> _get_cachedPawns = Dynamic.InstanceGetField<PawnTable, List<Pawn>>("cachedPawns");
-        static Action<PawnTable, List<Pawn>> _set_cachedPawns = Dynamic.InstanceSetField<PawnTable, List<Pawn>>("cachedPawns");
+        static Getter<PawnTable, List<Pawn>> _get_cachedPawns = Dynamic.InstanceGetField<PawnTable, List<Pawn>>("cachedPawns");
+        static Setter<PawnTable, List<Pawn>> _set_cachedPawns = Dynamic.InstanceSetField<PawnTable, List<Pawn>>("cachedPawns");
         public List<Pawn> cachedPawns
         {
             get => _get_cachedPawns(Table);
             set => _set_cachedPawns(Table, value);
         }
 
-        static Func<PawnTable, Vector2> _get_cachedSize = Dynamic.InstanceGetField<PawnTable, Vector2>("cachedSize");
-        static Action<PawnTable, Vector2> _set_cachedSize = Dynamic.InstanceSetField<PawnTable, Vector2>("cachedSize");
+        static Getter<PawnTable, Vector2> _get_cachedSize = Dynamic.InstanceGetField<PawnTable, Vector2>("cachedSize");
+        static Setter<PawnTable, Vector2> _set_cachedSize = Dynamic.InstanceSetField<PawnTable, Vector2>("cachedSize");
         public Vector2 cachedSize
         {
             get => _get_cachedSize(Table);
@@ -72,8 +72,8 @@ namespace PawnTableGrouped
         }
 
 
-        static Func<PawnTable, List<float>> _get_cachedColumnWidths = Dynamic.InstanceGetField<PawnTable, List<float>>("cachedColumnWidths");
-        static Action<PawnTable, List<float>> _set_cachedColumnWidths = Dynamic.InstanceSetField<PawnTable, List<float>>("cachedColumnWidths");
+        static Getter<PawnTable, List<float>> _get_cachedColumnWidths = Dynamic.InstanceGetField<PawnTable, List<float>>("cachedColumnWidths");
+        static Setter<PawnTable, List<float>> _set_cachedColumnWidths = Dynamic.InstanceSetField<PawnTable, List<float>>("cachedColumnWidths");
         public List<float> cachedColumnWidths
         {
             get => _get_cachedColumnWidths(Table);
@@ -81,8 +81,8 @@ namespace PawnTableGrouped
         }
 
 
-        static Func<PawnTable, List<bool>> _get_columnAtOptimalWidth = Dynamic.InstanceGetField<PawnTable, List<bool>>("columnAtOptimalWidth");
-        static Action<PawnTable, List<bool>> _set_columnAtOptimalWidth = Dynamic.InstanceSetField<PawnTable, List<bool>>("columnAtOptimalWidth");
+        static Getter<PawnTable, List<bool>> _get_columnAtOptimalWidth = Dynamic.InstanceGetField<PawnTable, List<bool>>("columnAtOptimalWidth");
+        static Setter<PawnTable, List<bool>> _set_columnAtOptimalWidth = Dynamic.InstanceSetField<PawnTable, List<bool>>("columnAtOptimalWidth");
         public List<bool> columnAtOptimalWidth
         {
             get => _get_columnAtOptimalWidth(Table);
@@ -90,8 +90,8 @@ namespace PawnTableGrouped
         }
 
 
-        static Func<PawnTable, List<bool>> _get_columnAtMaxWidth = Dynamic.InstanceGetField<PawnTable, List<bool>>("columnAtMaxWidth");
-        static Action<PawnTable, List<bool>> _set_columnAtMaxWidth = Dynamic.InstanceSetField<PawnTable, List<bool>>("columnAtMaxWidth");
+        static Getter<PawnTable, List<bool>> _get_columnAtMaxWidth = Dynamic.InstanceGetField<PawnTable, List<bool>>("columnAtMaxWidth");
+        static Setter<PawnTable, List<bool>> _set_columnAtMaxWidth = Dynamic.InstanceSetField<PawnTable, List<bool>>("columnAtMaxWidth");
         public List<bool> columnAtMaxWidth
         {
             get => _get_columnAtMaxWidth(Table);
@@ -100,8 +100,8 @@ namespace PawnTableGrouped
 
 
 
-        static Func<PawnTable, int> _get_minTableWidth = Dynamic.InstanceGetField<PawnTable, int>("minTableWidth");
-        static Action<PawnTable, int> _set_minTableWidth = Dynamic.InstanceSetField<PawnTable, int>("minTableWidth");
+        static Getter<PawnTable, int> _get_minTableWidth = Dynamic.InstanceGetField<PawnTable, int>("minTableWidth");
+        static Setter<PawnTable, int> _set_minTableWidth = Dynamic.InstanceSetField<PawnTable, int>("minTableWidth");
         public int minTableWidth
         {
             get => _get_minTableWidth(Table);
@@ -109,8 +109,8 @@ namespace PawnTableGrouped
         }
 
 
-        static Func<PawnTable, int> _get_maxTableWidth = Dynamic.InstanceGetField<PawnTable, int>("maxTableWidth");
-        static Action<PawnTable, int> _set_maxTableWidth = Dynamic.InstanceSetField<PawnTable, int>("maxTableWidth");
+        static Getter<PawnTable, int> _get_maxTableWidth = Dynamic.InstanceGetField<PawnTable, int>("maxTableWidth");
+        static Setter<PawnTable, int> _set_maxTableWidth = Dynamic.InstanceSetField<PawnTable, int>("maxTableWidth");
         public int maxTableWidth
         {
             get => _get_maxTableWidth(Table);
@@ -118,8 +118,8 @@ namespace PawnTableGrouped
         }
 
 
-        static Func<PawnTable, int> _get_minTableHeight = Dynamic.InstanceGetField<PawnTable, int>("minTableHeight");
-        static Action<PawnTable, int> _set_minTableHeight = Dynamic.InstanceSetField<PawnTable, int>("minTableHeight");
+        static Getter<PawnTable, int> _get_minTableHeight = Dynamic.InstanceGetField<PawnTable, int>("minTableHeight");
+        static Setter<PawnTable, int> _set_minTableHeight = Dynamic.InstanceSetField<PawnTable, int>("minTableHeight");
         public int minTableHeight
         {
             get => _get_minTableHeight(Table);
@@ -127,8 +127,8 @@ namespace PawnTableGrouped
         }
 
 
-        static Func<PawnTable, int> _get_maxTableHeight = Dynamic.InstanceGetField<PawnTable, int>("maxTableHeight");
-        static Action<PawnTable, int> _set_maxTableHeight = Dynamic.InstanceSetField<PawnTable, int>("maxTableHeight");
+        static Getter<PawnTable, int> _get_maxTableHeight = Dynamic.InstanceGetField<PawnTable, int>("maxTableHeight");
+        static Setter<PawnTable, int> _set_maxTableHeight = Dynamic.InstanceSetField<PawnTable, int>("maxTableHeight");
         public int maxTableHeight
         {
             get => _get_maxTableHeight(Table);
@@ -136,8 +136,8 @@ namespace PawnTableGrouped
         }
 
 
-        static Func<PawnTable, PawnColumnDef> _get_sortByColumn = Dynamic.InstanceGetField<PawnTable, PawnColumnDef>("sortByColumn");
-        static Action<PawnTable, PawnColumnDef> _set_sortByColumn = Dynamic.InstanceSetField<PawnTable, PawnColumnDef>("sortByColumn");
+        static Getter<PawnTable, PawnColumnDef> _get_sortByColumn = Dynamic.InstanceGetField<PawnTable, PawnColumnDef>("sortByColumn");
+        static Setter<PawnTable, PawnColumnDef> _set_sortByColumn = Dynamic.InstanceSetField<PawnTable, PawnColumnDef>("sortByColumn");
         public PawnColumnDef sortByColumn
         {
             get => _get_sortByColumn(Table);
@@ -145,8 +145,8 @@ namespace PawnTableGrouped
         }
 
 
-        static Func<PawnTable, bool> _get_sortDescending = Dynamic.InstanceGetField<PawnTable, bool>("sortDescending");
-        static Action<PawnTable, bool> _set_sortDescending = Dynamic.InstanceSetField<PawnTable, bool>("sortDescending");
+        static Getter<PawnTable, bool> _get_sortDescending = Dynamic.InstanceGetField<PawnTable, bool>("sortDescending");
+        static Setter<PawnTable, bool> _set_sortDescending = Dynamic.InstanceSetField<PawnTable, bool>("sortDescending");
         public bool sortDescending
         {
             get => _get_sortDescending(Table);

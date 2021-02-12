@@ -16,7 +16,7 @@ namespace PawnTableGrouped
 {
     public static class PawnTableExtentions
     {
-        static Func<PawnTable, PawnTableDef> _get_PawnTable_def = Dynamic.InstanceGetField<PawnTable, PawnTableDef>("def");
+        static Getter<PawnTable, PawnTableDef> _get_PawnTable_def = Dynamic.InstanceGetField<PawnTable, PawnTableDef>("def");
 
 
         static ConditionalWeakTable<PawnTable, PawnTableGroupedImpl> implementations;
@@ -26,6 +26,7 @@ namespace PawnTableGrouped
             var def = _get_PawnTable_def(table);
             if (Mod.Settings.pawnTablesEnabled.Contains(def.defName))
             {
+                $"Creating table impl for {def.defName}".Log();
                 return new PawnTableGroupedImpl(table, def);
             }
             else
@@ -62,18 +63,18 @@ namespace PawnTableGrouped
     {
         public static void Patch(Harmony harmony)
         {
-            harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "PawnTableOnGUI_prefix"));
+            harmony.Patch(AccessTools.Method(typeof(PawnTable), nameof(PawnTable.PawnTableOnGUI)),
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), nameof(PawnTablePatches.PawnTableOnGUI_prefix)));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "RecacheIfDirty_prefix"));
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), nameof(PawnTablePatches.RecacheIfDirty_prefix)));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "CalculateTotalRequiredHeight"),
-                prefix: new HarmonyMethod(typeof(PawnTablePatches), "CalculateTotalRequiredHeight_prefix"));
-
+                prefix: new HarmonyMethod(typeof(PawnTablePatches), nameof(PawnTablePatches.CalculateTotalRequiredHeight_prefix)));
+            
             harmony.Patch(AccessTools.Method(typeof(Window), "PostClose"),
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "PostClose_postfix"));
         }
 
-        static Func<MainTabWindow_PawnTable, PawnTable> _get_MainTabWindow_PawnTable_table = Dynamic.InstanceGetField<MainTabWindow_PawnTable, PawnTable>("table");
+        static Getter<MainTabWindow_PawnTable, PawnTable> _get_MainTabWindow_PawnTable_table = Dynamic.InstanceGetField<MainTabWindow_PawnTable, PawnTable>("table");
 
 
         static void PostClose_postfix(Window __instance)
