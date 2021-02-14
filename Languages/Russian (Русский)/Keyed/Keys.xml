@@ -9,6 +9,7 @@
   <DebugOutput>Отладочный вывод</DebugOutput>
   <HideHeaderIfOnlyOneGroup>Скрыть заголовок группы если в таблице всего одна группа</HideHeaderIfOnlyOneGroup>
   <UsePrimarySortFunction>Использовать первичную сортировку</UsePrimarySortFunction>
+  <DisableGroupCells>Отключить ячейки в строке группы</DisableGroupCells>
   <EnableGroupingInTables>Включить группировку в таблицах:</EnableGroupingInTables>
   <GroupByColumnExperimental>Группировка по значению столбца таблицы (экспериментальня фича)</GroupByColumnExperimental>
   <PTG_Select>Выбрать:</PTG_Select>

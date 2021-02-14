@@ -9,6 +9,7 @@
   <DebugOutput>Debug output</DebugOutput>
   <HideHeaderIfOnlyOneGroup>Hide group header if only one section exists</HideHeaderIfOnlyOneGroup>
   <UsePrimarySortFunction>Use primary sort function</UsePrimarySortFunction>
+  <DisableGroupCells>Disable group row cells</DisableGroupCells>
   <EnableGroupingInTables>Enable grouping in tables:</EnableGroupingInTables>
   <GroupByColumnExperimental>Grouping by column values (experimental)</GroupByColumnExperimental>
   <PTG_Select>Select:</PTG_Select>
