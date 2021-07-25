@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,11 +25,11 @@ namespace PawnTableGrouped
             GroupsSortingComparer = new GroupComparer();
         }
 
-        public override IEnumerable<PawnTableGroup> CreateGroups(List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
+        public override IEnumerable<PawnTableGroup> CreateGroups(Verse.WeakReference<PawnTable> table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
         {
             if (pawns.Count > 0)
             {
-                yield return new PawnTableGroup(TitleForGroup(pawns, pawns.First()), pawns.First(), defaultPawnSort(pawns), columnResolvers);
+                yield return new PawnTableGroup(table, TitleForGroup(pawns, pawns.First()), pawns.First(), defaultPawnSort(pawns), columnResolvers);
             }
         }
 

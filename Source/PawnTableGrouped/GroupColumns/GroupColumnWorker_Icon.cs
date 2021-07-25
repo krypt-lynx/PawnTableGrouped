@@ -117,7 +117,7 @@ namespace PawnTableGrouped
 			return null;
         }
 
-        public override void SetGroupValue(IEnumerable<Pawn> pawns, object value)
+        public override void SetGroupValue(IEnumerable<Pawn> pawns, object value, PawnTable table)
         {
             
         }
@@ -137,7 +137,7 @@ namespace PawnTableGrouped
 			return GetIconFor(pawn);
         }
 
-		public override void SetValue(Pawn pawn, object value)
+		public override void SetValue(Pawn pawn, object value, PawnTable table)
 		{
 
 		}

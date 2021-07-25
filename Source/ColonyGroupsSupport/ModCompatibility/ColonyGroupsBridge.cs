@@ -7,16 +7,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
-
-#if rw_1_2
 using TacticalGroups;
-#endif
+
 namespace PawnTableGrouped
 {
 
     public class ColonyGroupsBridge : ModBridge<ColonyGroupsBridge>
     {
-#if rw_1_2
        public static List<PawnGroup> AllPawnGroups()
         {
             if (!Instance.IsActive)
@@ -44,14 +41,15 @@ namespace PawnTableGrouped
             // Enure property exists and have right type.
             return typeof(IEnumerable<PawnGroup>).IsAssignableFrom(AccessTools.Property(typeof(TacticUtils), nameof(TacticUtils.AllPawnGroups)).ReflectedType);
         }
-#else
+
+/*
         protected override bool ResolveInternal(Harmony harmony)
         {
             $"rw_1_2 is not defined".Log(MessageType.Error);
             
             return false;
         }
-#endif
+*/
 
         public override string ModName()
         {

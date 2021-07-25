@@ -99,6 +99,7 @@ namespace PawnTableGrouped
         public TaggedString Title { get => title; }
         public string Key { get; set; }
 
+        private Verse.WeakReference<PawnTable> table = null;
 
         public IReadOnlyList<PawnTableGroupColumn> Columns
         {
@@ -108,8 +109,9 @@ namespace PawnTableGrouped
             }
         }
 
-        public PawnTableGroup(TaggedString title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers, Func<TaggedString> countInfoGenerator = null)
+        public PawnTableGroup(Verse.WeakReference<PawnTable> table, TaggedString title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers, Func<TaggedString> countInfoGenerator = null)
         {
+            this.table = table;
             Key = title.RawText;
             KeyPawn = keyPawn;
             ColumnResolvers = columnResolvers;
@@ -134,9 +136,9 @@ namespace PawnTableGrouped
             return ColumnResolvers[columnIndex]?.CanSetValues() ?? false;
         }
 
-        public bool IsVisible(int columnHeader)
+        public bool IsVisible(int columnIndex)
         {
-            return columnVisible[columnHeader];
+            return columnVisible[columnIndex];
         }
 
         private void RecacheValues()
@@ -184,7 +186,7 @@ namespace PawnTableGrouped
                 return;
             }
 
-            resolver.SetGroupValue(Pawns, value);
+            resolver.SetGroupValue(Pawns, value, table?.Target);
             RecacheValues();
         }
 

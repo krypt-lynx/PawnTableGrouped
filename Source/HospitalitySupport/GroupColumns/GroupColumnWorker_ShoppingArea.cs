@@ -1,4 +1,5 @@
 ﻿using Hospitality;
+using RimWorld;
 using RWLayout.alpha2.FastAccess;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace PawnTableGrouped.Hospitality
             return compGuest.ShoppingArea;
         }
 
-        public override void SetValue(Pawn pawn, object value)
+        public override void SetValue(Pawn pawn, object value, PawnTable table)
         {
             CompGuest compGuest = call_Pawn_CompGuest(pawn);
             if (compGuest != null)

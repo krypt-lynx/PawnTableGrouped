@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 using TacticalGroups;
+using RimWorld;
 
 namespace PawnTableGrouped
 {
@@ -40,7 +41,7 @@ namespace PawnTableGrouped
             return "";
         }
 
-        public override IEnumerable<PawnTableGroup> CreateGroups(List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
+        public override IEnumerable<PawnTableGroup> CreateGroups(Verse.WeakReference<PawnTable> table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
         {
             if (!ColonyGroupsBridge.Instance.IsActive)
             {
@@ -57,7 +58,7 @@ namespace PawnTableGrouped
                 var groupPawns = cgGroup.ActivePawns.Intersect(tablePawns).ToArray();
                 if (groupPawns.Length > 0)
                 {
-                    yield return new PawnTableGroup(cgGroup.curGroupName ?? "", null, cgGroup.ActivePawns.Intersect(tablePawns), columnResolvers, () =>
+                    yield return new PawnTableGroup(table, cgGroup.curGroupName ?? "", null, cgGroup.ActivePawns.Intersect(tablePawns), columnResolvers, () =>
                     {
                         return groupPawns.Length != cgGroup.ActivePawns.Count ? $"{groupPawns.Length} of {cgGroup.ActivePawns.Count}" : $"{groupPawns.Length}";
                     });
@@ -67,7 +68,7 @@ namespace PawnTableGrouped
             if (ungrouped.Count > 0)
             {
                 var pawnsPreservingOrder = pawns.Where(p => ungrouped.Contains(p));
-                yield return new PawnTableGroup("Ungrouped", null, defaultPawnSort(pawnsPreservingOrder), columnResolvers);
+                yield return new PawnTableGroup(table, "Ungrouped", null, defaultPawnSort(pawnsPreservingOrder), columnResolvers);
             }
         }
     }

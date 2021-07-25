@@ -21,6 +21,7 @@ $cache = $startupPath + "\cache"
 $dependencies = $startupPath
 $dependencies_1_1 = $startupPath + "\1.1"
 $dependencies_1_2 = $startupPath + "\1.2"
+$dependencies_1_3 = $startupPath + "\1.3"
 
 
 $steamcmd_location = $cache + "\steamcmd"
@@ -61,10 +62,12 @@ Echo "Coping assemblies..."
 
 Remove-Item -Recurse -Force $dependencies_1_1
 Remove-Item -Recurse -Force $dependencies_1_2
+Remove-Item -Recurse -Force $dependencies_1_3
 
 New-Item -Force -Path $dependencies -ItemType Directory | Out-Null
 New-Item -Force -Path $dependencies_1_1 -ItemType Directory | Out-Null
 New-Item -Force -Path $dependencies_1_2 -ItemType Directory | Out-Null
+New-Item -Force -Path $dependencies_1_3 -ItemType Directory | Out-Null
 
 foreach ($modId in $modIds) {
 	& $assemplyPathResolver --path "$modsDownloads\$modId" --version "1.1" | Foreach-Object -Process {
@@ -72,12 +75,16 @@ foreach ($modId in $modIds) {
 	}
 }
 
-
 foreach ($modId in $modIds) {
 	& $assemplyPathResolver --path "$modsDownloads\$modId" --version "1.2" | Foreach-Object -Process {
 		Copy-Item -Recurse $_ -Destination $dependencies_1_2
 	}
 }
 
+foreach ($modId in $modIds) {
+	& $assemplyPathResolver --path "$modsDownloads\$modId" --version "1.3" | Foreach-Object -Process {
+		Copy-Item -Recurse $_ -Destination $dependencies_1_3
+	}
+}
 
 Echo "Done!"

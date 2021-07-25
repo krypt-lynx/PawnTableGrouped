@@ -31,7 +31,7 @@ namespace PawnTableGrouped
             return pawn.Faction == Faction.OfPlayer;
         }
 
-        public override void SetValue(Pawn pawn, object value)
+        public override void SetValue(Pawn pawn, object value, PawnTable table)
         {
             if (pawn.playerSettings != null)
             {

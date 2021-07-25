@@ -5,9 +5,9 @@
 		<ReferencePath>
 			F:\RWModBuild\1.2\Managed;
 			D:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\;
-			F:\games\RimWorld\Mods\RWLayout_dev\1.2\Assemblies\;
-			F:\games\RimWorld\Mods\PawnTableGrouped_dev\Dependencies\1.2\;
-			F:\games\RimWorld\Mods\PawnTableGrouped_dev\Dependencies\;
+			F:\games\RimWorld\Mods\Dev\RWLayout\1.2\Assemblies\;
+			F:\games\RimWorld\Mods\Dev\PawnTableGrouped_dev\Dependencies\1.2\;
+			F:\games\RimWorld\Mods\Dev\PawnTableGrouped_dev\Dependencies\;
 			$(ReferencePath)
 		</ReferencePath>
 		<!-- misteriously breaks everything
