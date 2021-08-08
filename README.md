@@ -1,4 +1,4 @@
-# ModDiff
+# PawnTableGrouped
 Alternatime Mods Mismatch window for RimWorld game
 
 You need to modify search assembly paths to make this project to compile (check dependency-*.csproj files)
