@@ -6,6 +6,9 @@
 #  753498552 Orion.Hospitality                    Hospitality
 # 2009463077 brrainz.harmony                      Harmony
 
+# 2209393954 name.krypt.rimworld.moddiff          RWLayout
+# add this id to the modIds list if you are missing local copy of RWLayout
+
 $appId = 294100
 $modIds = @(1414302321, 2144935009, 2345493945, 725219116, 753498552, 2009463077)
 
