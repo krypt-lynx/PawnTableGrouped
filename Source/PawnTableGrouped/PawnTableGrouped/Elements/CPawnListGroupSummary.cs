@@ -46,7 +46,11 @@ namespace PawnTableGrouped
         private void DoRowsSummary()
         {
             int x = (int)BoundsRounded.xMin;
+#if rw_1_4_or_later
+            var columns = table.Columns;
+#else
             var columns = table.ColumnsListForReading;
+#endif
 
             var overflow = (Row as CPawnListGroupRow)?.overflow ?? 0;
 

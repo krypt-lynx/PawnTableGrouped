@@ -17,16 +17,16 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\ColonyGroups\1.3\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;rw_1_3</DefineConstants>
+    <OutputPath>..\..\ColonyGroups\1.4\Assemblies\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;rw_1_4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\ColonyGroups\1.3\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_3</DefineConstants>
+    <OutputPath>..\..\ColonyGroups\1.4\Assemblies\</OutputPath>
+    <DefineConstants>TRACE;rw_1_4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
@@ -49,11 +49,21 @@
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '1.4|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\ColonyGroups\1.4\Assemblies\</OutputPath>
+    <DefineConstants>TRACE;rw_1_4</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
   <Import Condition=" '$(Configuration)' == '1.1' " Project="..\dependences-1.1.csproj" />
   <Import Condition=" '$(Configuration)' == '1.2' " Project="..\dependences-1.2.csproj" />
   <Import Condition=" '$(Configuration)' == '1.3' " Project="..\dependences-1.3.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.3.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Release' " Project="..\dependences-1.3.csproj" />
+  <Import Condition=" '$(Configuration)' == '1.4' " Project="..\dependences-1.4.csproj" />
+  <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.4.csproj" />
+  <Import Condition=" '$(Configuration)' == 'Release' " Project="..\dependences-1.4.csproj" />
   <ItemGroup>
     <Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

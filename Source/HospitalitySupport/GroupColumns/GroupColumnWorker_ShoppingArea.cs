@@ -26,7 +26,7 @@ namespace PawnTableGrouped.Hospitality
 
         public override object DefaultValue(IEnumerable<Pawn> pawns)
         {
-            return pawns.FirstOrDefault()?.Map?.GetComponent<Hospitality_MapComponent>()?.defaultAreaShopping;
+            return new AreaData(pawns.FirstOrDefault()?.Map?.GetComponent<Hospitality_MapComponent>()?.defaultAreaShopping);
         }
 
         public override object GetValue(Pawn pawn)
@@ -34,9 +34,9 @@ namespace PawnTableGrouped.Hospitality
             CompGuest compGuest = call_Pawn_CompGuest(pawn);
             if (compGuest == null)
             {
-                return null;
+                return AreaData.Undefined;
             }
-            return compGuest.ShoppingArea;
+            return new AreaData(compGuest.ShoppingArea);
         }
 
         public override void SetValue(Pawn pawn, object value, PawnTable table)
@@ -44,7 +44,11 @@ namespace PawnTableGrouped.Hospitality
             CompGuest compGuest = call_Pawn_CompGuest(pawn);
             if (compGuest != null)
             {
-                compGuest.ShoppingArea = (Area)value;
+                var data = (AreaData)value;
+                if (data.Type == AreaData.DataType.Area)
+                {
+                    compGuest.ShoppingArea = data.Area;
+                }
             }
         }
     }

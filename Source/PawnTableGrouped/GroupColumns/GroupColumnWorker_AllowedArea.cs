@@ -14,16 +14,31 @@ namespace PawnTableGrouped
     {
         public override object DefaultValue(IEnumerable<Pawn> pawns)
         {
-            return Find.CurrentMap.areaManager.Home;
+            return new AreaData(Find.CurrentMap.areaManager.Home);
         }
 
         public override object GetValue(Pawn pawn)
         {
             if (pawn.Faction != Faction.OfPlayer)
             {
-                return null;
+                return AreaData.Undefined;
             }
-            return pawn.playerSettings?.AreaRestriction;
+
+#if rw_1_2_or_earlier
+            return new AreaData(pawn.playerSettings?.AreaRestriction);
+#else
+
+            if (pawn.playerSettings.SupportsAllowedAreas)
+            {
+                return new AreaData(pawn.playerSettings?.AreaRestriction);
+            }
+            if (AnimalPenUtility.NeedsToBeManagedByRope(pawn))
+            {
+                return new AreaData(AnimalPenUtility.GetCurrentPenOf(pawn, false));
+            }
+
+            return AreaData.Undefined;
+#endif
         }
 
         public override bool IsVisible(Pawn pawn)
@@ -33,9 +48,22 @@ namespace PawnTableGrouped
 
         public override void SetValue(Pawn pawn, object value, PawnTable table)
         {
+            $"GroupColumnWorker_AllowedArea.SetValue({pawn},{value},{table}) ".Log();
+
             if (pawn.playerSettings != null)
             {
+#if rw_1_2_or_earlier
                 pawn.playerSettings.AreaRestriction = (Area)value;
+#else
+                if (pawn.playerSettings.SupportsAllowedAreas)
+                {
+                    var data = (AreaData)value;
+                    if (data.Type == AreaData.DataType.Area)
+                    {
+                        pawn.playerSettings.AreaRestriction = data.Area;
+                    }
+                }
+#endif
             }
         }
     }

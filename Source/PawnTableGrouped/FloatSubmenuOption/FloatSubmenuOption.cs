@@ -59,20 +59,41 @@ namespace PawnTableGrouped
         /// <param name="extraPartWidth"></param>
         /// <param name="extraPartOnGUI"></param>
         /// <param name="revalidateWorldClickTarget"></param>
-        public FloatSubmenuOption(string label, Func<List<FloatMenuOption>> optionsGenerator, ThingDef shownItemForIcon, MenuOptionPriority priority = MenuOptionPriority.Default,
+        public FloatSubmenuOption(string label,
+            Func<List<FloatMenuOption>> optionsGenerator, 
+            ThingDef shownItemForIcon,
+#if rw_1_4_or_later
+            ThingStyleDef thingStyle = null,
+            bool forceBasicStyle = false,
+#endif
+            MenuOptionPriority priority = MenuOptionPriority.Default,
 #if rw_1_2_or_earlier
             Action mouseoverGuiAction = null,
 #else
             Action<Rect> mouseoverGuiAction = null,
 #endif      
-            Thing revalidateClickTarget = null, float extraPartWidth = 0,
-            Func<Rect, bool> extraPartOnGUI = null, WorldObject revalidateWorldClickTarget = null) :
-            base(label, null, shownItemForIcon, priority, mouseoverGuiAction, revalidateClickTarget, extraPartWidth + indicatorWidth, extraPartOnGUI, revalidateWorldClickTarget)
+            Thing revalidateClickTarget = null,
+            float extraPartWidth = 0,
+            Func<Rect, bool> extraPartOnGUI = null,
+            WorldObject revalidateWorldClickTarget = null) :
+            base(label,
+                null,
+                shownItemForIcon,
+#if rw_1_4_or_later
+                thingStyle,
+                forceBasicStyle,
+#endif
+                priority,
+                mouseoverGuiAction,
+                revalidateClickTarget, 
+                extraPartWidth + indicatorWidth,
+                extraPartOnGUI, 
+                revalidateWorldClickTarget)
         {
             this.action = OptionSelected;
             this.optionsGenerator = optionsGenerator;
         }
-
+                
         /// <summary>
         /// 
         /// </summary>

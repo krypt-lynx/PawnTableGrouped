@@ -43,7 +43,6 @@ namespace PawnTableGrouped
         public static List<(string packageId, ModBridge bridge)> ModBridges = new List<(string packageId, ModBridge bridge)> {
             ("mehni.numbers", NumbersBridge.Instance),
             ("fluffy.worktab", WorkTabBridge.Instance),
-            ("syl.simpleslavery", SimpleSlaveryBridge.Instance),
         };
 
         public static void RegisterModBridge(string packageId, ModBridge bridge)
@@ -119,12 +118,6 @@ namespace PawnTableGrouped
                 $"Enumerating mod bridges: {info.bridge.ModName()}; is listed: {isListed}".Log();
                 info.bridge.Resolve(isListed, harmony);
             }
-
-            if (SimpleSlaveryBridge.Instance.IsActive)
-            {
-                RegisterGroupWorker(new GroupWorker_IsSlave());
-            }
-
         }
 
         public override string SettingsCategory()

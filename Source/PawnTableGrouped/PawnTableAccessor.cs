@@ -195,11 +195,13 @@ namespace PawnTableGrouped
             return _CalculateTotalRequiredHeight(Table);
         }
 
+#if rw_1_3_or_earlier
         static Func<PawnTable, Pawn, bool> _CanAssignPawn = Dynamic.InstanceRetMethod<PawnTable, Pawn, bool>("CanAssignPawn");
         public bool CanAssignPawn(Pawn p)
         {
             return _CanAssignPawn(Table, p);
         }
+#endif
 
         static Func<PawnTable, Pawn, float> _CalculateRowHeight = Dynamic.InstanceRetMethod<PawnTable, Pawn, float>("CalculateRowHeight");
         public float CalculateRowHeight(Pawn p)

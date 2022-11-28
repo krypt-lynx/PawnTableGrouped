@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7883C69A-EAD9-43FC-B4D2-26412C7B69E5}</ProjectGuid>
+    <ProjectGuid>{5205ACBF-72EC-4F88-977B-3BDE7FE5A78D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PawnTableGrouped.Hospitality</RootNamespace>
-    <AssemblyName>PawnTableGrouped.1.Hospitality</AssemblyName>
+    <RootNamespace>PawnTableGrouped.SimpleSlavery</RootNamespace>
+    <AssemblyName>PawnTableGrouped.1.SimpleSlavery</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Hospitality\1.4\Assemblies\</OutputPath>
+    <OutputPath>..\..\SimpleSlavery\1.4\Assemblies\</OutputPath>
     <DefineConstants>TRACE;DEBUG;rw_1_4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Hospitality\1.4\Assemblies\</OutputPath>
+    <OutputPath>..\..\SimpleSlavery\1.4\Assemblies\</OutputPath>
     <DefineConstants>TRACE;rw_1_4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,7 +34,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' ">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Hospitality\1.1\Assemblies\</OutputPath>
+    <OutputPath>..\..\SimpleSlavery\1.1\Assemblies\</OutputPath>
     <DefineConstants>TRACE;rw_1_1</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,7 +43,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' ">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Hospitality\1.2\Assemblies\</OutputPath>
+    <OutputPath>..\..\SimpleSlavery\1.2\Assemblies\</OutputPath>
     <DefineConstants>TRACE;rw_1_2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -52,7 +52,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '1.3|AnyCPU'">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Hospitality\1.3\Assemblies\</OutputPath>
+    <OutputPath>..\..\SimpleSlavery\1.3\Assemblies\</OutputPath>
     <DefineConstants>TRACE;rw_1_3</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -61,7 +61,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '1.4|AnyCPU'">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Hospitality\1.4\Assemblies\</OutputPath>
+    <OutputPath>..\..\SimpleSlavery\1.4\Assemblies\</OutputPath>
     <DefineConstants>TRACE;rw_1_4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -88,7 +88,7 @@
     <Reference Include="Assembly-CSharp">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Hospitality">
+    <Reference Include="SimpleSlavery">
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -122,10 +122,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GroupColumns\GroupColumnWorker_ShoppingArea.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_AccommodationArea.cs" />
-    <Compile Include="HospitalitySupport.cs" />
-    <Compile Include="ModCompatibility\HospitalityBridge.cs" />
+    <Compile Include="GroupingProviders\GroupWorker_IsSlave.cs" />
+    <Compile Include="ModCompatibility\SimpleSlaveryBridge.cs" />
+    <Compile Include="SimpleSlaverySupport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

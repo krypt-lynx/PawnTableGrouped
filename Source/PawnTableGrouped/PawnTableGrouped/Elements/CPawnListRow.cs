@@ -40,7 +40,11 @@ namespace PawnTableGrouped
         {
             base.DoContent();
 
+#if rw_1_4_or_later
+            var columns = table.Columns;
+#else
             var columns = table.ColumnsListForReading;
+#endif
             var cachedColumnWidths = accessor.cachedColumnWidths;
 
             // decorative line
@@ -48,10 +52,12 @@ namespace PawnTableGrouped
             Widgets.DrawLineHorizontal(BoundsRounded.xMin + (doLeftOffset ? Metrics.TableLeftMargin : 0), BoundsRounded.yMin, BoundsRounded.width - (doLeftOffset ? Metrics.TableLeftMargin : 0));
             GUI.color = Color.white;
 
+#if rw_1_3_or_earlier
             if (!accessor.CanAssignPawn(pawn))
             {
                 GUI.color = Color.gray;
             }
+#endif
 
             bool needUpdateSectionHeader = false;
 

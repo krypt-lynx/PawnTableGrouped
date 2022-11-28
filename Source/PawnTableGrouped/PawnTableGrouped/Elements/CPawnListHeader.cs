@@ -31,7 +31,11 @@ namespace PawnTableGrouped
         {
             base.DoContent();
 
+#if rw_1_4_or_later
+            var columns = model.Table.Columns;
+#else
             var columns = model.Table.ColumnsListForReading;
+#endif
             var cachedColumnWidths = model.accessor.cachedColumnWidths;
     
 

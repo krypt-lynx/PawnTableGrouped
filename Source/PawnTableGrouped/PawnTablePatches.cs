@@ -76,14 +76,22 @@ namespace PawnTableGrouped
             harmony.Patch(AccessTools.Method(typeof(MainTabWindow_PawnTable), "DoWindowContents"),
                  prefix: new HarmonyMethod(typeof(PawnTablePatches), nameof(PawnTablePatches.DoWindowContents_prefix)));
 #endif
-            // SetInitialSizeAndPosition
         }
 
-          static Action<MainTabWindow_PawnTable> _call_MainTabWindow_PawnTable_SetInitialSizeAndPosition = Dynamic.InstanceVoidMethod<MainTabWindow_PawnTable>("SetInitialSizeAndPosition");
+        static Action<MainTabWindow_PawnTable> _call_MainTabWindow_PawnTable_SetInitialSizeAndPosition = Dynamic.InstanceVoidMethod<MainTabWindow_PawnTable>("SetInitialSizeAndPosition");
 
         static void DoWindowContents_prefix(MainTabWindow_PawnTable __instance)
         {
-            _call_MainTabWindow_PawnTable_SetInitialSizeAndPosition(__instance);
+            if (__instance is MainTabWindow_PawnTable tableWindow)
+            {
+
+                var table = _get_MainTabWindow_PawnTable_table(tableWindow);
+
+                if (table != null && PawnTableExtentions.TryGetImplementation(table, out var impl))
+                {
+                    _call_MainTabWindow_PawnTable_SetInitialSizeAndPosition(__instance);
+                }
+            }
         }
 
         static Getter<MainTabWindow_PawnTable, PawnTable> _get_MainTabWindow_PawnTable_table = Dynamic.InstanceGetField<MainTabWindow_PawnTable, PawnTable>("table");
@@ -132,7 +140,6 @@ namespace PawnTableGrouped
                 __result = groupedTable.CalculateTotalRequiredHeight();
                 return false;
             }
-
             return true;
         }
     }

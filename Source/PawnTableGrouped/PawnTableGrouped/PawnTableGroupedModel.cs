@@ -321,7 +321,11 @@ namespace PawnTableGrouped
         public void RecacheColumnResolvers()
         {
             columnResolvers.Clear();
+#if rw_1_4_or_later
+            foreach (var column in Table.Columns)
+#else
             foreach (var column in Table.ColumnsListForReading)
+#endif
             {
                 var resolverDef = GroupColumnDefResolver.GetResolver(column);
                 columnResolvers.Add(resolverDef?.Worker);

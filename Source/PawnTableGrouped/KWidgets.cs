@@ -102,7 +102,7 @@ namespace PawnTableGrouped
 			rect2.yMin += 2f;
 			Widgets.Label(rect2, text);
 
-			var currentArea = (Area)column.GetGroupValue();
+			var currentArea = ((AreaData)column.GetGroupValue()).Area;
 			var isUniform = column.IsUniform();
 			if (column.IsUniform())
             {
@@ -132,7 +132,7 @@ namespace PawnTableGrouped
 				}
 				if (dragging && (!isUniform || currentArea != area))
 				{
-					column.SetGroupValue(area);
+					column.SetGroupValue(new AreaData(area));
 					SoundDefOf.Designate_DragStandard_Changed.PlayOneShotOnCamera(null);
 				}
 			}
