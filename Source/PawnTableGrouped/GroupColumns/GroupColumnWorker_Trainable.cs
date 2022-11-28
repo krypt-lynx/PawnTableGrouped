@@ -94,7 +94,7 @@ namespace PawnTableGrouped
             return pawn.training?.GetWanted(ColumnDef.trainable) ?? false;
         }
 
-        public override void SetValue(Pawn pawn, object value)
+        public override void SetValue(Pawn pawn, object value, PawnTable table)
         {
             if (pawn.training != null && (pawn.training?.CanAssignToTrain(ColumnDef.trainable).Accepted ?? false))
             {

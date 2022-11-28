@@ -46,7 +46,7 @@ namespace PawnTableGrouped
 		abstract public bool CanSetValues();
 		abstract public object DefaultValue(IEnumerable<Pawn> pawns);
 		abstract public object GetValue(Pawn pawn);
-		abstract public void SetValue(Pawn pawn, object value);
+		abstract public void SetValue(Pawn pawn, object value, PawnTable table);
 
 		public virtual Pawn GetRepresentingPawn(IEnumerable<Pawn> pawns)
         {
@@ -64,21 +64,21 @@ namespace PawnTableGrouped
 			return pawn != null ? GetValue(pawn) : null;
 		}
 
-		public virtual void SetGroupValue(IEnumerable<Pawn> pawns, object value)
+		public virtual void SetGroupValue(IEnumerable<Pawn> pawns, object value, PawnTable table)
 		{
 			foreach (var pawn in pawns)
 			{
 				if (IsVisible(pawn))
 				{
-					SetValue(pawn, value);
+					SetValue(pawn, value, table);
 				}
 			}
 		}
 
-		public virtual void CopyToGroup(Pawn pawn, IEnumerable<Pawn> pawns)
+		public virtual void CopyToGroup(Pawn pawn, IEnumerable<Pawn> pawns, PawnTable table)
         {
 			var value = GetValue(pawn);
-			SetGroupValue(pawns, value);
+			SetGroupValue(pawns, value, table);
         }
 
 		public virtual bool IsVisible(Pawn pawn)

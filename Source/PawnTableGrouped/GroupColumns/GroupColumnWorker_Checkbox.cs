@@ -23,9 +23,13 @@ namespace PawnTableGrouped
     {
         static Func<PawnColumnWorker_Checkbox, Pawn, bool> getValue = Dynamic.InstanceRetMethod<PawnColumnWorker_Checkbox, Pawn, bool>(
             typeof(PawnColumnWorker_Checkbox).GetMethod("GetValue", BindingFlags.NonPublic | BindingFlags.Instance));
+#if rw_1_2_or_earlier
         static Action<PawnColumnWorker_Checkbox, Pawn, bool> setValue = Dynamic.InstanceVoidMethod<PawnColumnWorker_Checkbox, Pawn, bool>(
             typeof(PawnColumnWorker_Checkbox).GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance));
-
+#else
+        static Action<PawnColumnWorker_Checkbox, Pawn, bool, PawnTable> setValue = Dynamic.InstanceVoidMethod<PawnColumnWorker_Checkbox, Pawn, bool, PawnTable>(
+            typeof(PawnColumnWorker_Checkbox).GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Instance));
+#endif
         static Func<PawnColumnWorker_Checkbox, Pawn, bool> hasCheckbox = Dynamic.InstanceRetMethod<PawnColumnWorker_Checkbox, Pawn, bool>(
             typeof(PawnColumnWorker_Checkbox).GetMethod("HasCheckbox", BindingFlags.NonPublic | BindingFlags.Instance));
         static Func<PawnColumnWorker_Checkbox, Pawn, string> getTip = Dynamic.InstanceRetMethod<PawnColumnWorker_Checkbox, Pawn, string>(
@@ -36,11 +40,15 @@ namespace PawnTableGrouped
             return getValue((PawnColumnWorker_Checkbox)ColumnDef.Worker, pawn);
         }
 
-        public override void SetValue(Pawn pawn, object value)
+        public override void SetValue(Pawn pawn, object value, PawnTable table)
         {
             if (HasCheckbox(pawn))
             {
-                setValue((PawnColumnWorker_Checkbox)ColumnDef.Worker, pawn, (bool)value);
+#if rw_1_2_or_earlier
+               setValue((PawnColumnWorker_Checkbox)ColumnDef.Worker, pawn, (bool)value);
+#else
+                setValue((PawnColumnWorker_Checkbox)ColumnDef.Worker, pawn, (bool)value, table);
+#endif
             }
         }
 

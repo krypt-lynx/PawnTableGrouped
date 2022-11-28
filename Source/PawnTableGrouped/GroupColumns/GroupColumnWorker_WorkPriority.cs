@@ -230,7 +230,7 @@ namespace PawnTableGrouped
             return !pawn.WorkTypeIsDisabled(ColumnDef.workType);
         }
 
-        public override void SetValue(Pawn pawn, object value)
+        public override void SetValue(Pawn pawn, object value, PawnTable table)
         {
             var priority = (int)value;
 

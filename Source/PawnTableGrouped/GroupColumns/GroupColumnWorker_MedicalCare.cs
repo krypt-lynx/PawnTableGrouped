@@ -120,7 +120,7 @@ namespace PawnTableGrouped
             return pawn.playerSettings?.medCare;
         }
 
-        public override void SetValue(Pawn pawn, object value)
+        public override void SetValue(Pawn pawn, object value, PawnTable table)
         {
             if (pawn.playerSettings != null)
             {

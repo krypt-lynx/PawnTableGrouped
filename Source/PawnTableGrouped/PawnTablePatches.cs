@@ -72,6 +72,18 @@ namespace PawnTableGrouped
             
             harmony.Patch(AccessTools.Method(typeof(Window), "PostClose"),
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "PostClose_postfix"));
+#if rw_1_3_or_later
+            harmony.Patch(AccessTools.Method(typeof(MainTabWindow_PawnTable), "DoWindowContents"),
+                 prefix: new HarmonyMethod(typeof(PawnTablePatches), nameof(PawnTablePatches.DoWindowContents_prefix)));
+#endif
+            // SetInitialSizeAndPosition
+        }
+
+          static Action<MainTabWindow_PawnTable> _call_MainTabWindow_PawnTable_SetInitialSizeAndPosition = Dynamic.InstanceVoidMethod<MainTabWindow_PawnTable>("SetInitialSizeAndPosition");
+
+        static void DoWindowContents_prefix(MainTabWindow_PawnTable __instance)
+        {
+            _call_MainTabWindow_PawnTable_SetInitialSizeAndPosition(__instance);
         }
 
         static Getter<MainTabWindow_PawnTable, PawnTable> _get_MainTabWindow_PawnTable_table = Dynamic.InstanceGetField<MainTabWindow_PawnTable, PawnTable>("table");
