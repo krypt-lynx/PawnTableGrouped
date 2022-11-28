@@ -35,13 +35,13 @@ namespace PawnTableGrouped
 
     public abstract class GroupWorker
     {
-        public abstract IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
+        public virtual IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
 
         public abstract TaggedString TitleForGroup(IEnumerable<Pawn> groupPawns, Pawn keyPawn);
         public abstract string MenuItemTitle();
         public abstract string Key();
 
-        public abstract IEnumerable<PawnTableGroup> CreateGroups(Verse.WeakReference<PawnTable> table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers);
+        public abstract IEnumerable<PawnTableGroup> CreateGroups(PawnTableWrapper table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers);
 
         public TaggedString TitleForGroup(IGrouping<Pawn, Pawn> pawns)
         {
@@ -51,9 +51,9 @@ namespace PawnTableGrouped
 
     public abstract class SortingGroupWorker : GroupWorker // todo: name
     {
-        public abstract IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
+        public virtual IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
 
-        public override IEnumerable<PawnTableGroup> CreateGroups(Verse.WeakReference<PawnTable> table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
+        public override IEnumerable<PawnTableGroup> CreateGroups(PawnTableWrapper table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
         {
             var groups = pawns.GroupBy(p => p, GroupingEqualityComparer);
             foreach (var group in groups)
@@ -62,8 +62,4 @@ namespace PawnTableGrouped
             }
         }
     }
-
-
-
-
 }

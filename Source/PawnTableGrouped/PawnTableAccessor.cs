@@ -11,12 +11,12 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class PawnTableAccessor // Accessors
+    public class PawnTableAccessorOld // Accessors
     {
         private Verse.WeakReference<PawnTable> table;
         private PawnTable Table => table?.Target;
 
-        public PawnTableAccessor(PawnTable table)
+        public PawnTableAccessorOld(PawnTable table)
         {
             this.table = new Verse.WeakReference<PawnTable>(table);
         }

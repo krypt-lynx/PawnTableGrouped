@@ -53,7 +53,8 @@ namespace PawnTableGrouped
             if (pawn.playerSettings != null)
             {
 #if rw_1_2_or_earlier
-                pawn.playerSettings.AreaRestriction = (Area)value;
+                var data = (AreaData)value;
+                pawn.playerSettings.AreaRestriction = data.Area;
 #else
                 if (pawn.playerSettings.SupportsAllowedAreas)
                 {

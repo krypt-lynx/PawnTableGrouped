@@ -41,10 +41,10 @@ namespace PawnTableGrouped
 
                 ApplyPatches(harmony);
             }
-            catch
+            catch (Exception e)
             {
                 activated = false;
-                $"{this.GetType()} was activated but failed initialization, integration disabled".Log(MessageType.Warning);
+                LogHelper.LogException($"{this.GetType()} was activated but failed initialization, integration disabled", e);
             }
         }
 

@@ -90,9 +90,6 @@ namespace PawnTableGrouped
 			}
 		}
 
-        public override IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
-        public override IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
-
         public GroupWorker_ByFaction()
         {
             GroupingEqualityComparer = new PawnComparer();
@@ -144,7 +141,7 @@ namespace PawnTableGrouped
 
 		public override string MenuItemTitle()
         {
-            return "by faction";
+			return "by faction";
         }
 
         public override string Key()

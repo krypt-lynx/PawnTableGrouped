@@ -14,7 +14,7 @@
 		<li IfModActive="orion.hospitality">Hospitality</li>
 		<li IfModActive="orion.hospitality">Hospitality/1.2</li>
 		<li IfModActive="syl.simpleslavery">SimpleSlavery</li>
-		<li IfModActive="syl.simpleslavery">SimpleSlavery/1.1</li>
+		<li IfModActive="syl.simpleslavery">SimpleSlavery/1.2</li>
 	</v1.2>
 	<v1.3>
 		<li/>
@@ -33,3 +33,4 @@
 		<!-- the supported version of SimpleSlavery was abandoned -->
 	</v1.4>
 </loadFolders>
+ 

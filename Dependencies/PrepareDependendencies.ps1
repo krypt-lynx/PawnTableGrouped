@@ -10,7 +10,7 @@
 # add this id to the modIds list if you are missing local copy of RWLayout
 
 $appId = 294100
-$modIds = @(1414302321, 2144935009, 2345493945, 725219116, 753498552, 2009463077)
+$modIds = @(1414302321, 2144935009, 2345493945, 725219116, 753498552, 2009463077, 2209393954)
 $appVersions = @("1.1", "1.2", "1.3", "1.4")
 
 [string]$startupPath = Get-Location
@@ -55,7 +55,7 @@ Echo "Coping assemblies..."
 
 foreach ($ver in $appVersions) {
 	$dependencies = $startupPath + "\" + $ver
-	Remove-Item -Recurse -Force $dependencies | Out-Null
+	Remove-Item -Recurse -Force $dependencies | Out-Null	
 	New-Item -Force -Path $dependencies -ItemType Directory | Out-Null
 	
 	foreach ($modId in $modIds) {

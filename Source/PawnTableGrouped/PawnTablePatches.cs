@@ -14,7 +14,8 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public static class PawnTableExtentions
+ 
+    public static class PawnTableExtensions
     {
         static Getter<PawnTable, PawnTableDef> _get_PawnTable_def = Dynamic.InstanceGetField<PawnTable, PawnTableDef>("def");
 
@@ -27,7 +28,7 @@ namespace PawnTableGrouped
             if (Mod.Settings.pawnTablesEnabled.Contains(def.defName))
             {
                 $"Creating table impl for {def.defName}".Log();
-                return new PawnTableGroupedImpl(table, def);
+                return new PawnTableGroupedImpl(new PawnTableWrapper(table), def);
             }
             else
             {
@@ -35,7 +36,7 @@ namespace PawnTableGrouped
             }
         };
 
-        static PawnTableExtentions()
+        static PawnTableExtensions()
         {
             ResetImplementationsCache();
 
@@ -72,11 +73,24 @@ namespace PawnTableGrouped
             
             harmony.Patch(AccessTools.Method(typeof(Window), "PostClose"),
                 prefix: new HarmonyMethod(typeof(PawnTablePatches), "PostClose_postfix"));
+
+            harmony.Patch(AccessTools.Method(typeof(MainTabWindow_PawnTable), "CreateTable"),
+                postfix: new HarmonyMethod(typeof(PawnTablePatches), nameof(PawnTablePatches.CreateTable_postfix)));
+
+
 #if rw_1_3_or_later
-            harmony.Patch(AccessTools.Method(typeof(MainTabWindow_PawnTable), "DoWindowContents"),
-                 prefix: new HarmonyMethod(typeof(PawnTablePatches), nameof(PawnTablePatches.DoWindowContents_prefix)));
+//            harmony.Patch(AccessTools.Method(typeof(MainTabWindow_PawnTable), "DoWindowContents"),
+//                 prefix: new HarmonyMethod(typeof(PawnTablePatches), nameof(PawnTablePatches.DoWindowContents_prefix)));
 #endif
         }
+        static void CreateTable_postfix(MainTabWindow_PawnTable __instance, ref PawnTable __result)
+        {
+            if (PawnTableExtensions.TryGetImplementation(__result, out var impl))
+            {
+                impl.SetOwnerWindow(new MainTabWindow_PawnTableWrapper(__instance));
+            }
+        }
+
 
         static Action<MainTabWindow_PawnTable> _call_MainTabWindow_PawnTable_SetInitialSizeAndPosition = Dynamic.InstanceVoidMethod<MainTabWindow_PawnTable>("SetInitialSizeAndPosition");
 
@@ -87,7 +101,7 @@ namespace PawnTableGrouped
 
                 var table = _get_MainTabWindow_PawnTable_table(tableWindow);
 
-                if (table != null && PawnTableExtentions.TryGetImplementation(table, out var impl))
+                if (table != null && PawnTableExtensions.TryGetImplementation(table, out var impl))
                 {
                     _call_MainTabWindow_PawnTable_SetInitialSizeAndPosition(__instance);
                 }
@@ -103,7 +117,7 @@ namespace PawnTableGrouped
             {
                 var table = _get_MainTabWindow_PawnTable_table(tableWindow);
 
-                if (table != null && PawnTableExtentions.TryGetImplementation(table, out var impl))
+                if (table != null && PawnTableExtensions.TryGetImplementation(table, out var impl))
                 {
                     impl.SaveData();
                 }
@@ -112,7 +126,7 @@ namespace PawnTableGrouped
 
         static bool PawnTableOnGUI_prefix(PawnTable __instance, Vector2 position)
         {
-            if (PawnTableExtentions.TryGetImplementation(__instance, out var groupedTable))
+            if (PawnTableExtensions.TryGetImplementation(__instance, out var groupedTable))
             {
                 groupedTable.PawnTableOnGUI(position);
                 return false;
@@ -123,7 +137,7 @@ namespace PawnTableGrouped
 
         static bool RecacheIfDirty_prefix(PawnTable __instance)
         {
-            if (PawnTableExtentions.TryGetImplementation(__instance, out var groupedTable))
+            if (PawnTableExtensions.TryGetImplementation(__instance, out var groupedTable))
             {
                 groupedTable.RecacheIfDirty();
                 return false;
@@ -135,7 +149,7 @@ namespace PawnTableGrouped
 
         static bool CalculateTotalRequiredHeight_prefix(PawnTable __instance, ref float __result)
         {
-            if (PawnTableExtentions.TryGetImplementation(__instance, out var groupedTable))
+            if (PawnTableExtensions.TryGetImplementation(__instance, out var groupedTable))
             {
                 __result = groupedTable.CalculateTotalRequiredHeight();
                 return false;

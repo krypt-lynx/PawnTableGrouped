@@ -24,11 +24,19 @@
 				<columnWorkerType>PawnColumnWorker_MedicalCare</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_MedicalCare</groupWorkerType>
 			</li>
+			<!-- <li>
+				<columnWorkerType>PawnColumnWorker_HostilityResponse</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_HostilityResponse</groupWorkerType>
+			</li> -->			
 			<!-- static -->
 			<li>
 				<columnWorkerType>PawnColumnWorker_Icon</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Icon</groupWorkerType>
 			</li>			
+			<li>
+				<columnWorkerType>Numbers.PawnColumnWorker_Stat</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Text</groupWorkerType>
+			</li>
 			<li>
 				<columnWorkerType>PawnColumnWorker_Text</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Text</groupWorkerType>
@@ -38,8 +46,9 @@
 				<columnWorkerType>PawnColumnWorker_WorkPriority</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
 			</li>
+			    <!--
 			<li>
-				<!-- Work Tab -->
+				<!- - Work Tab - ->
 				<columnWorkerType>WorkTab.PawnColumnWorker_WorkType</columnWorkerType> 
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
 				<workerConfig Class="PawnTableGrouped.GCW_WorkPriority_Config">
@@ -48,6 +57,7 @@
 					<priorityColorMethod>WorkTab.DrawUtilities:ColorOfPriority</priorityColorMethod>
 				</workerConfig>
 			</li>
+				-->
 			<!-- allowed area -->
 			<li>
 				<columnWorkerType>PawnColumnWorker_AllowedArea</columnWorkerType>
@@ -57,12 +67,45 @@
 				<columnWorkerType>AnimalTab.PawnColumnWorker_AllowedArea</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_AllowedArea</groupWorkerType>
 			</li>
+			<!-- copy-paste -->
+			<li>
+				<columnWorkerType>PawnColumnWorker_CopyPaste</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_CopyPaste</groupWorkerType>
+			</li>
 			<!-- decorative gaps -->
 			<li>
 				<columnWorkerType>PawnColumnWorker_Gap</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Gap</groupWorkerType>
+			</li>		
+			<li>
+				<columnWorkerType>PawnColumnWorker_RemainingSpace</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Gap</groupWorkerType>			
 			</li>
-
+			<!-- Mech things -->
+			<li>
+				<columnWorkerType>PawnColumnWorker_DraftMech</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_DraftMech</groupWorkerType>			
+			</li>
+			<li>
+				<columnWorkerType>PawnColumnWorker_AutoRepair</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_AutoRepair</groupWorkerType>			
+			</li>
+			<li>
+				<columnWorkerType>PawnColumnWorker_Overseer</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Overseer</groupWorkerType>			
+			</li>
+			<li>
+				<columnWorkerType>PawnColumnWorker_Label</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_Label</groupWorkerType>			
+			</li>
+			<li>
+				<columnWorkerType>PawnColumnWorker_ControlGroup</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_ControlGroup</groupWorkerType>			
+			</li>
+			<li>
+				<columnWorkerType>PawnColumnWorker_WorkMode</columnWorkerType>
+				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkMode</groupWorkerType>			
+			</li>
 		</mapping>
 	</PawnTableGrouped.ClassMappingDef>
 
@@ -120,6 +163,11 @@
 						<compatibility>Supported</compatibility>
 						<defaultGrouping>race</defaultGrouping>
 					</li>
+					<li>
+						<name>Mechs</name>
+						<compatibility>Supported</compatibility>
+						<defaultGrouping>control_group</defaultGrouping>
+					</li>
 				</tables>
 			</li>
 			<li>
@@ -128,8 +176,8 @@
 				<tables>
 					<li>
 						<name>Numbers_MainTable</name>
-						<compatibility>Issues</compatibility>
-						<hint>Exception after switching from Animal/Wildlife tab. Numbers feeds incompatible data into this table, and I can do nothing about it</hint>
+						<compatibility>Supported</compatibility>
+						<hint>Exception after column removal</hint>
 						<defaultGrouping>faction</defaultGrouping>
 					</li>
 					<li>
@@ -181,8 +229,7 @@
 						<name>Numbers_ColonistNeedsPreset</name>
 						<compatibility>Supported</compatibility>
 						<defaultGrouping>faction</defaultGrouping>
-					</li>
-					
+					</li>					
 				</tables>
 			</li>
 			<li>
@@ -202,10 +249,8 @@
 				<tables>
 					<li>
 						<name>Work</name>
-						<compatibility>Issues</compatibility>
+						<compatibility>Supported</compatibility>
 						<defaultGrouping>faction</defaultGrouping>
-						<hint>Fluffy's Work Tab mod is not fully compatible for time being.
-Issues: various render issues</hint>
 						<config>
 							<allowHScroll>true</allowHScroll>
 						</config>

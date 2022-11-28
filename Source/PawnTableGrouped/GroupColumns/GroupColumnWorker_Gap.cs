@@ -24,7 +24,7 @@ namespace PawnTableGrouped
 
         public override object GetValue(Pawn pawn)
         {
-            return "Oops";
+            return null;
         }
 
         public override bool IsUniform(IEnumerable<Pawn> pawns)

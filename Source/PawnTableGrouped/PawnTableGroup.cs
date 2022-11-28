@@ -80,6 +80,11 @@ namespace PawnTableGrouped
         {
             return Group.GetValue(columnIndex, pawn);
         }
+
+        public void SetDirty()
+        {
+            Group.SetDirty();
+        }
     }
 
 
@@ -99,7 +104,8 @@ namespace PawnTableGrouped
         public TaggedString Title { get => title; }
         public string Key { get; set; }
 
-        private Verse.WeakReference<PawnTable> table = null;
+        private PawnTableWrapper table = null;
+        public PawnTable Table => table.Table;
 
         public IReadOnlyList<PawnTableGroupColumn> Columns
         {
@@ -109,7 +115,7 @@ namespace PawnTableGrouped
             }
         }
 
-        public PawnTableGroup(Verse.WeakReference<PawnTable> table, TaggedString title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers, Func<TaggedString> countInfoGenerator = null)
+        public PawnTableGroup(PawnTableWrapper table, TaggedString title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers, Func<TaggedString> countInfoGenerator = null)
         {
             this.table = table;
             Key = title.RawText;
@@ -186,7 +192,7 @@ namespace PawnTableGrouped
                 return;
             }
 
-            resolver.SetGroupValue(Pawns, value, table?.Target);
+            resolver.SetGroupValue(Pawns, value, Table);
             RecacheValues();
         }
 
@@ -198,6 +204,11 @@ namespace PawnTableGrouped
         public object GetValue(int columnIndex, Pawn pawn)
         {
             return ColumnResolvers[columnIndex]?.GetValue(pawn);
+        }
+
+        internal void SetDirty()
+        {
+            table.SetDirty();
         }
     }
 }

@@ -54,7 +54,7 @@ namespace PawnTableGrouped
 
         private void DetectMods()
         {
-            var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
+            var loadedModIds = Mod.RunningModInvariantIds.ToHashSet();
 
 
             var info = DefDatabase<CompatibilityInfoDef>.GetNamed("ModCompatibility");

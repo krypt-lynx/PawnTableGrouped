@@ -13,13 +13,15 @@ namespace PawnTableGrouped
 {
 	public abstract class GroupColumnWorker
 	{
+		public bool HealthCheck = true;
+
         public GroupColumnWorkerDef def;
 
 		private object defaultConfig = null;
 
 		public T GetWorkerConfig<T>() where T : class, new()
 		{
-				return (def.workerConfig as T) ?? (T)defaultConfig ?? (T)(defaultConfig = new T());
+			return (def.workerConfig as T) ?? (T)defaultConfig ?? (T)(defaultConfig = new T());
 		}
 
 		private bool needCreateGroupWorker = true;
@@ -100,6 +102,9 @@ namespace PawnTableGrouped
 		{
 			
         }
+
+		public virtual bool CanSetValue(Pawn pawn) => CanSetValues();
+
 
 		protected virtual void DoMixedValuesIcon(Rect rect)
 		{

@@ -41,6 +41,12 @@ namespace PawnTableGrouped
 
 					foreach (var def in mapping)
 					{
+						if (def.columnWorkerType == null ||
+							def.groupWorkerType == null)
+                        {
+							continue;
+                        }
+
 						// reading types manually to suppress parser error if supported mod is not present
 						var columnWorker = GenTypes.GetTypeInAnyAssembly(def.columnWorkerType);
 						var groupWorker = GenTypes.GetTypeInAnyAssembly(def.groupWorkerType);

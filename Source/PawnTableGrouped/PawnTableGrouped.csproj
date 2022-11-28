@@ -1,86 +1,61 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Configurations>Debug;Release;rw1.1;rw1.2;rw1.3;rw1.4</Configurations>
     <ProjectGuid>{2A51480C-712D-4EDE-BDF8-77F5C671BBDE}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
     <RootNamespace>PawnTableGrouped</RootNamespace>
     <AssemblyName>PawnTableGrouped.0</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+  </PropertyGroup>  
+    
+  <PropertyGroup>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <LangVersion>8.0</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\1.4\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;rw_1_4;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_4_or_later;rw_1_4_or_earlier</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>    
+  
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\1.4\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_4;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_4_or_later;rw_1_4_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
+  
+  <Import Project="..\configuration-selector.csproj" />
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>../../1.4/Assemblies</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\1.1\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_1;rw_1_1_or_later;rw_1_1_or_earlier;rw_1_2_or_earlier;rw_1_3_or_earlier;rw_1_4_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>../../1.4/Assemblies</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\1.2\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_2;rw_1_1_or_later;rw_1_2_or_later;rw_1_2_or_earlier;rw_1_3_or_earlier;rw_1_4_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'rw1.1' ">
+    <OutputPath>../../1.1/Assemblies</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '1.3|AnyCPU'">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_3;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_3_or_earlier;rw_1_4_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
+  <PropertyGroup Condition=" '$(Configuration)' == 'rw1.2' ">
+    <OutputPath>../../1.2/Assemblies</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '1.4|AnyCPU'">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\1.4\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_4;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_4_or_later;rw_1_4_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
+  <PropertyGroup Condition="'$(Configuration)' == 'rw1.3'">
+    <OutputPath>../../1.3/Assemblies</OutputPath>
   </PropertyGroup>
-  <Import Condition=" '$(Configuration)' == '1.1' " Project="..\dependences-1.1.csproj" />
-  <Import Condition=" '$(Configuration)' == '1.2' " Project="..\dependences-1.2.csproj" />
-  <Import Condition=" '$(Configuration)' == '1.3' " Project="..\dependences-1.3.csproj" />
-  <Import Condition=" '$(Configuration)' == '1.4' " Project="..\dependences-1.4.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.4.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Release' " Project="..\dependences-1.4.csproj" />
-  <ItemGroup>
-    <Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+  <PropertyGroup Condition="'$(Configuration)' == 'rw1.4'">
+    <OutputPath>../../1.4/Assemblies</OutputPath>
+  </PropertyGroup>
+  
+  <ItemGroup>   
+	<Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
-    <Reference Include="0RWLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="0Cassowary">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="0RWLayout">
       <Private>False</Private>
     </Reference>
     <Reference Include="0Harmony">
@@ -92,14 +67,6 @@
     <Reference Include="Numbers">
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <Private>False</Private>
     </Reference>
@@ -124,90 +91,17 @@
     <Reference Include="WorkTab">
       <Private>False</Private>
     </Reference>
-    <Reference Condition=" '$(Configuration)' == '1.2' " Include="SimpleSlavery">
-      <Private>False</Private>
-    </Reference>
-    <Reference Condition=" '$(Configuration)' == '1.3' " Include="SimpleSlavery">
-      <Private>False</Private>
-    </Reference>
-    <Reference Condition=" '$(Configuration)' == 'Debug' " Include="SimpleSlavery">
-      <Private>False</Private>
-    </Reference>
-    <Reference Condition=" '$(Configuration)' == 'Release' " Include="SimpleSlavery">
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompatibilityInfoDef.cs" />
-    <Compile Include="DataStore.cs" />
-    <Compile Include="EventBus\EventBus.cs" />
-    <Compile Include="EventBus\PawnTableInvalidateMessage.cs" />
-    <Compile Include="EventBus\PawnTableSaveDataMessage.cs" />
-    <Compile Include="EventBus\PawnTableSettingsChanged.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="FloatSubmenuOption\FloatSubmenuOption.cs" />
-    <Compile Include="GroupColumns\Base\GroupColumnWorker_Area.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_Gap.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_AllowedArea.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_WorkPriority.cs" />
-    <Compile Include="GroupingProviders\GroupWorker_AllInOne.cs" />
-    <Compile Include="GroupingProviders\GroupWorker_ByColumn.cs" />
-    <Compile Include="GroupingProviders\GroupWorker_ByFaction.cs" />
-    <Compile Include="GroupingProviders\GroupWorker_ByGender.cs" />
-    <Compile Include="GroupingProviders\GroupWorker_ByRace.cs" />
-    <Compile Include="ModCompatibility\ModBridge.cs" />
-    <Compile Include="ModCompatibility\WorkTabBridge.cs" />
-    <Compile Include="Mod\ModPostInit.cs" />
-    <Compile Include="Mod\Settings.cs" />
-    <Compile Include="PawnTableGrouped\Elements\CPawnListGroupNoSummary.cs" />
-    <Compile Include="PawnTableGrouped\Elements\CPawnListHighlight.cs" />
-    <Compile Include="PawnTableGrouped\Elements\CPawnTable.cs" />
-    <Compile Include="ModCompatibility\NumbersBridge.cs" />
-    <Compile Include="PawnTableGrouped\Elements\CPawnListGroupFixed.cs" />
-    <Compile Include="PawnTableGrouped\PawnTableGrouped.cs" />
-    <Compile Include="PawnTableGrouped\PawnTableGroupedModel.cs" />
-    <Compile Include="PawnTableGrouped\PawnTableGroupedView.cs" />
-    <Compile Include="GUI\AlternatingBGRow.cs" />
-    <Compile Include="GroupColumnDefResolver.cs" />
-    <Compile Include="PawnTableGrouped\Elements\CPawnListHeader.cs" />
-    <Compile Include="PawnTableGrouped\Elements\CPawnListRow.cs" />
-    <Compile Include="PawnTableGrouped\Elements\CPawnListGroupSummary.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="GroupColumns\Base\GroupColumnWorker.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_Checkbox.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_Dummy.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_Icon.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_MedicalCare.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_Text.cs" />
-    <Compile Include="GroupColumns\GroupColumnWorker_Trainable.cs" />
-    <Compile Include="KWidgets.cs" />
-    <Compile Include="Linq.cs" />
-    <Compile Include="LogHelper.cs" />
-    <Compile Include="PawnTableAccessor.cs" />
-    <Compile Include="PawnTableGroup.cs" />
-    <Compile Include="PawnTablePatches.cs" />
-    <Compile Include="PawnTableGroupDef.cs" />
-    <Compile Include="Mod\Mod.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GUI\ColumnGuide.cs" />
-    <Compile Include="Settings\ColumnsSettingsTab.cs" />
-    <Compile Include="Settings\GeneralSettingsTab.cs" />
-    <Compile Include="Settings\SettingsView.cs" />
-    <Compile Include="Settings\TablesSettingsTab.cs" />
-    <Compile Include="Settings\TablesSettingsViewModel.cs" />
-    <Compile Include="GroupingProviders\GroupWorker.cs" />
+    <None Remove="git.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="git.txt">
       <LogicalName>PawnTableGrouped.0.git.txt</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>git describe --tag  --dirty --always &gt; "$(ProjectDir)\git.txt"
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="echo &quot;PawnTableGrouped pre-build&quot;&#xD;&#xA;&#xD;&#xA;git describe --tag --dirty --always &gt; &quot;$(ProjectDir)\git.txt&quot;&#xD;&#xA;&#xD;&#xA;echo &quot;target dir:&quot;&#xD;&#xA;echo &quot;$(TargetDir)&quot;&#xD;&#xA;&#xD;&#xA;cd &quot;$(TargetDir)&quot;&#xD;&#xA;&#xD;&#xA;del /Q *.*" />
+  </Target>
 
-cd "$(TargetDir)"
-del /Q *.*</PreBuildEvent>
-  </PropertyGroup>
 </Project>

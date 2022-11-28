@@ -1,4 +1,6 @@
-﻿using RWLayout.alpha2;
+﻿using PawnTableGrouped.TableGrid;
+using RimWorld;
+using RWLayout.alpha2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,50 +11,44 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-
-    public class PawnTableGroupedGUI
+    public class PawnTableGroupedView : ICTableGridDataSource
     {
         PawnTableGroupedModel model;
 
         CGuiRoot host = new CGuiRoot();
         CCheckbox collapseBtn;
-        CPawnTable list;
+        CTableGrid list;
 
-        public PawnTableGroupedGUI(PawnTableGroupedModel model)
+        public PawnTableGroupedView(PawnTableGroupedModel model)
         {
             this.model = model;
 
             ConstructGUI();
         }
-        public void SetInnerWidth(float innerWidth)
-        {
-            list.InnerWidth = innerWidth;
-        }
+        //public void SetInnerWidth(float innerWidth)
+        //{
+        //    list.InnerWidth = innerWidth;
+        //}
 
+       // public Action GroupsStateChanged;
+
+        public void Invalidate()
+        {
+            list.Invalidate();
+        }
 
         void ConstructGUI()
         {
             CElement footer;
 
-            list = host.AddElement(new CPawnTable());
+            list = host.AddElement(new CTableGrid());
             list.allowHScroll = model.AllowHScroll;
+            list.DataSource = this; 
 
-            var weakThis = new Verse.WeakReference<PawnTableGroupedGUI>(this);
+            var weakThis = new Verse.WeakReference<PawnTableGroupedView>(this);
 
             footer = host.AddElement(new CElement());
-
-            CRowSegment headerSegment = new CPawnListHeader(model, new RangeInt(0, 1), true);
-            CRowSegment bodySegment = new CPawnListHeader(model, new RangeInt(0, int.MaxValue / 2), true); // including first column twice for Nubmers compatibility; second copy is invisible
-            var header = list.AppendRow(
-                new CPawnTableRow
-                {
-                    Fixed = headerSegment,
-                    Row = bodySegment,
-                });
-            list.TableHeader = header;
-            headerSegment.AddConstraint(headerSegment.height ^ headerSegment.intrinsicHeight);
-            bodySegment.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
-
+                     
             Texture2D settingsTex = new Resource<Texture2D>("UI/Settings");
             var GroupBtn = footer.AddElement(new CWidget
             {
@@ -74,7 +70,7 @@ namespace PawnTableGrouped
                 {
                     var this_ = weakThis.Target;
                     this_.model.SetSortingDecending(value);
-                    this_.PopulateList();
+                    this_.Invalidate();
                 },
             });
             collapseBtn = footer.AddElement(new CCheckbox
@@ -103,14 +99,15 @@ namespace PawnTableGrouped
             model.GroupsStateChanged = (m) =>
             {
                 collapseBtn.Checked = !m.Groups.Any(x => m.IsExpanded(x));
+                list.SetNeedsUpdateLayout();
             };
         }
 
-        private IEnumerable<Widgets.DropdownMenuElement<PawnTableGroupedGUI>> CreateGroupingMenuOptions()
+        private IEnumerable<Widgets.DropdownMenuElement<PawnTableGroupedView>> CreateGroupingMenuOptions()
         {
             foreach (var worker in model.PredefinedGroupWorkers)
             {
-                yield return new Widgets.DropdownMenuElement<PawnTableGroupedGUI>
+                yield return new Widgets.DropdownMenuElement<PawnTableGroupedView>
                 {
                     option = new FloatMenuOption(worker.MenuItemTitle(), () =>
                     {
@@ -121,7 +118,7 @@ namespace PawnTableGrouped
 
             if (Mod.Settings.groupByColumnExperimental)
             {
-                yield return new Widgets.DropdownMenuElement<PawnTableGroupedGUI>
+                yield return new Widgets.DropdownMenuElement<PawnTableGroupedView>
                 {
                     option = new FloatSubmenuOption("by column:", () =>
                     {
@@ -134,69 +131,74 @@ namespace PawnTableGrouped
             }
         }
 
-
-        public void PopulateList()
+        public int numberOfColumns()
         {
-            list.ClearRows();
+            return model.Table.Columns.Count;
+        }
 
-            var columnWidths = model.accessor.cachedColumnWidths;
-            var column0Width = columnWidths.Count > 0 ? columnWidths[0] : 0;
-            list.FixedSegmentWidth = column0Width + Metrics.TableLeftMargin;
+        public float widthForColumn(int column)
+        {
+            return model.Table.cachedColumnWidths[column] + (column == 0 ? Metrics.TableLeftMargin : 0);
+        }
 
-            var weakThis = new Verse.WeakReference<PawnTableGroupedGUI>(this);
+        public int numberOfSections()
+        {
+            return model.Groups.Count + 1;
+        }
 
-            foreach (var group in model.Groups)
+        public int numberOfRowsInSection(int section)
+        {
+            if (section == 0)
             {
-                if (!Mod.Settings.hideHeaderIfOnlyOneGroup || model.Groups.Count > 1)
-                {
-                    CPawnListGroupFixed headerSegment = new CPawnListGroupFixed(group, model.IsExpanded(group));
-                    CRowSegment bodySegment = Mod.Settings.disableGroupCells ? (CRowSegment)new CPawnListGroupNoSummary() : (CRowSegment)new CPawnListGroupSummary(model.Table, model.accessor, group);
-                    var groupRow = list.AppendRow(
-                        new CPawnListGroupRow
-                        {
-                            Fixed = headerSegment,
-                            Row = bodySegment,
-                            Group = group,
-                            Action = (sectionRow) =>
-                            {
-                                weakThis.Target.model.SwitchExpanded(sectionRow.Group);
-                            }
-                        });
-
-
-                    headerSegment.AddConstraint(headerSegment.height ^ headerSegment.intrinsicHeight);
-                    bodySegment.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
-                    
-
-                }
+                return 1;
+            } 
+            else
+            {
+                bool showHeader = !Mod.Settings.hideHeaderIfOnlyOneGroup || model.Groups.Count > 1;
                 
-                if (model.IsExpanded(group))
+                if (model.IsExpanded(model.Groups[section - 1]))
                 {
-                    foreach (var pawn in group.Pawns)
+                    return model.Groups[section - 1].Pawns.Count + (showHeader ? 1 : 0);
+                } 
+                else
+                {
+                    return (showHeader ? 1 : 0);
+                }
+            }
+        }
+
+        public ICTableGridRow rowAt(int section, int row)
+        {
+            if (section == 0)
+            {
+                return new CPawnTableHeaderRow(model);
+            }
+            else
+            {
+                var weakThis = new Verse.WeakReference<PawnTableGroupedView>(this);
+                bool showHeader = !Mod.Settings.hideHeaderIfOnlyOneGroup || model.Groups.Count > 1;
+
+                var group = model.Groups[section - 1];
+                if (showHeader && row == 0)
+                {
+                    var groupHeader = new CPawnTableGroupRow(group, this, model.IsExpanded(group));
+                    groupHeader.Action = (group) =>
                     {
-                        CRowSegment headerSegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(0, 1), true);
-                        CPawnListRow bodySegment = new CPawnListRow(model.Table, model.accessor, group, pawn, new RangeInt(1, int.MaxValue / 2), false);
-                        CPawnListHighlight background = new CPawnListHighlight(pawn);
-
-                        var pawnRow = list.AppendRow(
-                            new CPawnTableRow
-                            {
-                                Fixed = headerSegment,
-                                Row = bodySegment,
-                                Background = background
-                            });
-
-
-                        headerSegment.AddConstraint(headerSegment.height ^ headerSegment.intrinsicHeight);
-                        bodySegment.AddConstraint(bodySegment.height ^ bodySegment.intrinsicHeight);
-                    }
+                        weakThis.Target.model.SwitchExpanded(group);
+                    };
+                    return groupHeader;
+                }
+                else
+                {
+                    var pawn = group.Pawns[row - (showHeader ? 1 : 0)];
+                    return new CPawnTablePawnRow(model.table, group, pawn);
                 }
             }
         }
 
         public void OnGUI(Vector2 position, int magic)
         {
-            host.InRect = new Rect((int)position.x, (int)position.y, (int)model.accessor.cachedSize.x, (int)model.accessor.cachedSize.y);
+            host.InRect = new Rect((int)position.x, (int)position.y, (int)model.Table.cachedSize.x, (int)model.Table.cachedSize.y);
             host.UpdateLayoutIfNeeded();
             host.DoElementContent();
         }
@@ -223,6 +225,15 @@ namespace PawnTableGrouped
             height += model.TableExtendedArea;
 
             return height;
+        }
+
+        public bool canMergeRows(int column)
+        {
+#if rw_1_4_or_later
+            return model.Table.Columns[column].groupable;            
+#else
+            return false;
+#endif
         }
     }
 

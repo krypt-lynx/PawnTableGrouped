@@ -20,19 +20,5 @@ namespace PawnTableGrouped
         {
             return condition ? if_() : else_();
         }
-
-        /// <summary>
-        /// performs action with value if value is not null
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <param name="action"></param>
-        public static void IfNotNull<T>(this T obj, Action<T> action)
-        {
-            if (obj != null)
-            {
-                action(obj);
-            }
-        }
     }
 }

@@ -38,7 +38,7 @@ namespace PawnTableGrouped
                 if (currentTables == null)
                 {
                     var info = DefDatabase<CompatibilityInfoDef>.GetNamed("ModCompatibility");
-                    var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageId).ToHashSet();
+                    var loadedModIds = Mod.RunningModInvariantIds.ToHashSet();
 
                     currentTables = new Dictionary<string, TableInfo>();
 

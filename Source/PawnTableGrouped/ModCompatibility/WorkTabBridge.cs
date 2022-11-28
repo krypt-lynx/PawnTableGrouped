@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using RWLayout.alpha2.FastAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,12 +104,50 @@ namespace PawnTableGrouped
             WorkTabRenderEnabled = !Mod.Settings.pawnTablesEnabled.Contains(WorkTabDefName);
 
 
+            Patch(harmony);
+            
+            
             return true;
+        }
+
+        public static void Patch(Harmony harmony)
+        {
+            harmony.Patch(AccessTools.Method(typeof(MainTabWindow_WorkTab), nameof(MainTabWindow_WorkTab.RebuildTable)),
+                postfix: new HarmonyMethod(typeof(MainTabWindow_WorkTabPatches), nameof(MainTabWindow_WorkTabPatches.RebuildTable_postfix)));
+            harmony.Patch(AccessTools.PropertySetter(typeof(PriorityManager), nameof(PriorityManager.ShowScheduler)),
+                postfix: new HarmonyMethod(typeof(MainTabWindow_WorkTabPatches), nameof(MainTabWindow_WorkTabPatches.ShowScheduler_postfix)));
+            harmony.Patch(AccessTools.Method(typeof(MainTabWindow), "SetInitialSizeAndPosition"),
+                postfix: new HarmonyMethod(typeof(MainTabWindow_WorkTabPatches), nameof(MainTabWindow_WorkTabPatches.SetInitialSizeAndPosition_postfix)));
         }
 
         public override string ModName()
         {
             return "Work Tab";
+        }
+    }
+
+    static class MainTabWindow_WorkTabPatches
+    {
+        static Action<MainTabWindow_WorkTab> _setDirty = Dynamic.InstanceVoidMethod<MainTabWindow_WorkTab>("SetDirty");
+
+        public static void RebuildTable_postfix(MainTabWindow_WorkTab __instance)
+        {
+            _setDirty(__instance);
+        }
+
+        public static void ShowScheduler_postfix()
+        {
+            _setDirty(MainTabWindow_WorkTab.Instance);
+        }
+
+        internal static void SetInitialSizeAndPosition_postfix(MainTabWindow __instance)
+        {
+            if (__instance is MainTabWindow_WorkTab workTab) {
+                if (PriorityManager.ShowScheduler)
+                {
+                    workTab.RecacheTimeBarRect();
+                }
+            }
         }
     }
 }

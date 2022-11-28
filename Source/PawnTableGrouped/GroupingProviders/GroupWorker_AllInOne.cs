@@ -18,14 +18,13 @@ namespace PawnTableGrouped
             }
         }
 
-        public override IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
 
         public GroupWorker_AllInOne()
         {
             GroupsSortingComparer = new GroupComparer();
         }
 
-        public override IEnumerable<PawnTableGroup> CreateGroups(Verse.WeakReference<PawnTable> table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
+        public override IEnumerable<PawnTableGroup> CreateGroups(PawnTableWrapper table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
         {
             if (pawns.Count > 0)
             {

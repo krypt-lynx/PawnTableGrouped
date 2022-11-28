@@ -32,37 +32,24 @@ namespace PawnTableGrouped
 
     public class PawnTableGroupedImpl
     {
-        Verse.WeakReference<PawnTable> table;
-        public PawnTable Table
-        {
-            get => table.Target; 
-            set
-            {
-                table = new Verse.WeakReference<PawnTable>(value);
-            }
-        }
-
-        PawnTableAccessor accessor;
-
+        PawnTableWrapper table;
 
         PawnTableGroupedModel model;
-        PawnTableGroupedGUI view;
+        PawnTableGroupedView view;
 
 
-        public PawnTableGroupedImpl(PawnTable table, PawnTableDef def)
+        public PawnTableGroupedImpl(PawnTableWrapper table, PawnTableDef def)
         {
-            this.Table = table;
+            this.table = table;
             //this.def = def;
 
-            accessor = new PawnTableAccessor(table);
 
-
-            model = new PawnTableGroupedModel(table, accessor, def);
-            view = new PawnTableGroupedGUI(model);
+            model = new PawnTableGroupedModel(table, def);
+            view = new PawnTableGroupedView(model);
 
             new EventBusListener<PawnTableGroupedImpl, PawnTableInvalidateMessage>(this, (x, sender, args) =>
             {
-                x.Table.SetDirty();
+                x.table.SetDirty();
             });
 
             table.SetDirty();
@@ -83,7 +70,7 @@ namespace PawnTableGrouped
         {
             if (NeedUpdateViews)
             {
-                view.PopulateList();
+                view.Invalidate();
                 model.DoGroupsStateChanged();
                 NeedUpdateViews = false;
             }
@@ -93,8 +80,8 @@ namespace PawnTableGrouped
                 return;
             }
 
-            var magic = NumbersBridge.IsNumbersTable(Table) ? NumbersBridge.ReorderableGroup(Table) : 0;
-            accessor.RecacheIfDirty();
+            var magic = NumbersBridge.IsNumbersTable(table.Table) ? NumbersBridge.ReorderableGroup(table.Table) : 0;
+            //accessor.RecacheIfDirty();
 
             view.OnGUI(position, magic);
         }
@@ -102,51 +89,56 @@ namespace PawnTableGrouped
         public virtual void RecacheIfDirty()
         {  // todo: move to model
 
-            if (!accessor.dirty)
+            if (!table.dirty)
             {
                 return;
             }
-            accessor.dirty = false;
+            table.dirty = false;
             // $"PawnTableGroupedImpl RecacheIfDirty".Log();
 
             model.RecacheColumnResolvers();
-            accessor.RecachePawns();
+            table.RecachePawns();
             model.RecacheGroups();
 
-            accessor.RecacheRowHeights();
-            accessor.cachedHeaderHeight = accessor.CalculateHeaderHeight();
-            accessor.cachedHeightNoScrollbar = CalculateTotalRequiredHeight();
-            accessor.RecacheSize();
+            table.RecacheRowHeights();
+            table.cachedHeaderHeight = table.CalculateHeaderHeight();
+            table.cachedHeightNoScrollbar = CalculateTotalRequiredHeight();
+            table.RecacheSize();
 
-            var size = accessor.cachedSize;
-            accessor.cachedSize = new Vector2(Mathf.Min(size.x, accessor.maxTableWidth - Metrics.TableLeftMargin), size.y);
+            var size = table.cachedSize;
+            table.cachedSize = new Vector2(Mathf.Min(size.x, table.maxTableWidth - Metrics.TableLeftMargin), size.y);
 
 
-            accessor.RecacheColumnWidths();
+            table.RecacheColumnWidths();
             //var columnWidths = accessor.cachedColumnWidths; 
 
             AdjastTableWidth();
 
-            accessor.RecacheLookTargets();
+            table.RecacheLookTargets();
 
             NeedUpdateViews = true;
+        }
+
+        internal void SetOwnerWindow(MainTabWindow_PawnTableWrapper ownerWindow)
+        {
+            model.OnChanged = () => ownerWindow.SetDirty();
         }
 
         private void AdjastTableWidth()
         {
             float totalColumnsWidth;
             var fits = UpdateColumnWidths(out totalColumnsWidth);
-            view.SetInnerWidth(totalColumnsWidth + Metrics.TableLeftMargin);
+            //view.SetInnerWidth(totalColumnsWidth + Metrics.TableLeftMargin);
 
-            var size = accessor.cachedSize;
-            accessor.cachedSize = new Vector2(size.x + Metrics.TableLeftMargin,
-                Mathf.Min(size.y + (fits ? 0 : Metrics.ScrollBar), accessor.maxTableHeight)); // expand table for collapse indicator and horizontal scrollbar
+            var size = table.cachedSize;
+            table.cachedSize = new Vector2(size.x + Metrics.TableLeftMargin,
+                Mathf.Min(size.y + (fits ? 0 : Metrics.ScrollBar), table.maxTableHeight)); // expand table for collapse indicator and horizontal scrollbar
         }
 
         private bool UpdateColumnWidths(out float width)
         {
-            var cachedColumnWidths = accessor.cachedColumnWidths;
-            float optimalWidth = accessor.cachedSize.x - Metrics.ScrollBar;
+            var cachedColumnWidths = table.cachedColumnWidths;
+            float optimalWidth = table.cachedSize.x - Metrics.ScrollBar;
 
             if (model.AllowHScroll)
             {
@@ -155,7 +147,7 @@ namespace PawnTableGrouped
                 {
                     if (!model.def.columns[i].ignoreWhenCalculatingOptimalTableSize)
                     {
-                        var minColumnWidth = accessor.GetMinWidth(model.def.columns[i]);
+                        var minColumnWidth = table.GetMinWidth(model.def.columns[i]);
                         minWidth += minColumnWidth;
                         cachedColumnWidths[i] = Mathf.Max(cachedColumnWidths[i], minColumnWidth);
                     }

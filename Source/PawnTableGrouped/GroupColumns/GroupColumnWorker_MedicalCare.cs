@@ -37,7 +37,7 @@ namespace PawnTableGrouped
             else
             {
 
-                Widgets.Dropdown(rect, column, (c) => (MedicalCareCategory)c.GetGroupValue(), (c) => MedicalCareSelectButton_GenerateMenu(c), null, careTextures[(int)(MedicalCareCategory)column.GetGroupValue()], null, null, null, true);
+                Widgets.Dropdown(rect, column, (c) => (MedicalCareCategory)c.GetGroupValue(), (c) => MedicalCareSelectButton_GenerateMenu(c), null, careTextures[(int)(MedicalCareCategory)column.GetGroupValue()], null, null, null, true); // it throws an exception because of the array, I think?
             }
 
             GuiTools.PopColor();

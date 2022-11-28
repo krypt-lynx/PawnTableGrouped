@@ -1,16 +1,4 @@
-﻿// #if rw_1_1
-// #define rw_1_1_or_above
-// #define rw_1_1_or_below
-// #define rw_1_2_or_below
-// #endif
-
-// #if rw_1_2
-// #define rw_1_1_or_above
-// #define rw_1_2_or_above
-// #define rw_1_2_or_below
-// #endif
-
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimWorld;
 using RWLayout.alpha2;
 using System;
@@ -50,18 +38,38 @@ namespace PawnTableGrouped
             ModBridges.Add((packageId, bridge));
         }
 
-        public static List<GroupWorker> MiscGroupWorkers = new List<GroupWorker>
+        public static List<(Func<bool>, GroupWorker)> GroupWorkersConfig = new List<(Func<bool>, GroupWorker)>
         {
-            new GroupWorker_AllInOne(),
-            new GroupWorker_ByRace(),
-            new GroupWorker_ByGender(),
-            new GroupWorker_ByFaction(),
+            (() => true, new GroupWorker_AllInOne()),
+            (() => true, new GroupWorker_ByFaction()),
+            (() => true, new GroupWorker_ByRace()),
+#if rw_1_4_or_later
+            (() => ModsConfig.BiotechActive, new GroupWorker_ByXenotype()),
+#endif
+            (() => true, new GroupWorker_ByGender()),
+#if rw_1_3_or_later
+            (() => ModsConfig.IdeologyActive, new GroupWorker_ByIdeo()),
+            (() => ModsConfig.IdeologyActive, new GroupWorker_IsSlave()),
+#endif
+#if rw_1_4_or_later
+            (() => ModsConfig.BiotechActive, new GroupWorker_ByControlGroup()),
+#endif
         };
+
+        public static List<GroupWorker> groupWorkers = null;
+
+        public static List<GroupWorker> GroupWorkers => 
+            groupWorkers ??= GroupWorkersConfig.Where(x => x.Item1()).Select(x => x.Item2).ToList();
+
 
         public static void RegisterGroupWorker(GroupWorker groupWorker)
         {
-            MiscGroupWorkers.Add(groupWorker);
+            GroupWorkers.Add(groupWorker);
         }
+
+
+        public static IEnumerable<string> RunningModInvariantIds =>
+            LoadedModManager.RunningMods.Select(x => x.PackageIdPlayerFacing.ToLowerInvariant());
 
         static Harmony harmony = null;
 
@@ -110,7 +118,7 @@ namespace PawnTableGrouped
                 Activator.CreateInstance(modmod);
             }
 
-            var loadedModIds = LoadedModManager.RunningMods.Select(x => x.PackageIdPlayerFacing.ToLowerInvariant()).ToHashSet();            
+            var loadedModIds = RunningModInvariantIds.ToHashSet();            
 
             foreach (var info in ModBridges)
             {

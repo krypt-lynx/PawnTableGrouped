@@ -41,9 +41,6 @@ namespace PawnTableGrouped
 
         public Verse.WeakReference<GroupColumnWorker> resolver = null;
 
-        public override IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
-        public override IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
-
         public GroupWorker_ByColumn(GroupColumnWorker resolver)
         {
             this.resolver = new Verse.WeakReference<GroupColumnWorker>(resolver);

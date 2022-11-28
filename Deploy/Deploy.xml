@@ -7,10 +7,10 @@
 	<build>
 		<solution>..\Source\PawnTableGrouped.sln</solution>
 		<configurations>
-			<configuration>1.1</configuration>
-			<configuration>1.2</configuration>
-			<configuration>1.3</configuration>
-			<configuration>1.4</configuration>
+			<configuration>rw1.1</configuration>
+			<configuration>rw1.2</configuration>
+			<configuration>rw1.3</configuration>
+			<configuration>rw1.4</configuration>
 		</configurations>
 	</build>
 	<archive>

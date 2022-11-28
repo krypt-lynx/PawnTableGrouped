@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 	<PropertyGroup>
-		<ReferencePath>
+		<AssemblySearchPaths>
 			C:\I\RWModBuild\1.4\Managed;
-			C:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\;
-			C:\I\games\RimWorld\Mods\Dev\RWLayout\1.4\Assemblies\;
-			C:\I\games\RimWorld\Mods\Dev\PawnTableGrouped_dev\Dependencies\1.4\;
-			$(ReferencePath)
-		</ReferencePath>
+			C:\I\games\RimWorld\Mods\dev\PawnTableGrouped_dev\Dependencies\1.4\;
+			$(AssemblySearchPaths)
+		</AssemblySearchPaths>
 	</PropertyGroup>
 </Project>

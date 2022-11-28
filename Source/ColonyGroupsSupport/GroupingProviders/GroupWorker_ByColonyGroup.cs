@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Verse;
 using TacticalGroups;
 using RimWorld;
+using System.Collections;
 
 namespace PawnTableGrouped
 {
@@ -41,7 +42,7 @@ namespace PawnTableGrouped
             return "";
         }
 
-        public override IEnumerable<PawnTableGroup> CreateGroups(Verse.WeakReference<PawnTable> table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
+        public override IEnumerable<PawnTableGroup> CreateGroups(PawnTableWrapper table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
         {
             if (!ColonyGroupsBridge.Instance.IsActive)
             {
@@ -71,5 +72,7 @@ namespace PawnTableGrouped
                 yield return new PawnTableGroup(table, "Ungrouped", null, defaultPawnSort(pawnsPreservingOrder), columnResolvers);
             }
         }
+
+
     }
 }

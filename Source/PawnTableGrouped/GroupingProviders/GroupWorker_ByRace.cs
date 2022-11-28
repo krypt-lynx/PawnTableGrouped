@@ -13,7 +13,7 @@ namespace PawnTableGrouped
         {
             public bool Equals(Pawn x, Pawn y)
             {
-                return x.kindDef.race.Equals(x.kindDef.race);
+                return x.kindDef.race.Equals(y.kindDef.race);
             }
 
             public int GetHashCode(Pawn obj)
@@ -29,9 +29,6 @@ namespace PawnTableGrouped
                 return Math.Sign(y.KeyPawn.kindDef.race.race.baseBodySize - x.KeyPawn.kindDef.race.race.baseBodySize);
             }
         }
-
-        public override IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
-        public override IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
 
         public GroupWorker_ByRace()
         {

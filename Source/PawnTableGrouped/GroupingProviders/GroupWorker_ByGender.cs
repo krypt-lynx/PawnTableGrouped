@@ -13,7 +13,7 @@ namespace PawnTableGrouped
         {
             public bool Equals(Pawn x, Pawn y)
             {
-                return x.gender.Equals(x.gender);
+                return x.gender.Equals(y.gender);
             }
 
             public int GetHashCode(Pawn obj)
@@ -29,9 +29,6 @@ namespace PawnTableGrouped
                 return Math.Sign((int)y.KeyPawn.gender - (int)x.KeyPawn.gender);
             }
         }
-
-        public override IEqualityComparer<Pawn> GroupingEqualityComparer { get; protected set; }
-        public override IComparer<PawnTableGroup> GroupsSortingComparer { get; protected set; }
 
         public GroupWorker_ByGender()
         {

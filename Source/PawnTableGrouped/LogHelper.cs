@@ -48,7 +48,7 @@ namespace PawnTableGrouped
 
         public static string BuildExceptionMessage(string message, Exception e)
         {
-            var result = $"{message}: {e.GetType().Name}: {e.Message}\n";
+            var result = $"{message}:\n{e.GetType().Name}: {e.Message}\n";
             if (e.InnerException != null)
             {
                 result += BuildExceptionMessage("Inner Exception", e.InnerException);
