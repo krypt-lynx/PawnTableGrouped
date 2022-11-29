@@ -1,6 +1,9 @@
+2.1.1
+* GUI scale fix for modified Work Tab vertical labels 
+
 2.1.0
 + Select all pawns in the group: right click to select, shift + right click to add to selection
-* Work Tab appearance changes to increase visual clarity
+* Changes in Work Tab appearance to increase visual clarity
 * Animal Tab compatibility regression fixed
 
 2.0.2
