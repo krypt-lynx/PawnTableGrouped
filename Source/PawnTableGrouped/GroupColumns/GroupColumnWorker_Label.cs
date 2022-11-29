@@ -14,7 +14,7 @@ namespace PawnTableGrouped
     {
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
-            if (column.IsUniform())
+            if (column.IsUniformCached())
             {
                 var pawn = GetRepresentingPawn(column.Group.Pawns);
 

@@ -15,7 +15,7 @@ namespace PawnTableGrouped
     {
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
-            if (!column.IsUniform())
+            if (!column.IsUniformCached())
             {
                 GuiTools.PushColor(Metrics.GroupHeaderOpacityColor);
                 DoMixedValuesIcon(rect);
@@ -23,7 +23,7 @@ namespace PawnTableGrouped
             } 
             else
             {
-                var value = ((MechWorkModeDef)column.GetGroupValue())?.LabelCap;
+                var value = ((MechWorkModeDef)column.GetGroupValueCached())?.LabelCap;
                 if (value != null)
                 {
                     // todo: menu with work options to switch

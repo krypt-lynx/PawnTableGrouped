@@ -46,14 +46,14 @@ namespace PawnTableGrouped
             return Group.IsInteractive(columnIndex);
         }
 
-        public bool IsVisible()
+        public bool IsVisibleCached()
         {
-            return Group.IsVisible(columnIndex);
+            return Group.IsVisibleCached(columnIndex);
         }
 
-        public bool IsUniform()
+        public bool IsUniformCached()
         {
-            return Group.IsUniform(columnIndex);
+            return Group.IsUniformCached(columnIndex);
         }
 
         public void NotifyValueChanged()
@@ -61,9 +61,9 @@ namespace PawnTableGrouped
             Group.NotifyValueChanged();
         }
 
-        public object GetGroupValue()
+        public object GetGroupValueCached()
         {
-            return Group.GetGroupValue(columnIndex);
+            return Group.GetGroupValueCached(columnIndex);
         }
 
         public void SetGroupValue(object value)
@@ -96,10 +96,13 @@ namespace PawnTableGrouped
         public TaggedString title = null;
 
         public List<GroupColumnWorker> ColumnResolvers = null;
-        private List<bool> columnsIsUniform = new List<bool>();
-        private List<object> columnValues = new List<object>();
-        private List<bool> columnVisible = new List<bool>();
+        private bool[] columnsIsUniform;
+        private bool[] columnIsCached;
+        private object[] columnValues;
+        private bool[] columnVisible;
+        private bool[] columnIsStaticVisible;
         private List<PawnTableGroupColumn> columns;
+
 
         public TaggedString Title { get => title; }
         public string Key { get; set; }
@@ -123,8 +126,22 @@ namespace PawnTableGrouped
             ColumnResolvers = columnResolvers;
             Pawns = pawns.ToList();
             columns = columnResolvers.Select((r, i) => new PawnTableGroupColumn(this, i)).ToList();
+
             this.title = title + $" ({(countInfoGenerator ?? PawnsCountString).Invoke()})";
-            RecacheValues();
+            InitArrays();
+            UpdateIsVisible();
+        }
+
+        private void UpdateIsVisible()
+        {
+            for (int i = 0; i < ColumnResolvers.Count; i++)
+            {
+                if (ColumnResolvers[i].IsStaticVisible())
+                {
+                    columnIsStaticVisible[i] = true;
+                    columnVisible[i] = ColumnResolvers[i]?.IsGroupVisible(Pawns) ?? false;
+                }
+            }                
         }
 
         TaggedString PawnsCountString()
@@ -142,45 +159,55 @@ namespace PawnTableGrouped
             return ColumnResolvers[columnIndex]?.CanSetValues() ?? false;
         }
 
-        public bool IsVisible(int columnIndex)
+        public bool IsVisibleCached(int columnIndex)
         {
+            if (!columnIsStaticVisible[columnIndex])
+            {
+                UpdateColumnIfNeeded(columnIndex);
+            }                
             return columnVisible[columnIndex];
         }
 
-        private void RecacheValues()
+        void InitArrays()
         {
-            if (Mod.Settings.disableGroupCells)
+            columnIsCached = new bool[ColumnResolvers.Count];
+            columnsIsUniform = new bool[ColumnResolvers.Count];
+            columnValues = new object[ColumnResolvers.Count];
+            columnVisible = new bool[ColumnResolvers.Count];
+            columnIsStaticVisible = new bool[ColumnResolvers.Count];
+        }
+
+        private void ResetCache()
+        {
+            Array.Fill(columnIsCached, false);
+        }
+
+        private void UpdateColumnIfNeeded(int columnIndex) // todo: optimize
+        {
+            if (!columnIsCached[columnIndex])
             {
-                return;
-            }
-
-            columnsIsUniform.Clear();
-            columnValues.Clear();
-            columnVisible.Clear();
-
-            for (int i = 0; i < ColumnResolvers.Count; i++)
-            {
-                var uniform = ColumnResolvers[i]?.IsUniform(Pawns) ?? true;
-                var value = uniform ? ColumnResolvers[i]?.GetGroupValue(Pawns) : ColumnResolvers[i]?.DefaultValue(Pawns);
-                var visible = ColumnResolvers[i]?.IsGroupVisible(Pawns) ?? false;
-
-                columnsIsUniform.Add(uniform);
-                columnValues.Add(value);
-                columnVisible.Add(visible);
+                columnIsCached[columnIndex] = true;
+                var uniform = ColumnResolvers[columnIndex]?.IsUniform(Pawns) ?? true;
+                columnsIsUniform[columnIndex] = uniform;
+                columnValues[columnIndex] = uniform ? ColumnResolvers[columnIndex]?.GetGroupValue(Pawns) : ColumnResolvers[columnIndex]?.DefaultValue(Pawns);
+                columnVisible[columnIndex] = ColumnResolvers[columnIndex]?.IsGroupVisible(Pawns) ?? false;
             }
         }
 
-        public bool IsUniform(int columnIndex) {
+        public bool IsUniformCached(int columnIndex)
+        {
+            UpdateColumnIfNeeded(columnIndex);
             return columnsIsUniform[columnIndex]; 
         }
 
         public void NotifyValueChanged()
         {
-            RecacheValues();
+            ResetCache();
         }
 
-        public object GetGroupValue(int columnIndex)
+        public object GetGroupValueCached(int columnIndex)
         {
+            UpdateColumnIfNeeded(columnIndex);
             return columnValues[columnIndex];
         }
 
@@ -193,7 +220,7 @@ namespace PawnTableGrouped
             }
 
             resolver.SetGroupValue(Pawns, value, Table);
-            RecacheValues();
+            columnIsCached[columnIndex] = false;
         }
 
         public object GetDefaultValue(int columnIndex)
@@ -208,6 +235,7 @@ namespace PawnTableGrouped
 
         internal void SetDirty()
         {
+            ResetCache();
             Table.SetDirty();
         }
     }

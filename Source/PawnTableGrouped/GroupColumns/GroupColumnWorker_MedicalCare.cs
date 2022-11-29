@@ -30,14 +30,14 @@ namespace PawnTableGrouped
         {
             GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
 
-            if (!column.IsUniform())
+            if (!column.IsUniformCached())
             {
                 DoMixedValuesWidget(rect, column); // todo:  Widgets.Dropdown, but need a texture
             }
             else
             {
 
-                Widgets.Dropdown(rect, column, (c) => (MedicalCareCategory)c.GetGroupValue(), (c) => MedicalCareSelectButton_GenerateMenu(c), null, careTextures[(int)(MedicalCareCategory)column.GetGroupValue()], null, null, null, true); // it throws an exception because of the array, I think?
+                Widgets.Dropdown(rect, column, (c) => (MedicalCareCategory)c.GetGroupValueCached(), (c) => MedicalCareSelectButton_GenerateMenu(c), null, careTextures[(int)(MedicalCareCategory)column.GetGroupValueCached()], null, null, null, true); // it throws an exception because of the array, I think?
             }
 
             GuiTools.PopColor();

@@ -45,28 +45,16 @@
 			<li>
 				<columnWorkerType>PawnColumnWorker_WorkPriority</columnWorkerType>
 				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
-			</li>
-				<!-- 
+			</li>			
+			<!-- Work Tab -->
 			<li>
-				<!- - Work Tab - ->
 				<columnWorkerType>WorkTab.PawnColumnWorker_WorkType</columnWorkerType> 
-				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
-				<workerConfig Class="PawnTableGrouped.GCW_WorkPriority_Config">
-					<prioritiesCount>10</prioritiesCount>
-					<defaultPriority>3</defaultPriority>
-					<priorityColorMethod>WorkTab.DrawUtilities:ColorOfPriority</priorityColorMethod>
-				</workerConfig>
+				<groupWorkerType>PawnTableGrouped.WorkTab.GroupColumnWorker_WorkPriority</groupWorkerType>
 			</li>
 			<li>
 				<columnWorkerType>WorkTab.PawnColumnWorker_WorkGiver</columnWorkerType>
-				<groupWorkerType>PawnTableGrouped.GroupColumnWorker_WorkPriority</groupWorkerType>
-				<workerConfig Class="PawnTableGrouped.GCW_WorkPriority_Config">
-					<prioritiesCount>10</prioritiesCount>
-					<defaultPriority>3</defaultPriority>
-					<priorityColorMethod>WorkTab.DrawUtilities:ColorOfPriority</priorityColorMethod>
-				</workerConfig>
+				<groupWorkerType>PawnTableGrouped.WorkTab.GroupColumnWorker_WorkGiver</groupWorkerType>
 			</li>
-				-->
 			<!-- allowed area -->
 			<li>
 				<columnWorkerType>PawnColumnWorker_AllowedArea</columnWorkerType>

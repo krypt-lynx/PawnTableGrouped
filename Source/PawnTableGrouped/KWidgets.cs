@@ -102,9 +102,9 @@ namespace PawnTableGrouped
 			rect2.yMin += 2f;
 			Widgets.Label(rect2, text);
 
-			var currentArea = ((AreaData)column.GetGroupValue()).Area;
-			var isUniform = column.IsUniform();
-			if (column.IsUniform())
+			var currentArea = ((AreaData)column.GetGroupValueCached()).Area;
+			var isUniform = column.IsUniformCached();
+			if (column.IsUniformCached())
             {
 				if (currentArea == area)
 				{

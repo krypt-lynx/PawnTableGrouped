@@ -1,3 +1,8 @@
+2.2.0
++ WorkTab group header cells are back
+* Not drawing invisible table parts anymore
+- Known issue: table can catch events ouside of table area
+
 2.1.1
 * GUI scale fix for modified Work Tab vertical labels 
 

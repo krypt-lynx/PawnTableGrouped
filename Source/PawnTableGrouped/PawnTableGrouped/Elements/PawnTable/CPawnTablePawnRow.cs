@@ -18,18 +18,12 @@ namespace PawnTableGrouped
         private Pawn pawn;
         private LookTargets target;
 
-        private object[] oldValues;
-
-        bool needUpdateSectionHeader = false;
-
         public CPawnTablePawnRow(PawnTable table, PawnTableGroup group, Pawn pawn)
         {
             this.table = table;
             this.group = group;
             this.pawn = pawn;
             target = new LookTargets(pawn);
-
-            oldValues = new object[group.ColumnResolvers.Count];
         }
 
         public bool CanCombineWith(ICTableGridRow other, int columnIndex)
@@ -61,7 +55,6 @@ namespace PawnTableGrouped
                 target.Highlight(true, pawn.IsColonist, false);
             }
 #endif
-            needUpdateSectionHeader = false;
         }
 
         public void DoCell(Rect rect, int columnIndex, bool hightlighted, bool combined)
@@ -90,22 +83,6 @@ namespace PawnTableGrouped
                 target.Highlight(true, pawn.IsColonist, false);
             }
 #endif
-
-            if (!Mod.Settings.disableGroupCells) // todo: check if dummy
-            {
-                object cellValue = group.GetValue(columnIndex, pawn);
-
-                if (!object.Equals(cellValue, oldValues[columnIndex]))
-                {
-                    oldValues[columnIndex] = cellValue;
-                    needUpdateSectionHeader = true;
-                }
-            }
-
-            //GuiTools.PushColor(Color.green);
-            //GuiTools.Box(rect, EdgeInsets.One);
-            //Widgets.Label(rect, columnIndex.ToString());
-            //GuiTools.PopColor();
         }
 
         public void DoOverlay(Rect rect)
@@ -116,11 +93,6 @@ namespace PawnTableGrouped
             {
                 GUI.color = new Color(1f, 0f, 0f, 0.5f);
                 Widgets.DrawLineHorizontal(rect.xMin, rect.center.y, rect.width);
-            }
-
-            if (needUpdateSectionHeader)
-            {
-                group.NotifyValueChanged(); // todo: section header uodate in the same frame
             }
         }
 

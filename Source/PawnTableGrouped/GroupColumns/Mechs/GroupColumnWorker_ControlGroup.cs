@@ -17,10 +17,10 @@ namespace PawnTableGrouped
             rect.yMin += 5;
             Widgets.Dropdown(rect, column, (c) =>
             {
-                return (MechanitorControlGroup)(c.IsUniform() ? c.GetGroupValue() : c.GetDefaultValue());
+                return (MechanitorControlGroup)(c.IsUniformCached() ? c.GetGroupValueCached() : c.GetDefaultValue());
             },
             Button_GenerateGroupMenu,
-            column.IsUniform() ? ((MechanitorControlGroup)column.GetGroupValue()).Index.ToString() : "mixed",
+            column.IsUniformCached() ? ((MechanitorControlGroup)column.GetGroupValueCached()).Index.ToString() : "mixed",
             paintable: true);
 
           
@@ -47,7 +47,7 @@ namespace PawnTableGrouped
 
             tmpControlGroups.Clear();
             tmpControlGroups.AddRange(overseers.First().mechanitor.controlGroups);
-            var currentControlGroup = column.IsUniform() ? (MechanitorControlGroup)column.GetGroupValue() : null;
+            var currentControlGroup = column.IsUniformCached() ? (MechanitorControlGroup)column.GetGroupValueCached() : null;
 
             for (int i = 0; i < tmpControlGroups.Count; i++)
             {
@@ -96,7 +96,7 @@ namespace PawnTableGrouped
                 {
                     yield return new Widgets.DropdownMenuElement<MechanitorControlGroup>
                     {
-                        option = new FloatMenuOption("CannotAssignMechToControlGroup".Translate(localControlGroup.LabelIndexWithWorkMode) + ": " + "AssignMechAlreadyAssigned".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                        option = new FloatMenuOption("CannotAssignMechToControlGroup".Translate(localControlGroup.LabelIndexWithWorkMode) + ": " + "AssignMechAlreadyAssigned".Translate(), null),
                         payload = localControlGroup
                     };
                 }
@@ -104,16 +104,18 @@ namespace PawnTableGrouped
                 {
                     yield return new Widgets.DropdownMenuElement<MechanitorControlGroup>
                     {
-                        option = new FloatMenuOption("AssignMechToControlGroup".Translate(localControlGroup.LabelIndexWithWorkMode), delegate ()
-                        {
-                            localControlGroup.Assign(pawn);
-                        }, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0),
+                        option = new FloatMenuOption(
+                            "AssignMechToControlGroup".Translate(localControlGroup.LabelIndexWithWorkMode),
+                            () => {
+                                localControlGroup.Assign(pawn);
+                            }),
                         payload = localControlGroup
                     };
                 }
             }
             tmpControlGroups.Clear();
         }
+
         public override bool IsVisible(Pawn pawn)
         {
             return !pawn.IsGestating() && pawn.GetOverseer() != null;

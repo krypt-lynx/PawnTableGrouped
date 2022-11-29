@@ -26,7 +26,7 @@ namespace PawnTableGrouped
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
             GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
-            if (!column.IsUniform())
+            if (!column.IsUniformCached())
             {
                 DoMixedValuesWidget(rect, column);
             }

@@ -43,6 +43,7 @@ namespace PawnTableGrouped
         public void DoBackground(Rect rect) {
             host.InRect = rect;
             host.UpdateLayoutIfNeeded();
+            group.NotifyValueChanged();
         }
 
         public void DoCell(Rect rect, int columnIndex, bool hightlighted, bool combined)
@@ -54,7 +55,7 @@ namespace PawnTableGrouped
 
             var resolver = group.ColumnResolvers[columnIndex];
 
-            if (resolver != null && group.IsVisible(columnIndex))
+            if (resolver != null && group.IsVisibleCached(columnIndex))
             {
                 if (!resolver.IsDummy() && resolver.HealthCheck)
                 {

@@ -11,6 +11,7 @@ using UnityEngine;
 using Verse;
 using PawnTableGrouped.TableGrid.Collections;
 using PawnTableGrouped.TableGrid;
+using System.Runtime.CompilerServices;
 
 namespace PawnTableGrouped
 {
@@ -94,6 +95,13 @@ namespace PawnTableGrouped
         float hScrollPosition = 0;
         float vScrollPosition = 0;
 
+        // todo: expose in rwlayout
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static float GUIScale(float value)
+        {
+            var scale = Prefs.UIScale;
+            return ((int)(value * scale)) / scale;
+        }
 
         public override void PostLayoutUpdate()
         {
@@ -110,50 +118,50 @@ namespace PawnTableGrouped
                 return;
             }
 
-            hScrollVisible = allowHScroll && (Columns.TotalSize() > Bounds.width - vBarWidth);
+            hScrollVisible = allowHScroll && GUIScale(Columns.TotalSize()) > GUIScale(BoundsRounded.width - vBarWidth);
             var hScrollHeight = hScrollVisible ? hBarHeight : 0;
 
-            vScrollVisible = Sections.TotalSize() > Bounds.height - hScrollHeight;
+            vScrollVisible = GUIScale(Sections.TotalSize()) > GUIScale(BoundsRounded.height - hScrollHeight);
             var vScrollWidth = vBarWidth;
 
             fixedWidth = Columns.IntegralSizeOf(1);
             fixedHeight = Sections[0].IntegralSizeOf(1);
 
-            scrollOuterWidth = Bounds.width - fixedWidth - vScrollWidth;
-            scrollOuterHeight = Bounds.height - fixedHeight - hScrollHeight;
+            scrollOuterWidth = BoundsRounded.width - fixedWidth - vScrollWidth;
+            scrollOuterHeight = BoundsRounded.height - fixedHeight - hScrollHeight;
 
             if (vScrollVisible)
             {
                 vScrollRect = Rect.MinMaxRect(
-                    Bounds.xMax - vBarWidth,
-                    Bounds.yMin + fixedHeight,
-                    Bounds.xMax,
-                    Bounds.yMax - hScrollHeight);
+                    BoundsRounded.xMax - vBarWidth,
+                    BoundsRounded.yMin + fixedHeight,
+                    BoundsRounded.xMax,
+                    BoundsRounded.yMax - hScrollHeight);
             }
 
             if (hScrollVisible)
             {
                 hScrollRect = Rect.MinMaxRect(
-                    Bounds.xMin + fixedWidth,
-                    Bounds.yMax - hBarHeight,
-                    Bounds.xMax - vScrollWidth,
-                    Bounds.yMax);
+                    BoundsRounded.xMin + fixedWidth,
+                    BoundsRounded.yMax - hBarHeight,
+                    BoundsRounded.xMax - vScrollWidth,
+                    BoundsRounded.yMax);
             }
 
-            fixedPanelRect = new Rect(Bounds.xMin, Bounds.yMin, fixedWidth, fixedHeight);
-            columnsPanelRect = new Rect(Bounds.xMin + fixedWidth, Bounds.yMin, scrollOuterWidth, fixedHeight);
+            fixedPanelRect = new Rect(BoundsRounded.xMin, BoundsRounded.yMin, fixedWidth, fixedHeight).GUIRounded();
+            columnsPanelRect = new Rect(BoundsRounded.xMin + fixedWidth, BoundsRounded.yMin, scrollOuterWidth, fixedHeight).GUIRounded();
 
-            tableBodyOuterRect = new Rect(Bounds.xMin, Bounds.yMin + fixedHeight, fixedWidth + scrollOuterWidth, scrollOuterHeight);
+            tableBodyOuterRect = new Rect(BoundsRounded.xMin, BoundsRounded.yMin + fixedHeight, fixedWidth + scrollOuterWidth, scrollOuterHeight).GUIRounded();
 
-            namesPanelRect = new Rect(0, fixedHeight, fixedWidth, scrollOuterHeight);
-            namesPanelRect = new Rect(0, 0, fixedWidth, scrollOuterHeight);
+            namesPanelRect = new Rect(0, fixedHeight, fixedWidth, scrollOuterHeight).GUIRounded();
+            namesPanelRect = new Rect(0, 0, fixedWidth, scrollOuterHeight).GUIRounded();
 
-            hScrollZoneRect = Rect.MinMaxRect(Bounds.xMin, Bounds.yMin, Bounds.xMax, Bounds.yMin + fixedHeight);
+            hScrollZoneRect = Rect.MinMaxRect(BoundsRounded.xMin, BoundsRounded.yMin, BoundsRounded.xMax, BoundsRounded.yMin + fixedHeight).GUIRounded();
 
             scrollInnerWidth = Columns.TotalSize() - fixedWidth;
             scrollInnerHeight = Sections.TotalSize() - fixedHeight;
 
-            scrollOuterRectClipped = new Rect(fixedWidth, 0, scrollOuterWidth, scrollOuterHeight);
+            scrollOuterRectClipped = new Rect(fixedWidth, 0, scrollOuterWidth, scrollOuterHeight).GUIRounded();
 
             vScrollMax = scrollInnerHeight - scrollOuterHeight;
             hScrollMax = scrollInnerWidth - scrollOuterWidth;
@@ -163,7 +171,27 @@ namespace PawnTableGrouped
         int controlID = 0;
         private void ScrollBegin()
         {            
-            controlID = GUIUtility.GetControlID(pawnTableScrollHash, FocusType.Passive, Bounds);            
+            controlID = GUIUtility.GetControlID(pawnTableScrollHash, FocusType.Passive, BoundsRounded);
+
+            EventType typeForControl = Event.current.GetTypeForControl(controlID);
+
+            if (typeForControl == EventType.ScrollWheel)
+            {
+                GUIUtility.hotControl = controlID;
+
+                var delta = Event.current.delta * 20;
+                if (hScrollVisible && hScrollRect.Contains(Event.current.mousePosition))
+                {
+                    hScrollPosition = Mathf.Clamp(hScrollPosition + delta.y, 0, hScrollMax);
+                    Event.current.Use();
+                }
+                else if (vScrollVisible && vScrollRect.Contains(Event.current.mousePosition))
+                {
+                    vScrollPosition = Mathf.Clamp(vScrollPosition + delta.y, 0, vScrollMax);
+                    Event.current.Use();
+                }
+
+            }
         }
 
         private void ScrollEnd()
@@ -184,12 +212,11 @@ namespace PawnTableGrouped
                 {
                     vScrollPosition = Mathf.Clamp(vScrollPosition + delta.y, 0, vScrollMax);
                 }
-                else if (hScrollZoneRect.Contains(Event.current.mousePosition) ||
-                    (hScrollVisible && hScrollRect.Contains(Event.current.mousePosition)))
+                else if (hScrollZoneRect.Contains(Event.current.mousePosition))
                 {
                     hScrollPosition = Mathf.Clamp(hScrollPosition + delta.y, 0, hScrollMax);
                 }
-                else
+                else if (BoundsRounded.Contains(Event.current.mousePosition))
                 {
                     hScrollPosition = Mathf.Clamp(hScrollPosition + delta.x, 0, hScrollMax);
                     vScrollPosition = Mathf.Clamp(vScrollPosition + delta.y, 0, vScrollMax);
@@ -287,7 +314,7 @@ namespace PawnTableGrouped
             GUI.BeginGroup(columnsPanelRect);
 
             var minX = 0;
-            var maxX = columnsPanelRect.width;
+            var maxX = scrollOuterWidth;
 
             var visibleRect = new Rect(0, 0, scrollOuterWidth, fixedHeight);
 
@@ -301,8 +328,8 @@ namespace PawnTableGrouped
             {
 
                 var offsetX = hScrollPosition + fixedWidth;
-                var cellXMin = Columns.IntegralSizeOf(columnIndex) - offsetX;
-                var cellXMax = Columns.IntegralSizeOf(columnIndex + 1) - offsetX;
+                var cellXMin = GUIScale(Columns.IntegralSizeOf(columnIndex) - offsetX);
+                var cellXMax = GUIScale(Columns.IntegralSizeOf(columnIndex + 1) - offsetX);
 
                 var column = Columns[columnIndex];
                 var columnRect = Rect.MinMaxRect(cellXMin, 0, cellXMax, fixedHeight);
@@ -327,7 +354,7 @@ namespace PawnTableGrouped
         private void DoGridBackground(ref int highlightedSectionIndex, ref int highlightedRowIndex)
         {
             var minY = 0;
-            var maxY = scrollInnerHeight;
+            var maxY = scrollOuterHeight;
             var offsetY = fixedHeight + vScrollPosition;
 
             for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)
@@ -370,7 +397,7 @@ namespace PawnTableGrouped
             GUI.BeginGroup(namesPanelRect);
 
             var minY = 0;
-            var maxY = scrollInnerHeight;
+            var maxY = scrollOuterHeight;
 
             var offsetY = fixedHeight + vScrollPosition;
 
@@ -418,20 +445,22 @@ namespace PawnTableGrouped
 
             var minX = 0;
             var minY = 0;
-            var maxX = columnsPanelRect.width;
-            var maxY = scrollInnerHeight;
+            var maxX = GUIScale(scrollOuterWidth);
+            var maxY = GUIScale(scrollOuterHeight);
 
-            var offsetY = vScrollPosition + fixedHeight;
             var offsetX = hScrollPosition + fixedWidth;
+            var offsetY = vScrollPosition + fixedHeight;
 
             var visibleRect = new Rect(0, 0, scrollOuterWidth, scrollOuterHeight);
+
+            int rowsDrawn = 0;
 
             // enumeration sections
             for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)
             {
                 var section = Sections[sectionIndex];
-                var sectionYMin = Sections.IntegralSizeOf(sectionIndex) - offsetY;
-                var sectionYMax = Sections.IntegralSizeOf(sectionIndex + 1) - offsetY;
+                var sectionYMin = GUIScale(Sections.IntegralSizeOf(sectionIndex) - offsetY);
+                var sectionYMax = GUIScale(Sections.IntegralSizeOf(sectionIndex + 1) - offsetY);
 
                 // if section is visible
                 if (sectionYMin < maxY &&
@@ -444,8 +473,8 @@ namespace PawnTableGrouped
                     // enumerating columns
                     for (int columnIndex = 1; columnIndex < Columns.Count; columnIndex++)
                     {
-                        var cellXMin = Columns.IntegralSizeOf(columnIndex) - offsetX;
-                        var cellXMax = Columns.IntegralSizeOf(columnIndex + 1) - offsetX;
+                        var cellXMin = GUIScale(Columns.IntegralSizeOf(columnIndex) - offsetX);
+                        var cellXMax = GUIScale(Columns.IntegralSizeOf(columnIndex + 1) - offsetX);
                         
                         // is column visible
                         if (cellXMin < maxX &&
@@ -514,6 +543,7 @@ namespace PawnTableGrouped
                                             columnIndex,
                                             highlightedSectionIndex == sectionIndex && highlightedRowIndex == rowIndex,
                                             false);
+                                        rowsDrawn++;
                                     }
                                 }
                             }
@@ -526,6 +556,7 @@ namespace PawnTableGrouped
                 }
             }
 
+            $"rows drawn: {rowsDrawn}".Log();
 
             GUI.EndGroup();
         }
@@ -533,7 +564,7 @@ namespace PawnTableGrouped
         private void DoGridOverlays()
         {
             var minY = 0;
-            var maxY = scrollInnerHeight;
+            var maxY = scrollOuterHeight;
             var offsetY = fixedHeight + vScrollPosition;
 
             for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)

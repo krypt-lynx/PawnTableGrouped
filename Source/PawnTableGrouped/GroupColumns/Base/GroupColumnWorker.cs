@@ -76,17 +76,15 @@ namespace PawnTableGrouped
 				}
 			}
 		}
-
 		public virtual void CopyToGroup(Pawn pawn, IEnumerable<Pawn> pawns, PawnTable table)
         {
 			var value = GetValue(pawn);
 			SetGroupValue(pawns, value, table);
         }
 
-		public virtual bool IsVisible(Pawn pawn)
-        {
-			return true;
-        }
+		public virtual bool IsVisible(Pawn pawn) => true;
+
+		public virtual bool IsStaticVisible() => false;
 
 		public virtual bool IsGroupVisible(IEnumerable<Pawn> pawns)
         {

@@ -24,7 +24,7 @@ namespace PawnTableGrouped
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
             GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
-            if (!column.IsUniform())
+            if (!column.IsUniformCached())
             {
                 int dx = (int)((rect.width - 24f) / 2f);
                 int dy = 3;
@@ -41,7 +41,7 @@ namespace PawnTableGrouped
             }
             else
             {
-                var value = (bool)column.GetGroupValue();
+                var value = (bool)column.GetGroupValueCached();
 
                 int dx = (int)((rect.width - 24f) / 2f);
                 int dy = 3;

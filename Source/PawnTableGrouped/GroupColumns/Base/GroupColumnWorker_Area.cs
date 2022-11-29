@@ -55,7 +55,7 @@ namespace PawnTableGrouped
         {
             GuiTools.PushColor(Mouse.IsOver(rect) ? Color.white : Metrics.GroupHeaderOpacityColor);
             //#if rw_1_2_or_earlier
-            switch (((AreaData)column.GetGroupValue()).Type)
+            switch (((AreaData)column.GetGroupValueCached()).Type)
             {
                 case AreaData.DataType.Area:
                     KWidgets.DoAllowedAreaSelectors(rect, column, GetAreaLabel);
