@@ -1,7 +1,12 @@
+2.1.0
++ Select all pawns in the group: right click to select, shift + right click to add to selection
+* Work Tab appearance changes to increase visual clarity
+* Animal Tab compatibility regression fixed
+
 2.0.2
-* WorkTab crash on first appearence if time bar is visible fixed
+* WorkTab crash on first display if time bar is visible fixed
 * Invalid wheel scroll limits fixed
-* Timely table updates (clock on column header will change sorting immideately)
+* Timely table updates (click on column header will change sorting immediately)
 
 2.0.1
 * accidental strong dependency on WorkTab removed

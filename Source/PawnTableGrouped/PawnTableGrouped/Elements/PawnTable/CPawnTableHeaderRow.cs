@@ -33,25 +33,19 @@ namespace PawnTableGrouped
                 rect = rect.ContractedBy(new EdgeInsets(0, 0, 0, Metrics.TableLeftMargin));
             }
 
-            if (NumbersBridge.IsNumbersTable(model.Table))
+            if (KnownMods.Numbers.IsNumbersTable(model.Table))
             {
-                NumbersBridge.CallReorderableWidget(model.NumbersMagic, rect);
+                KnownMods.Numbers.CallReorderableWidget(model.NumbersMagic, rect);
             }
 
-            model.Table.Columns[columnIndex].Worker.DoHeader(rect, model.Table);
-
-
-            //GuiTools.PushColor(Color.yellow);
-            //GuiTools.Box(rect, EdgeInsets.One);
-            //Widgets.Label(rect, columnIndex.ToString());
-            //GuiTools.PopColor();
+            model.Table.Columns()[columnIndex].Worker.DoHeader(rect, model.Table);
         }
 
         public void DoOverlay(Rect rect) { }
 
         public float GetRowHeight()
         {
-            return model.Table.cachedHeaderHeight;
+            return model.Table.GetCachedHeaderHeight();
 
         }
     }    

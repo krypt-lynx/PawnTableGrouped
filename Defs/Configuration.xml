@@ -265,4 +265,20 @@
 			</li>
 		</tables>
 	</PawnTableGrouped.CompatibilityInfoDef>
+	
+	<PawnTableGrouped.CompatibilityInfoDef>
+		<defName>fluffy_animaltab</defName>
+		<packageId>fluffy.animaltab</packageId>
+		<modName>Animal Tab</modName>
+		<tables>
+			<li>
+				<name>Animals</name>
+				<compatibility>Supported</compatibility>
+				<defaultGrouping>race</defaultGrouping>
+				<config>
+					<footerBtnOffset>40</footerBtnOffset>
+				</config>
+			</li>
+		</tables>
+	</PawnTableGrouped.CompatibilityInfoDef>	
 </Defs>

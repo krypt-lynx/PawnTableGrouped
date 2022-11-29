@@ -27,10 +27,16 @@ namespace PawnTableGrouped
     public class WorkTabBridge : ModBridge<WorkTabBridge>, IWorkTabBridge
     {
         Harmony harmony = null;
+
         MethodInfo PawnTable_PawnTableOnGUI_prefix = null;
         MethodInfo PawnTable_RecacheIfDirty_prefix = null;
         MethodInfo PawnTable_RecacheIfDirty_postfix = null;
-        
+
+        public Type WorkTypeWorkerType { get; private set; } = null;
+        public Type WorkGiverWorkerType { get; private set; } = null;
+
+        Getter<MainTabWindow_WorkTab, bool>  _anyExpanded = null;
+
         const string workTabHarmonyId = "fluffy.worktab";
         internal const string WorkTabDefName = "Work";
 
@@ -115,6 +121,19 @@ namespace PawnTableGrouped
             }
         }
 
+        public bool IsWorkTabWindow(MainTabWindow_PawnTable window)
+        {
+            return window is MainTabWindow_WorkTab;
+        }
+
+        public bool Expanded(MainTabWindow_PawnTable window)
+        {
+            if (window is MainTabWindow_WorkTab workTabWindow) {
+                return _anyExpanded(workTabWindow);
+            }
+            return false;
+        }
+
         delegate bool PawnTable_PawnTableOnGUI_Prefix_Delegate(PawnTable arg1, Vector2 arg2, PawnTableDef arg3, ref Vector2 arg4);
 
         protected override bool ResolveInternal(Harmony harmony)
@@ -129,6 +148,10 @@ namespace PawnTableGrouped
                 return false;
             }
 
+            _anyExpanded = Dynamic.InstanceGetProperty<MainTabWindow_WorkTab, bool>("AnyExpanded");
+
+            WorkTypeWorkerType = typeof(PawnColumnWorker_WorkType);
+            WorkGiverWorkerType = typeof(PawnColumnWorker_WorkGiver);
             this.harmony = new Harmony(workTabHarmonyId);
 
 
@@ -140,13 +163,16 @@ namespace PawnTableGrouped
 
         public void PatchEnablePTGRender(Harmony harmony)
         {
+            $"WorkTabBridge PatchEnablePTGRender".Log();
             harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"), HarmonyPatchType.Prefix, workTabHarmonyId);
             harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"), HarmonyPatchType.Prefix, workTabHarmonyId);
             harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"), HarmonyPatchType.Postfix, workTabHarmonyId);
+            harmony.Patch(AccessTools.Method(typeof(LabelUtilities), nameof(LabelUtilities.VerticalLabel)), prefix: new HarmonyMethod(typeof(LabelUtilitiesPatches), nameof(LabelUtilitiesPatches.VerticalLabel_prefix)));
         }
 
         private static void PatchEnableLayoutFix(Harmony harmony)
         {
+            $"WorkTabBridge PatchEnableLayoutFix".Log();
             harmony.Patch(AccessTools.Method(typeof(MainTabWindow_WorkTab), nameof(MainTabWindow_WorkTab.RebuildTable)),
                 postfix: new HarmonyMethod(typeof(MainTabWindow_WorkTabPatches), nameof(MainTabWindow_WorkTabPatches.RebuildTable_postfix)));
             harmony.Patch(AccessTools.PropertySetter(typeof(PriorityManager), nameof(PriorityManager.ShowScheduler)),
@@ -157,15 +183,18 @@ namespace PawnTableGrouped
 
         public void PatchEnableWorkTabRender(Harmony harmony)
         {
+            $"WorkTabBridge PatchEnableWorkTabRender".Log();
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
                 prefix: new HarmonyMethod(PawnTable_PawnTableOnGUI_prefix));
             harmony.Patch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"),
                 prefix: new HarmonyMethod(PawnTable_RecacheIfDirty_prefix),
                 postfix: new HarmonyMethod(PawnTable_RecacheIfDirty_postfix));
+            harmony.Unpatch(AccessTools.Method(typeof(LabelUtilities), nameof(LabelUtilities.VerticalLabel)), HarmonyPatchType.Prefix, workTabHarmonyId);
         }
 
         private static void PatchDisableLayoutFix(Harmony harmony)
         {
+            $"WorkTabBridge PatchDisableLayoutFix".Log();
             harmony.Unpatch(AccessTools.Method(typeof(MainTabWindow_WorkTab), nameof(MainTabWindow_WorkTab.RebuildTable)),
                 HarmonyPatchType.Postfix, workTabHarmonyId);
             harmony.Unpatch(AccessTools.PropertySetter(typeof(PriorityManager), nameof(PriorityManager.ShowScheduler)),
@@ -194,7 +223,7 @@ namespace PawnTableGrouped
             _setDirty(MainTabWindow_WorkTab.Instance);
         }
 
-        internal static void SetInitialSizeAndPosition_postfix(MainTabWindow __instance)
+        public static void SetInitialSizeAndPosition_postfix(MainTabWindow __instance)
         {
             if (__instance is MainTabWindow_WorkTab workTab) {
                 if (PriorityManager.ShowScheduler)
@@ -224,6 +253,15 @@ namespace PawnTableGrouped
                     }
                 }
             }
+        }
+    }
+
+    static class LabelUtilitiesPatches
+    {
+        public static bool VerticalLabel_prefix(Rect rect, string text, float margin)
+        {
+            RenderHelper.VerticalLabel(rect, text);
+            return false;
         }
     }
 }

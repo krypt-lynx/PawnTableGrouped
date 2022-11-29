@@ -28,7 +28,7 @@ namespace PawnTableGrouped
             if (Mod.Settings.pawnTablesEnabled.Contains(def.defName))
             {
                 $"Creating table impl for {def.defName}".Log();
-                return new PawnTableGroupedImpl(new PawnTableWrapper(table), def);
+                return new PawnTableGroupedImpl(table, def);
             }
             else
             {
@@ -83,7 +83,7 @@ namespace PawnTableGrouped
         {
             if (PawnTableExtensions.TryGetImplementation(__result, out var impl))
             {
-                impl.SetOwnerWindow(new MainTabWindow_PawnTableWrapper(__instance));
+                impl.SetOwnerWindow(__instance);
             }
         }
 

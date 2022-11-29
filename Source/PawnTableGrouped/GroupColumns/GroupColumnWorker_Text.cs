@@ -60,7 +60,7 @@ namespace PawnTableGrouped
 #if rw_1_4_or_later
                         Text.Anchor = Anchor;
 #else
-                        Text.Anchor = NumbersBridge.IsNumbersTable(table) ? TextAnchor.MiddleCenter : TextAnchor.MiddleLeft;
+                        Text.Anchor = KnownMods.Numbers.IsNumbersTable(table) ? TextAnchor.MiddleCenter : TextAnchor.MiddleLeft;
 #endif
                     }
                     else

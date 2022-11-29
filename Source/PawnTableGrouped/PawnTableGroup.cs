@@ -104,8 +104,8 @@ namespace PawnTableGrouped
         public TaggedString Title { get => title; }
         public string Key { get; set; }
 
-        private PawnTableWrapper table = null;
-        public PawnTable Table => table.Table;
+        private Verse.WeakReference<PawnTable> table = null;
+        public PawnTable Table => table.Target;
 
         public IReadOnlyList<PawnTableGroupColumn> Columns
         {
@@ -115,9 +115,9 @@ namespace PawnTableGrouped
             }
         }
 
-        public PawnTableGroup(PawnTableWrapper table, TaggedString title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers, Func<TaggedString> countInfoGenerator = null)
+        public PawnTableGroup(PawnTable table, TaggedString title, Pawn keyPawn, IEnumerable<Pawn> pawns, List<GroupColumnWorker> columnResolvers, Func<TaggedString> countInfoGenerator = null)
         {
-            this.table = table;
+            this.table = new Verse.WeakReference<PawnTable>(table);
             Key = title.RawText;
             KeyPawn = keyPawn;
             ColumnResolvers = columnResolvers;
@@ -208,7 +208,7 @@ namespace PawnTableGrouped
 
         internal void SetDirty()
         {
-            table.SetDirty();
+            Table.SetDirty();
         }
     }
 }

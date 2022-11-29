@@ -10,9 +10,9 @@ namespace PawnTableGrouped.TableGrid.Collections
     {
         public CTableGridSectionsCollection(ICTableGridDataSource dataSource) : base(dataSource) { }
 
-        protected override CTableGridRowsCollection itemAt(int index) => new CTableGridRowsCollection(DataSource, index);
+        protected override CTableGridRowsCollection itemAt(int index) => new CTableGridRowsCollection(DataSource, DataSource.SectionAt(index));
 
-        protected override int itemsCount() => DataSource.numberOfSections();
+        protected override int itemsCount() => DataSource.NumberOfSections();
 
         protected override float getItemSize(int index) => this[index].TotalSize();
     }

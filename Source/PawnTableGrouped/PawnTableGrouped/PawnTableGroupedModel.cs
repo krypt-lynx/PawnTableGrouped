@@ -15,25 +15,31 @@ namespace PawnTableGrouped
 
     public class PawnTableGroupedModel : IDataOwner
     {
-        public PawnTableWrapper table;
-        public PawnTableWrapper Table => table;
-                
+        private Verse.WeakReference<PawnTable> table;
+        public PawnTable Table => table?.Target;
+        
+        private Verse.WeakReference<MainTabWindow_PawnTable> window;
+        public MainTabWindow_PawnTable Window
+        {
+            get => window?.Target;
+            set => window = new Verse.WeakReference<MainTabWindow_PawnTable>(value);
+        }
+
+
         public PawnTableDef def;
 
         List<GroupColumnWorker> columnResolvers;
 
         public GroupWorker ActiveGrouper;
 
-        public Action OnChanged { get; set; }
         public Action<PawnTableGroupedModel> GroupsStateChanged;
 
         public int NumbersMagic = 0;
 
-        public PawnTableGroupedModel(PawnTableWrapper tableWrapper, PawnTableDef def)
+        public PawnTableGroupedModel(PawnTable table, PawnTableDef def)
         {
-            this.table = tableWrapper;
+            this.table = new Verse.WeakReference<PawnTable>(table);
             this.def = def;
-            this.OnChanged = () => tableWrapper.SetDirty();
 
             columnResolvers = new List<GroupColumnWorker>();
 
@@ -62,7 +68,7 @@ namespace PawnTableGrouped
             if (CompatibilityInfoDef.CurrentTables.TryGetValue(def.defName, out info))
             {
                 TableExtendedArea = info.config?.expandedBottomSpace ?? TableExtendedArea;
-                FotterBtnOffset = info.config?.fotterBtnOffset ?? FotterBtnOffset;
+                FotterBtnOffset = info.config?.footerBtnOffset ?? FotterBtnOffset;
                 AllowHScroll = info.config?.allowHScroll ?? AllowHScroll;
             }
         }
@@ -151,7 +157,7 @@ namespace PawnTableGrouped
         {
             get
             {
-                return table.cachedHeaderHeight;
+                return Table.GetCachedHeaderHeight();
             }
         }
 
@@ -180,7 +186,7 @@ namespace PawnTableGrouped
         public void SwitchExpanded(PawnTableGroup g)
         {
             SetExpanded(g, !IsExpanded(g));
-            OnChanged?.Invoke();
+            SetGUIDirty();
         }
 
         void SetExpanded(PawnTableGroup group, bool expanded, bool updateBtnState = true)
@@ -214,7 +220,7 @@ namespace PawnTableGrouped
                 SetExpanded(group, needToExpand, false);
             }
 
-            OnChanged?.Invoke();
+            SetGUIDirty();
 
             return !needToExpand;
         }
@@ -243,21 +249,21 @@ namespace PawnTableGrouped
         public IEnumerable<Pawn> DefaultPawnSort(IEnumerable<Pawn> pawns)
         {
             tmpSortList.Clear();
-            tmpSortList.AddRange(table.LabelSortFunction(pawns));
-            if (table.sortByColumn != null)
+            tmpSortList.AddRange(Table.LabelSortFunction(pawns));
+            if (Table.GetSortByColumn() != null)
             {
-                if (table.sortDescending)
+                if (Table.GetSortDescending())
                 {
-                    tmpSortList.SortStable(new Func<Pawn, Pawn, int>(table.sortByColumn.Worker.Compare));
+                    tmpSortList.SortStable(new Func<Pawn, Pawn, int>(Table.GetSortByColumn().Worker.Compare));
                 }
                 else
                 {
-                    tmpSortList.SortStable((Pawn a, Pawn b) => table.sortByColumn.Worker.Compare(b, a));
+                    tmpSortList.SortStable((Pawn a, Pawn b) => Table.GetSortByColumn().Worker.Compare(b, a));
                 }
             }
             if (Mod.Settings.usePrimarySortFunction)
             {
-                return table.PrimarySortFunction(tmpSortList);
+                return Table.PrimarySortFunction(tmpSortList);
             }
             else
             {
@@ -268,7 +274,7 @@ namespace PawnTableGrouped
 
         public void RecacheGroups()
         {            
-            Groups = ActiveGrouper.CreateGroups(table, Table.PawnsListForReading, DefaultPawnSort, columnResolvers).ToList();
+            Groups = ActiveGrouper.CreateGroups(Table, Table.PawnsListForReading, DefaultPawnSort, columnResolvers).ToList();
 
             SortGroups();
         }
@@ -289,7 +295,7 @@ namespace PawnTableGrouped
         public void SetGrouper(GroupWorker group)
         {
             ActiveGrouper = group;
-            OnChanged?.Invoke();
+            SetGUIDirty();
         }
 
         public void SetSortingDecending(bool value)
@@ -318,11 +324,22 @@ namespace PawnTableGrouped
 
         #endregion
 
+        public void SetGUIDirty()
+        {
+            if (Window != null)
+            {
+                Window.SetDirty();
+            }
+            else
+            {
+                Table.SetDirty();
+            }
+        }
 
         public void RecacheColumnResolvers()
         {
             columnResolvers.Clear();
-            foreach (var column in Table.Columns)
+            foreach (var column in Table.Columns())
             {
                 var resolverDef = GroupColumnDefResolver.GetResolver(column);
                 columnResolvers.Add(resolverDef?.Worker);
@@ -333,7 +350,7 @@ namespace PawnTableGrouped
 
         public float CalculateRowHeight(Pawn pawn)
         {
-            return table.CalculateRowHeight(pawn);
+            return Table.CalculateRowHeight(pawn);
         }
 
     }

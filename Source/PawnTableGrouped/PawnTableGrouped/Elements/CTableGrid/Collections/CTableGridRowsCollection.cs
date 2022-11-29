@@ -8,17 +8,18 @@ namespace PawnTableGrouped.TableGrid.Collections
 {
     class CTableGridRowsCollection : CTableGridDataSourceMetricsCache<ICTableGridRow>
     {
-        private readonly int sectionIndex;
+        private readonly ICTableGridSection section;
 
-        public CTableGridRowsCollection(ICTableGridDataSource dataSource, int sectionIndex) : base(dataSource)
+        public CTableGridRowsCollection(ICTableGridDataSource dataSource, ICTableGridSection iCTableGridSection) : base(dataSource)
         {
-            this.sectionIndex = sectionIndex;
+            this.section = iCTableGridSection;
         }
 
-        protected override ICTableGridRow itemAt(int index) => DataSource.rowAt(sectionIndex, index);
+        protected override ICTableGridRow itemAt(int index) => section.RowAt(index);
 
-        protected override int itemsCount() => DataSource.numberOfRowsInSection(sectionIndex);
+        protected override int itemsCount() => section.NumberOfRows();
 
         protected override float getItemSize(int index) => this[index].GetRowHeight();
+        public ICTableGridSection Section => section;
     }
 }

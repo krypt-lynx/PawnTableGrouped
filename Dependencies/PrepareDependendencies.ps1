@@ -10,7 +10,7 @@
 # add this id to the modIds list if you are missing local copy of RWLayout
 
 $appId = 294100
-$modIds = @(1414302321, 2144935009, 2345493945, 725219116, 753498552, 2009463077, 2209393954)
+$modIds = @(1414302321, 2144935009, 2345493945, 725219116, 753498552, 2009463077)
 $appVersions = @("1.1", "1.2", "1.3", "1.4")
 
 [string]$startupPath = Get-Location

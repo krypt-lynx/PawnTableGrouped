@@ -11,28 +11,25 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    [StaticConstructorOnStartup]
     class CPawnTableGroupRow : ICTableGridRow
     {
         public Action<PawnTableGroup> Action { get; set; }
 
         private PawnTableGroup group;
-        private readonly Verse.WeakReference<ICTableGridDataSource> dataSource;
+        //private readonly Verse.WeakReference<ICTableGridDataSource> dataSource;
         private bool expanded;
 
         CGuiRoot host = new CGuiRoot();
         private ClVariable fadeOurEdgeAnchor;
         float fixedWidth;
 
-        static private Texture2D Gradient = new Resource<Texture2D>("UI/PTG_transparent_gradient");
-
-        public CPawnTableGroupRow(PawnTableGroup group, ICTableGridDataSource dataSource, bool expanded)
+        public CPawnTableGroupRow(PawnTableGroup group, float fixedWidth, bool expanded)
         {
             this.group = group;
-            this.dataSource = new Verse.WeakReference<ICTableGridDataSource>(dataSource);
+            //this.dataSource = new Verse.WeakReference<ICTableGridDataSource>(dataSource);
             this.expanded = expanded;
 
-            fixedWidth = dataSource.numberOfColumns() > 0 ? dataSource.widthForColumn(0) : 0;
+            this.fixedWidth = fixedWidth;
 
             ConstructGui();
         }
@@ -50,7 +47,6 @@ namespace PawnTableGrouped
 
         public void DoCell(Rect rect, int columnIndex, bool hightlighted, bool combined)
         {
-//            if ()
             if (Mod.Settings.disableGroupCells || columnIndex == 0 || rect.xMax < fadeOurEdgeAnchor.Value - fixedWidth)
             {
                 return;
@@ -113,7 +109,7 @@ namespace PawnTableGrouped
 
             var fadeIn = host.AddElement(new CImage
             {
-                Texture = Gradient,
+                Texture = Textures.LinearGradient,
                 TintColor = Widgets.WindowBGFillColor,
             });
 
@@ -144,53 +140,25 @@ namespace PawnTableGrouped
 
             if (Widgets.ButtonInvisible(rect))
             {
-                Action?.Invoke(group);
+                if (Event.current.button == 0)
+                {
+                    Action?.Invoke(group);
+                } 
+                else
+                {
+                    if (!Event.current.shift)
+                    {
+                        Find.Selector.ClearSelection();
+                    }
+
+                    foreach (var pawn in group.Pawns)
+                    {
+                        Find.Selector.Select(pawn, true, false);
+                    }
+                }                
             }
         }
 
-        /* 
-
-        private void DoRowsSummary()
-        {
-            int x = (int)BoundsRounded.xMin;
-#if rw_1_4_or_later
-            var columns = table.Columns;
-#else
-            var columns = table.ColumnsListForReading;
-#endif
-
-            var overflow = (Row as CPawnListGroupRow)?.overflow ?? 0;
-
-            for (int columnIndex = 1; columnIndex < columns.Count; columnIndex++)
-            {
-                int columnWidth;
-                if (columnIndex == columns.Count - 1)
-                {
-                    columnWidth = (int)(BoundsRounded.width - x);
-                }
-                else
-                {
-                    columnWidth = (int)accessor.cachedColumnWidths[columnIndex];
-                }
-
-                if (x >= xScrollOffset + overflow && x <= xScrollOffset + visibleRectWidth)
-                {
-                    var resolver = Group.ColumnResolvers[columnIndex];
-                    if (resolver != null && Group.IsVisible(columnIndex))
-                    {
-                        Rect cellRect = new Rect(x, BoundsRounded.yMin, columnWidth, BoundsRounded.height);
-                        resolver.DoCell(cellRect, Group.Columns[columnIndex], table);
-                        if (Mod.Settings.showDummyColumns)
-                        {
-                            TooltipHandler.TipRegion(cellRect, $"{resolver.ColumnDef.defName}: {resolver.ColumnDef.workerClass.FullName}");
-                        }
-                    }
-                }
-                x += columnWidth;
-            }
-
-        GUI.color = Color.white;
-        }        */
         public float GetRowHeight()
         {
             return Metrics.GroupHeaderHeight;

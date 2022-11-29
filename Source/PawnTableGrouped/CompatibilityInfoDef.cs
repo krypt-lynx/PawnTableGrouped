@@ -22,7 +22,7 @@ namespace PawnTableGrouped
     {
         public bool allowHScroll = false;
         public float expandedBottomSpace = 0;
-        public float fotterBtnOffset = 0;
+        public float footerBtnOffset = 0;
     }
 
     public class CompatibilityInfoDef : Def

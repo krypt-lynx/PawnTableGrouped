@@ -13,7 +13,7 @@ namespace PawnTableGrouped
 {
     class CPawnTablePawnRow : ICTableGridRow
     {
-        private PawnTableWrapper table;
+        private PawnTable table;
         private PawnTableGroup group;
         private Pawn pawn;
         private LookTargets target;
@@ -22,7 +22,7 @@ namespace PawnTableGrouped
 
         bool needUpdateSectionHeader = false;
 
-        public CPawnTablePawnRow(PawnTableWrapper table, PawnTableGroup group, Pawn pawn)
+        public CPawnTablePawnRow(PawnTable table, PawnTableGroup group, Pawn pawn)
         {
             this.table = table;
             this.group = group;
@@ -81,7 +81,7 @@ namespace PawnTableGrouped
             GUI.color = Color.white;
 #endif
 
-            table.Columns[columnIndex].Worker.DoCell(rect, pawn, table.Table);
+            table.Columns()[columnIndex].Worker.DoCell(rect, pawn, table);
 
 #if rw_1_4_or_later
             if (hightlighted)

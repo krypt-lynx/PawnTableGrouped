@@ -13,13 +13,10 @@ using Verse.Sound;
 
 namespace PawnTableGrouped
 {
-    [StaticConstructorOnStartup] // not it don't. But I need to suppress the issue
     class GroupColumnWorker_CopyPaste: GroupColumnWorker
     {
         static Getter<PawnColumnWorker_CopyPaste, bool> anythingInClipboard = Dynamic.InstanceGetProperty<PawnColumnWorker_CopyPaste, bool>("AnythingInClipboard");
         static Action<PawnColumnWorker_CopyPaste, Pawn> pasteTo = Dynamic.InstanceVoidMethod<PawnColumnWorker_CopyPaste, Pawn>("PasteTo");
-
-        public static readonly Texture2D TexButton_Paste = ContentFinder<Texture2D>.Get("UI/Buttons/Paste", true);
 
         public override void DoCell(Rect rect, PawnTableGroupColumn column, PawnTable table)
         {
@@ -46,7 +43,7 @@ namespace PawnTableGrouped
             {
                 Rect rect3 = rect2;
                 rect3.x = rect2.xMax;
-                if (Widgets.ButtonImage(rect3, TexButton_Paste, true))
+                if (Widgets.ButtonImage(rect3, Textures.TexButton_Paste, true))
                 {
                     pasteAction();
                     SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);

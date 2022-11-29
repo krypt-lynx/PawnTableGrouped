@@ -42,7 +42,7 @@ namespace PawnTableGrouped
             return "";
         }
 
-        public override IEnumerable<PawnTableGroup> CreateGroups(PawnTableWrapper table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
+        public override IEnumerable<PawnTableGroup> CreateGroups(PawnTable table, List<Pawn> pawns, Func<IEnumerable<Pawn>, IEnumerable<Pawn>> defaultPawnSort, List<GroupColumnWorker> columnResolvers)
         {
             if (!ColonyGroupsBridge.Instance.IsActive)
             {

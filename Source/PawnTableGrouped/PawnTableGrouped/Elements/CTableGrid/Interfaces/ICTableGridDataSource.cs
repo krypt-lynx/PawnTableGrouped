@@ -9,12 +9,11 @@ namespace PawnTableGrouped.TableGrid
 {
     public interface ICTableGridDataSource
     {
-        int numberOfColumns();
-        float widthForColumn(int column);
-        bool canMergeRows(int column);
+        int NumberOfColumns();
+        float WidthForColumn(int column);
+        ICTableGridColumn ColumnAt(int column);
 
-        int numberOfSections();
-        int numberOfRowsInSection(int section);
-        ICTableGridRow rowAt(int section, int row);
+        int NumberOfSections();
+        ICTableGridSection SectionAt(int section);
     }
 }

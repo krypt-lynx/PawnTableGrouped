@@ -4,6 +4,7 @@
 		<AssemblySearchPaths>
 			C:\I\RWModBuild\1.3\Managed;
 			C:\I\games\RimWorld\Mods\dev\PawnTableGrouped_dev\Dependencies\1.3\;
+			C:\I\games\RimWorld\Mods\dev\RWLayout_dev\1.3\Assemblies;
 			$(AssemblySearchPaths)
 		</AssemblySearchPaths>
 	</PropertyGroup>

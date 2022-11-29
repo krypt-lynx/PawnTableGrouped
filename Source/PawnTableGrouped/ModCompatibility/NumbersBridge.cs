@@ -12,17 +12,31 @@ using RWLayout.alpha2.FastAccess;
 
 namespace PawnTableGrouped
 {
-    public class NumbersBridge : ModBridge<NumbersBridge>
+    public interface INumbersBridge
+    {
+        public bool IsNumbersTable(PawnTable table);
+        public int ReorderableGroup(PawnTable pawnTable);
+        public void CallReorderableWidget(int groupId, Rect rect);
+    }
+
+    public class NumbersPlaceholderBridge : PlaceholderBridge, INumbersBridge
+    {
+        public void CallReorderableWidget(int groupId, Rect rect) { }
+
+        public bool IsNumbersTable(PawnTable table) => false;
+        public int ReorderableGroup(PawnTable pawnTable) => 0;
+    }
+
+    public class NumbersBridge : ModBridge<NumbersBridge>, INumbersBridge
     { 
-        public static bool IsNumbersTable(PawnTable table)
+        public bool IsNumbersTable(PawnTable table)
         {
-            return Instance.IsActive && table != null && tableType.IsAssignableFrom(table.GetType());
+            return IsActive && table != null && tableType.IsAssignableFrom(table.GetType());
         }
 
-
-        public static int ReorderableGroup(PawnTable pawnTable)
+        public int ReorderableGroup(PawnTable pawnTable)
         {
-            if (!Instance.IsActive)
+            if (!IsActive)
             {
                 return 0;
             }
@@ -33,13 +47,13 @@ namespace PawnTableGrouped
             }
             catch
             {
-                Instance.Deactivate();
+                Deactivate();
                 return 0;
             }
         }
 
         static Type tableType = null;
-        public static void CallReorderableWidget(int groupId, Rect rect)
+        public void CallReorderableWidget(int groupId, Rect rect)
         {
             if (!Instance.IsActive)
             {

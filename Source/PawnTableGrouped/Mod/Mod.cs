@@ -15,6 +15,7 @@ namespace PawnTableGrouped
 {
     public class ModMod {
         public const string WorkTabPackageId = "fluffy.worktab";
+        public const string NumbersPackageId = "mehni.numbers";
     }
 
     public class Mod : CMod
@@ -31,7 +32,7 @@ namespace PawnTableGrouped
         public static Verse.Mod Instance = null;
         
         public static List<(string packageId, ModBridge bridge)> ModBridges = new List<(string packageId, ModBridge bridge)> {
-            ("mehni.numbers", NumbersBridge.Instance),
+            (ModMod.NumbersPackageId, NumbersBridge.Instance),
         };
 
         public static void RegisterModBridge(string packageId, ModBridge bridge)

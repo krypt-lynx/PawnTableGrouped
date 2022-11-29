@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace PawnTableGrouped.TableGrid.Collections
 {
-    class CTableGridColumnsCollection : CTableGridDataSourceMetricsCache<object> // me being lazy
+    class CTableGridColumnsCollection : CTableGridDataSourceMetricsCache<ICTableGridColumn>
     {
         public CTableGridColumnsCollection(ICTableGridDataSource dataSource) : base(dataSource) { }
 
-        protected override object itemAt(int index) => new object();
+        protected override ICTableGridColumn itemAt(int index) => DataSource.ColumnAt(index);
 
-        protected override int itemsCount() => DataSource.numberOfColumns();
+        protected override int itemsCount() => DataSource.NumberOfColumns();
 
-        protected override float getItemSize(int index) => DataSource.widthForColumn(index);
+        protected override float getItemSize(int index) => DataSource.WidthForColumn(index);
     }
 }

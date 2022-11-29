@@ -131,74 +131,64 @@ namespace PawnTableGrouped
             }
         }
 
-        public int numberOfColumns()
+        public int NumberOfColumns()
         {
-            return model.Table.Columns.Count;
+            return model.Table.Columns().Count;
         }
 
-        public float widthForColumn(int column)
+        public float WidthForColumn(int column)
         {
-            return model.Table.cachedColumnWidths[column] + (column == 0 ? Metrics.TableLeftMargin : 0);
+            return model.Table.GetCachedColumnWidths()[column] + (column == 0 ? Metrics.TableLeftMargin : 0);
         }
 
-        public int numberOfSections()
+        public int NumberOfSections()
         {
             return model.Groups.Count + 1;
         }
 
-        public int numberOfRowsInSection(int section)
+        public ICTableGridSection SectionAt(int section)
         {
             if (section == 0)
             {
-                return 1;
+                return new CTableGridHeaderSection(model);
             } 
             else
             {
-                bool showHeader = !Mod.Settings.hideHeaderIfOnlyOneGroup || model.Groups.Count > 1;
-                
-                if (model.IsExpanded(model.Groups[section - 1]))
-                {
-                    return model.Groups[section - 1].Pawns.Count + (showHeader ? 1 : 0);
-                } 
-                else
-                {
-                    return (showHeader ? 1 : 0);
-                }
+                var fixedWidth = NumberOfColumns() > 0 ? WidthForColumn(0) : 0;
+                return new CTableGridGroupSection(model, model.Groups[section - 1], fixedWidth);
             }
         }
 
-        public ICTableGridRow rowAt(int section, int row)
+        bool highlight = false;
+
+        public ICTableGridColumn ColumnAt(int column)
         {
-            if (section == 0)
+            // a hack (of my own code), assuming columns enumerated from left to right continiusly (which is true for the moment)
+            if (KnownMods.WorkTab.IsActive &&
+                KnownMods.WorkTab.IsWorkTabWindow(model.Window) &&
+                KnownMods.WorkTab.Expanded(model.Window))
             {
-                return new CPawnTableHeaderRow(model);
+                var workerType = model.Table.Columns()[column].workerClass;
+                if (workerType  == KnownMods.WorkTab.WorkTypeWorkerType)
+                {
+                    highlight = !highlight;
+                } 
+                else if (workerType != KnownMods.WorkTab.WorkGiverWorkerType)
+                {
+                    highlight = false;
+                }
             }
             else
             {
-                var weakThis = new Verse.WeakReference<PawnTableGroupedView>(this);
-                bool showHeader = !Mod.Settings.hideHeaderIfOnlyOneGroup || model.Groups.Count > 1;
-
-                var group = model.Groups[section - 1];
-                if (showHeader && row == 0)
-                {
-                    var groupHeader = new CPawnTableGroupRow(group, this, model.IsExpanded(group));
-                    groupHeader.Action = (group) =>
-                    {
-                        weakThis.Target.model.SwitchExpanded(group);
-                    };
-                    return groupHeader;
-                }
-                else
-                {
-                    var pawn = group.Pawns[row - (showHeader ? 1 : 0)];
-                    return new CPawnTablePawnRow(model.table, group, pawn);
-                }
+                highlight = false;
             }
+
+            return new CPawnTableColumn(highlight);
         }
 
         public void OnGUI(Vector2 position, int magic)
         {
-            host.InRect = new Rect((int)position.x, (int)position.y, (int)model.Table.cachedSize.x, (int)model.Table.cachedSize.y);
+            host.InRect = new Rect((int)position.x, (int)position.y, (int)model.Table.GetCachedSize().x, (int)model.Table.GetCachedSize().y);
             host.UpdateLayoutIfNeeded();
             host.DoElementContent();
         }
@@ -225,15 +215,6 @@ namespace PawnTableGrouped
             height += model.TableExtendedArea;
 
             return height;
-        }
-
-        public bool canMergeRows(int column)
-        {
-#if rw_1_4_or_later
-            return model.Table.Columns[column].groupable;            
-#else
-            return false;
-#endif
         }
     }
 

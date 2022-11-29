@@ -199,11 +199,12 @@ namespace PawnTableGrouped
             }
         }
 
-
         private static readonly int pawnTableScrollHash = "CTableGrid".GetHashCode();
 
         public override void DoContent()
         {
+            // todo: overlays draw consistency
+
             base.DoContent();
 
             // scroll bars
@@ -231,7 +232,7 @@ namespace PawnTableGrouped
             DoTableContent(highlightedSectionIndex, highlightedRowIndex);
 
             // row overlays
-            DoTableOverlays();
+            DoGridOverlays();
 
             GUI.EndGroup();
 
@@ -261,203 +262,64 @@ namespace PawnTableGrouped
 
         private void DoFixedCell()
         {
+            if (columns.Count == 0 || sections.Count == 0 || sections[0].Count == 0)
+            {
+                return;
+            }
+            // todo: call column bg/overlay?
+            // todo: pass column as paramenter?
+            var column = Columns[0];
+            var visibleRect = new Rect(0, 0, fixedWidth, fixedHeight);
+            var columnRect = Rect.MinMaxRect(0, 0, fixedWidth, fixedHeight);
+
+            column.DoBackground(columnRect, visibleRect);
             Sections[0][0].DoCell(fixedPanelRect, 0, false, false);
+            column.DoOverlay(columnRect, visibleRect);
         }
 
         private void DoColumnHeaders()
         {
+            if (sections.Count == 0 || sections[0].Count == 0)
+            {
+                return;
+            }
+
             GUI.BeginGroup(columnsPanelRect);
 
             var minX = 0;
             var maxX = columnsPanelRect.width;
 
+            var visibleRect = new Rect(0, 0, scrollOuterWidth, fixedHeight);
+
+            var section = Sections[0];
+
+            var sectionRect = Rect.MinMaxRect(-hScrollPosition, 0, scrollInnerWidth - hScrollPosition, fixedHeight);
+
+            section.Section.DoScrollableBackground(sectionRect, visibleRect);
+
             for (int columnIndex = 1; columnIndex < Columns.Count; columnIndex++)
             {
+
                 var offsetX = hScrollPosition + fixedWidth;
                 var cellXMin = Columns.IntegralSizeOf(columnIndex) - offsetX;
                 var cellXMax = Columns.IntegralSizeOf(columnIndex + 1) - offsetX;
 
+                var column = Columns[columnIndex];
+                var columnRect = Rect.MinMaxRect(cellXMin, 0, cellXMax, fixedHeight);
+                column.DoBackground(columnRect, visibleRect);
+
                 if (cellXMin < maxX &&
                     cellXMax > minX)
                 {
-                    Sections[0][0].DoCell(
+                    section[0].DoCell(
                         Rect.MinMaxRect(cellXMin, 0, cellXMax, fixedHeight),
                         columnIndex, false, false);
                 }
+
+                column.DoOverlay(columnRect, visibleRect);
             }
 
-            GUI.EndGroup();
-        }
-
-        private void DoTableOverlays()
-        {
-            var minY = 0;
-            var maxY = scrollInnerHeight;
-            var offsetY = fixedHeight + vScrollPosition;
-
-            for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)
-            {
-                var section = Sections[sectionIndex];
-                var sectionMinY = Sections.IntegralSizeOf(sectionIndex) - offsetY;
-                var sectionMaxY = Sections.IntegralSizeOf(sectionIndex + 1) - offsetY;
-
-                if (sectionMinY < maxY &&
-                    sectionMaxY > minY)
-                {
-                    for (int rowIndex = 0; rowIndex < section.Count; rowIndex++)
-                    {
-                        var cellYMin = sectionMinY + section.IntegralSizeOf(rowIndex);
-                        var cellYMax = sectionMinY + section.IntegralSizeOf(rowIndex + 1);
-
-                        if (cellYMin < maxY &&
-                            cellYMax > minY)
-                        {
-                            Sections[sectionIndex][rowIndex].DoOverlay(Rect.MinMaxRect(0, cellYMin, tableBodyOuterRect.width, cellYMax));
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DoTableContent(int highlightedSectionIndex, int highlightedRowIndex)
-        {
-            GUI.BeginGroup(scrollOuterRectClipped);
-
-            var minX = 0;
-            var minY = 0;
-            var maxX = columnsPanelRect.width;
-            var maxY = scrollInnerHeight;
-
-            var offsetY = vScrollPosition + fixedHeight;
-            var offsetX = hScrollPosition + fixedWidth;
-
-            // enumeration sections
-            for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)
-            {
-                var section = Sections[sectionIndex];
-                var sectionMinY = Sections.IntegralSizeOf(sectionIndex) - offsetY;
-                var sectionMaxY = Sections.IntegralSizeOf(sectionIndex + 1) - offsetY;
-
-                // if section is visible
-                if (sectionMinY < maxY &&
-                    sectionMaxY > minY)
-                {
-                    // enumerating columns
-                    for (int columnIndex = 1; columnIndex < Columns.Count; columnIndex++)
-                    {
-                        var cellXMin = Columns.IntegralSizeOf(columnIndex) - offsetX;
-                        var cellXMax = Columns.IntegralSizeOf(columnIndex + 1) - offsetX;
-
-                        // is column visible
-                        if (cellXMin < maxX &&
-                            cellXMax > minX)
-                        {
-
-                            // enumerating rows
-                            var firstCombined = -1;
-                            var highlightedCombined = false;
-                            for (int rowIndex = 0; rowIndex < section.Count; rowIndex++)
-                            {
-                                var row = section[rowIndex];
-
-                                // if can combine rows in this column (mechanitor column for mechs, for example)
-                                if (DataSource.canMergeRows(columnIndex))
-                                {
-                                    // do rows merging
-                                    bool willCombine = false;
-                                    if (rowIndex != section.Count - 1)
-                                    {
-                                        willCombine = row.CanCombineWith(section[rowIndex + 1], columnIndex);
-                                    }
-
-                                    highlightedCombined |= (highlightedSectionIndex == sectionIndex && highlightedRowIndex == rowIndex);
-                                    if (willCombine)
-                                    {
-                                        if (firstCombined == -1)
-                                        {
-                                            firstCombined = rowIndex;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        var beginIndex = firstCombined == -1 ? rowIndex : firstCombined;
-                                        var cellYMin = sectionMinY + section.IntegralSizeOf(beginIndex);
-                                        var cellYMax = sectionMinY + section.IntegralSizeOf(rowIndex + 1);
-
-                                        // render cell if visible
-                                        if (cellYMin < maxY &&
-                                            cellYMax > minY)
-                                        {
-                                            row.DoCell(Rect.MinMaxRect(cellXMin, cellYMin, cellXMax, cellYMax),
-                                                columnIndex,
-                                                highlightedCombined,
-                                                firstCombined != -1);
-                                        }
-                                        firstCombined = -1;
-                                        highlightedCombined = false;
-                                    }
-                                }
-                                else
-                                {
-                                    // it can't, use short version logic
-                                    var cellYMin = sectionMinY + section.IntegralSizeOf(rowIndex);
-                                    var cellYMax = sectionMinY + section.IntegralSizeOf(rowIndex + 1);
-
-                                    // render cell if visible
-                                    if (cellYMin < maxY &&
-                                        cellYMax > minY)
-                                    {
-                                        row.DoCell(
-                                            Rect.MinMaxRect(cellXMin, cellYMin, cellXMax, cellYMax),
-                                            columnIndex,
-                                            highlightedSectionIndex == sectionIndex && highlightedRowIndex == rowIndex,
-                                            false);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            GUI.EndGroup();
-        }
-
-        private void DoFixedColumn(int highlightedSectionIndex, int highlightedRowIndex)
-        {
-            GUI.BeginGroup(namesPanelRect);
-
-            var minY = 0;
-            var maxY = scrollInnerHeight;
-
-            var offsetY = fixedHeight + vScrollPosition;
-            for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)
-            {
-                var section = Sections[sectionIndex];
-                var sectionMinY = Sections.IntegralSizeOf(sectionIndex) - offsetY;
-                var sectionMaxY = Sections.IntegralSizeOf(sectionIndex + 1) - offsetY;
-
-                if (sectionMinY < maxY &&
-                    sectionMaxY > minY)
-                {
-                    for (int rowIndex = 0; rowIndex < section.Count; rowIndex++)
-                    {
-                        var cellYMin = sectionMinY + section.IntegralSizeOf(rowIndex);
-                        var cellYMax = sectionMinY + section.IntegralSizeOf(rowIndex + 1);
-
-                        if (cellYMin < maxY &&
-                            cellYMax > minY)
-                        {
-                            Sections[sectionIndex][rowIndex].DoCell(
-                                Rect.MinMaxRect(0, cellYMin, fixedWidth, cellYMax),
-                                0,
-                                highlightedSectionIndex == sectionIndex && highlightedRowIndex == rowIndex,
-                                false);
-                        }
-                    }
-                }
-            }
+            section.Section.DoScrollableOverlay(sectionRect, visibleRect);
 
             GUI.EndGroup();
         }
@@ -492,6 +354,206 @@ namespace PawnTableGrouped
                                 highlightedRowIndex = rowIndex;
                             }
                             Sections[sectionIndex][rowIndex].DoBackground(bgRect);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DoFixedColumn(int highlightedSectionIndex, int highlightedRowIndex)
+        {
+            if (Columns.Count == 0)
+            {
+                return;
+            }
+
+            GUI.BeginGroup(namesPanelRect);
+
+            var minY = 0;
+            var maxY = scrollInnerHeight;
+
+            var offsetY = fixedHeight + vScrollPosition;
+
+            var visibleRect = new Rect(0, offsetY, fixedWidth, scrollOuterHeight);
+
+            for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)
+            {
+                var section = Sections[sectionIndex];
+                var sectionYMin = Sections.IntegralSizeOf(sectionIndex) - offsetY;
+                var sectionYMax = Sections.IntegralSizeOf(sectionIndex + 1) - offsetY;
+
+                if (sectionYMin < maxY &&
+                    sectionYMax > minY)
+                {
+                    var column = Columns[0];
+                    var columnRect = Rect.MinMaxRect(0, sectionYMin, fixedWidth, sectionYMax);
+                    column.DoBackground(columnRect, visibleRect);
+
+                    for (int rowIndex = 0; rowIndex < section.Count; rowIndex++)
+                    {
+                        var cellYMin = sectionYMin + section.IntegralSizeOf(rowIndex);
+                        var cellYMax = sectionYMin + section.IntegralSizeOf(rowIndex + 1);
+
+                        if (cellYMin < maxY &&
+                            cellYMax > minY)
+                        {
+                            Sections[sectionIndex][rowIndex].DoCell(
+                                Rect.MinMaxRect(0, cellYMin, fixedWidth, cellYMax),
+                                0,
+                                highlightedSectionIndex == sectionIndex && highlightedRowIndex == rowIndex,
+                                false);
+                        }
+                    }
+
+                    column.DoOverlay(columnRect, visibleRect);
+                }
+            }
+
+            GUI.EndGroup();
+        }
+  
+        private void DoTableContent(int highlightedSectionIndex, int highlightedRowIndex)
+        {
+            GUI.BeginGroup(scrollOuterRectClipped);
+
+            var minX = 0;
+            var minY = 0;
+            var maxX = columnsPanelRect.width;
+            var maxY = scrollInnerHeight;
+
+            var offsetY = vScrollPosition + fixedHeight;
+            var offsetX = hScrollPosition + fixedWidth;
+
+            var visibleRect = new Rect(0, 0, scrollOuterWidth, scrollOuterHeight);
+
+            // enumeration sections
+            for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)
+            {
+                var section = Sections[sectionIndex];
+                var sectionYMin = Sections.IntegralSizeOf(sectionIndex) - offsetY;
+                var sectionYMax = Sections.IntegralSizeOf(sectionIndex + 1) - offsetY;
+
+                // if section is visible
+                if (sectionYMin < maxY &&
+                    sectionYMax > minY)
+                {
+                    var sectionRect = Rect.MinMaxRect(-hScrollPosition, sectionYMin, scrollInnerWidth - hScrollPosition, sectionYMax);
+
+                    section.Section.DoScrollableBackground(sectionRect, visibleRect);
+
+                    // enumerating columns
+                    for (int columnIndex = 1; columnIndex < Columns.Count; columnIndex++)
+                    {
+                        var cellXMin = Columns.IntegralSizeOf(columnIndex) - offsetX;
+                        var cellXMax = Columns.IntegralSizeOf(columnIndex + 1) - offsetX;
+                        
+                        // is column visible
+                        if (cellXMin < maxX &&
+                            cellXMax > minX)
+                        {
+                            var column = Columns[columnIndex];
+                            var columnRect = Rect.MinMaxRect(cellXMin, sectionYMin, cellXMax, sectionYMax);
+                            column.DoBackground(columnRect, visibleRect);
+
+                            // enumerating rows
+                            var firstCombined = -1;
+                            var highlightedCombined = false;
+                            for (int rowIndex = 0; rowIndex < section.Count; rowIndex++)
+                            {
+                                var row = section[rowIndex];
+
+                                // if can combine rows in this column (mechanitor column for mechs, for example)
+                                if (section.Section.CanMergeRows(columnIndex))
+                                {
+                                    // do rows merging
+                                    bool willCombine = false;
+                                    if (rowIndex != section.Count - 1)
+                                    {
+                                        willCombine = row.CanCombineWith(section[rowIndex + 1], columnIndex);
+                                    }
+
+                                    highlightedCombined |= (highlightedSectionIndex == sectionIndex && highlightedRowIndex == rowIndex);
+                                    if (willCombine)
+                                    {
+                                        if (firstCombined == -1)
+                                        {
+                                            firstCombined = rowIndex;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var beginIndex = firstCombined == -1 ? rowIndex : firstCombined;
+                                        var cellYMin = sectionYMin + section.IntegralSizeOf(beginIndex);
+                                        var cellYMax = sectionYMin + section.IntegralSizeOf(rowIndex + 1);
+
+                                        // render cell if visible
+                                        if (cellYMin < maxY &&
+                                            cellYMax > minY)
+                                        {
+                                            row.DoCell(Rect.MinMaxRect(cellXMin, cellYMin, cellXMax, cellYMax),
+                                                columnIndex,
+                                                highlightedCombined,
+                                                firstCombined != -1);
+                                        }
+                                        firstCombined = -1;
+                                        highlightedCombined = false;
+                                    }
+                                }
+                                else
+                                {
+                                    // it can't, use short version logic
+                                    var cellYMin = sectionYMin + section.IntegralSizeOf(rowIndex);
+                                    var cellYMax = sectionYMin + section.IntegralSizeOf(rowIndex + 1);
+
+                                    // render cell if visible
+                                    if (cellYMin < maxY &&
+                                        cellYMax > minY)
+                                    {
+                                        row.DoCell(
+                                            Rect.MinMaxRect(cellXMin, cellYMin, cellXMax, cellYMax),
+                                            columnIndex,
+                                            highlightedSectionIndex == sectionIndex && highlightedRowIndex == rowIndex,
+                                            false);
+                                    }
+                                }
+                            }
+
+                            column.DoOverlay(columnRect, visibleRect);
+                        }
+                    }
+
+                    section.Section.DoScrollableOverlay(sectionRect, visibleRect);
+                }
+            }
+
+
+            GUI.EndGroup();
+        }
+
+        private void DoGridOverlays()
+        {
+            var minY = 0;
+            var maxY = scrollInnerHeight;
+            var offsetY = fixedHeight + vScrollPosition;
+
+            for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)
+            {
+                var section = Sections[sectionIndex];
+                var sectionMinY = Sections.IntegralSizeOf(sectionIndex) - offsetY;
+                var sectionMaxY = Sections.IntegralSizeOf(sectionIndex + 1) - offsetY;
+
+                if (sectionMinY < maxY &&
+                    sectionMaxY > minY)
+                {
+                    for (int rowIndex = 0; rowIndex < section.Count; rowIndex++)
+                    {
+                        var cellYMin = sectionMinY + section.IntegralSizeOf(rowIndex);
+                        var cellYMax = sectionMinY + section.IntegralSizeOf(rowIndex + 1);
+
+                        if (cellYMin < maxY &&
+                            cellYMax > minY)
+                        {
+                            Sections[sectionIndex][rowIndex].DoOverlay(Rect.MinMaxRect(0, cellYMin, tableBodyOuterRect.width, cellYMax));
                         }
                     }
                 }

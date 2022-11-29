@@ -8,18 +8,9 @@ using System.Threading.Tasks;
 
 namespace PawnTableGrouped
 {
-    class MainTabWindow_PawnTableWrapper
+    static class MainTabWindow_PawnTableWrapper
     { 
-        Verse.WeakReference<MainTabWindow_PawnTable> window;
-
-        public MainTabWindow_PawnTableWrapper(MainTabWindow_PawnTable window)
-        {
-            this.window = new Verse.WeakReference<MainTabWindow_PawnTable>(window);
-        }
-
-        public MainTabWindow_PawnTable Window => window.Target;
-
         static Action<MainTabWindow_PawnTable> _SetDirty = Dynamic.InstanceVoidMethod<MainTabWindow_PawnTable>("SetDirty");
-        public void SetDirty() => _SetDirty(Window);
+        public static void SetDirty(this MainTabWindow_PawnTable window) => _SetDirty(window);
     }
 }

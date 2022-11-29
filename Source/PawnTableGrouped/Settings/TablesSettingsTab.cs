@@ -100,19 +100,14 @@ namespace PawnTableGrouped
                 {
                     Tip = table.Tip,
                 });
-
-                var checkbox = row.AddElement(new CCheckbox
+                var checkbox = row.AddElement(new CCheckBoxLabeledPaintable
                 {
                     Checked = table.Selected,
+                    Title = table.DefName,
+                    Color = colorForPawnTable(table),
                     Changed = (_, value) => tablesModel.SetSelected(table, value),
                     Paintable = true,
                 });
-                var title = row.AddElement(new CLabel
-                {
-                    Title = table.DefName,
-                    Color = colorForPawnTable(table),
-                });
-
                 var column1 = row.AddElement(new CElement
                 {
                     Tip = table.PackageId,
@@ -123,12 +118,10 @@ namespace PawnTableGrouped
                     Title = table.ModName,
                 });
 
-                column0.StackLeft(StackOptions.Create(constrainSides: false), 2, checkbox, 2, title);
-                title.AddConstraint(title.height ^ title.intrinsicHeight);
+                column0.StackLeft(StackOptions.Create(constrainSides: false), 2, checkbox);
+                checkbox.AddConstraint(checkbox.height ^ checkbox.intrinsicHeight);
 
-                checkbox.MakeSizeIntristic();
-                column0.AddConstraint(column0.centerY ^ checkbox.centerY);
-                column0.AddConstraints(column0.top ^ title.top, column0.bottom ^ title.bottom);
+                column0.AddConstraints(column0.top ^ checkbox.top, column0.bottom ^ checkbox.bottom);
 
 
                 column1.Embed(description, new EdgeInsets(0, 2, 0, 2));
