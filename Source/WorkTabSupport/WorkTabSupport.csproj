@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <LangVersion>9.0</LangVersion>
-    <Configurations>Debug;Release;rw1.1;rw1.2</Configurations>	
-    <ProjectGuid>{5205ACBF-72EC-4F88-977B-3BDE7FE5A78D}</ProjectGuid>
+    <Configurations>Debug;Release;rw1.1;rw1.2;rw1.3;rw1.4</Configurations>
+    <ProjectGuid>{395CF3E5-6599-448D-8165-4BD495901964}</ProjectGuid>
     <OutputType>Library</OutputType>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
-    <RootNamespace>PawnTableGrouped.SimpleSlavery</RootNamespace>
-    <AssemblyName>PawnTableGrouped.1.SimpleSlavery</AssemblyName>
+    <RootNamespace>PawnTableGrouped.WorkTab</RootNamespace>
+    <AssemblyName>PawnTableGrouped.1.WorkTab</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -18,28 +18,34 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>  
-  
+      
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
-  </PropertyGroup>
+  </PropertyGroup>  
   
   <Import Project="..\configuration-selector.csproj" />
   
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>../../SimpleSlavery/1.2/Assemblies</OutputPath>
+    <OutputPath>../../WorkTab/1.4/Assemblies</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>../../SimpleSlavery/1.2/Assemblies</OutputPath>
+    <OutputPath>../../WorkTab/1.4/Assemblies</OutputPath>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(Configuration)' == 'rw1.1' ">
-    <OutputPath>../../SimpleSlavery/1.1/Assemblies</OutputPath>
+    <OutputPath>../../WorkTab/1.1/Assemblies</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'rw1.2' ">
-    <OutputPath>../../SimpleSlavery/1.2/Assemblies</OutputPath>
+    <OutputPath>../../WorkTab/1.2/Assemblies</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'rw1.3'">
+    <OutputPath>../../WorkTab/1.3/Assemblies</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'rw1.4'">
+    <OutputPath>../../WorkTab/1.4/Assemblies</OutputPath>
   </PropertyGroup>
   
   <ItemGroup>
@@ -52,10 +58,10 @@
     <Reference Include="0Harmony">
       <Private>False</Private>
     </Reference>
-    <Reference Include="SimpleSlavery">
+    <Reference Include="Assembly-CSharp">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp">
+    <Reference Include="WorkTab">
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
@@ -90,7 +96,6 @@
   </ItemGroup>
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="echo SimpleSlaverySupport pre-build&quot;&#xD;&#xA;&#xD;&#xA;echo &quot;target dir:&quot;&#xD;&#xA;echo &quot;$(TargetDir)&quot;&#xD;&#xA;&#xD;&#xA;cd &quot;$(TargetDir)&quot;&#xD;&#xA;&#xD;&#xA;del /Q *.dll" />
-  </Target>
-  
+    <Exec Command="echo &quot;ColonyGroupsSupport pre-build&quot;&#xD;&#xA;&#xD;&#xA;echo &quot;target dir:&quot;&#xD;&#xA;echo &quot;$(TargetDir)&quot;&#xD;&#xA;&#xD;&#xA;cd &quot;$(TargetDir)&quot;&#xD;&#xA;&#xD;&#xA;del /Q *.dll" />
+  </Target>  
 </Project>

@@ -30,7 +30,6 @@ namespace PawnTableGrouped
         
         public static List<(string packageId, ModBridge bridge)> ModBridges = new List<(string packageId, ModBridge bridge)> {
             ("mehni.numbers", NumbersBridge.Instance),
-            ("fluffy.worktab", WorkTabBridge.Instance),
         };
 
         public static void RegisterModBridge(string packageId, ModBridge bridge)

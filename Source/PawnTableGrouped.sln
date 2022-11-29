@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalitySupport", "Hospi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleSlavery", "SimpleSlaveryDepricated\SimpleSlavery.csproj", "{5205ACBF-72EC-4F88-977B-3BDE7FE5A78D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkTabSupport", "WorkTabSupport\WorkTabSupport.csproj", "{395CF3E5-6599-448D-8165-4BD495901964}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,18 @@ Global
 		{5205ACBF-72EC-4F88-977B-3BDE7FE5A78D}.rw1.2|Any CPU.Build.0 = rw1.2|Any CPU
 		{5205ACBF-72EC-4F88-977B-3BDE7FE5A78D}.rw1.3|Any CPU.ActiveCfg = rw1.2|Any CPU
 		{5205ACBF-72EC-4F88-977B-3BDE7FE5A78D}.rw1.4|Any CPU.ActiveCfg = rw1.2|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.Release|Any CPU.Build.0 = Release|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.rw1.1|Any CPU.ActiveCfg = rw1.1|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.rw1.1|Any CPU.Build.0 = rw1.1|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.rw1.2|Any CPU.ActiveCfg = rw1.2|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.rw1.2|Any CPU.Build.0 = rw1.2|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.rw1.3|Any CPU.ActiveCfg = rw1.3|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.rw1.3|Any CPU.Build.0 = rw1.3|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.rw1.4|Any CPU.ActiveCfg = rw1.4|Any CPU
+		{395CF3E5-6599-448D-8165-4BD495901964}.rw1.4|Any CPU.Build.0 = rw1.4|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

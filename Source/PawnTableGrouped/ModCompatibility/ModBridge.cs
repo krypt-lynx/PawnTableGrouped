@@ -7,7 +7,24 @@ using System.Threading.Tasks;
 
 namespace PawnTableGrouped
 {
-    public abstract class ModBridge
+    public interface ISettingsWorker
+    {
+        void TableActiveChanged(string tableName, bool active);
+    }
+
+    public interface IModBridge
+    {
+        bool IsDetected { get; }
+        bool IsActive { get; }
+
+        void Deactivate();
+        string ModName();
+
+        void Resolve(bool active, Harmony harmony);
+    }
+
+
+    public abstract class ModBridge: IModBridge
     {
         protected bool detected = false;
         protected bool activated = false;

@@ -56,13 +56,9 @@ namespace PawnTableGrouped
         {
             var loadedModIds = Mod.RunningModInvariantIds.ToHashSet();
 
-
-            var info = DefDatabase<CompatibilityInfoDef>.GetNamed("ModCompatibility");
-
-
-            foreach (var modInfo in info.compatibilityList)
+            foreach (var modInfo in DefDatabase<CompatibilityInfoDef>.AllDefs.OrderBy(x => x.priority))
             {
-                if (loadedModIds.Contains(modInfo.packageId))
+                if (loadedModIds.Contains(modInfo.packageId.ToLowerInvariant()))
                 {
                     foreach (var tableInfo in modInfo.tables)
                     {

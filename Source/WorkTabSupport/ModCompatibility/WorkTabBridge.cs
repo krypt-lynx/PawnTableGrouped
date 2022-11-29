@@ -13,11 +13,6 @@ using WorkTab;
 
 namespace PawnTableGrouped
 {
-    public interface ISettingsWorker
-    {
-        void TableActiveChanged(string tableName, bool active);
-    }
-
     public class WorkTabSettingsWorker : ISettingsWorker
     {
         public void TableActiveChanged(string tableName, bool active)
@@ -29,7 +24,7 @@ namespace PawnTableGrouped
         }
     }
 
-    public class WorkTabBridge : ModBridge<WorkTabBridge>
+    public class WorkTabBridge : ModBridge<WorkTabBridge> /*, IWorkTabBridge*/
     {
         Harmony harmony = null;
         MethodInfo PawnTable_PawnTableOnGUI_prefix = null;
@@ -127,7 +122,7 @@ namespace PawnTableGrouped
     }
 
     static class MainTabWindow_WorkTabPatches
-    {
+    {        
         static Action<MainTabWindow_WorkTab> _setDirty = Dynamic.InstanceVoidMethod<MainTabWindow_WorkTab>("SetDirty");
 
         public static void RebuildTable_postfix(MainTabWindow_WorkTab __instance)

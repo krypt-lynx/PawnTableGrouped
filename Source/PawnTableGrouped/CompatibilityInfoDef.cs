@@ -27,7 +27,10 @@ namespace PawnTableGrouped
 
     public class CompatibilityInfoDef : Def
     {
-        public List<ModCompatibility> compatibilityList;
+        public string packageId;
+        public string modName;
+        public int priority;
+        public List<TableInfo> tables;
 
         [Unsaved(false)]
         private static Dictionary<string, TableInfo> currentTables;
@@ -37,12 +40,11 @@ namespace PawnTableGrouped
             {
                 if (currentTables == null)
                 {
-                    var info = DefDatabase<CompatibilityInfoDef>.GetNamed("ModCompatibility");
                     var loadedModIds = Mod.RunningModInvariantIds.ToHashSet();
 
                     currentTables = new Dictionary<string, TableInfo>();
 
-                    foreach (var tableInfo in info.compatibilityList.Where(x => loadedModIds.Contains(x.packageId)).SelectMany(x => x.tables))
+                    foreach (var tableInfo in DefDatabase<CompatibilityInfoDef>.AllDefs.Where(x => loadedModIds.Contains(x.packageId.ToLowerInvariant())).OrderBy(x => x.priority).SelectMany(x => x.tables))
                     {
                         currentTables[tableInfo.name] = tableInfo;
                     }
@@ -50,13 +52,6 @@ namespace PawnTableGrouped
                 return currentTables;
             }
         }
-    }
-
-    public class ModCompatibility
-    {
-        public string packageId;
-        public string modName;
-        public List<TableInfo> tables;
     }
 
     public enum TableCompatibility
