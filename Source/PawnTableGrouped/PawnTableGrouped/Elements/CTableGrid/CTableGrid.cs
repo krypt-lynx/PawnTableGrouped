@@ -453,8 +453,6 @@ namespace PawnTableGrouped
 
             var visibleRect = new Rect(0, 0, scrollOuterWidth, scrollOuterHeight);
 
-            int rowsDrawn = 0;
-
             // enumeration sections
             for (int sectionIndex = 1; sectionIndex < Sections.Count; sectionIndex++)
             {
@@ -543,7 +541,6 @@ namespace PawnTableGrouped
                                             columnIndex,
                                             highlightedSectionIndex == sectionIndex && highlightedRowIndex == rowIndex,
                                             false);
-                                        rowsDrawn++;
                                     }
                                 }
                             }
@@ -555,8 +552,6 @@ namespace PawnTableGrouped
                     section.Section.DoScrollableOverlay(sectionRect, visibleRect);
                 }
             }
-
-            $"rows drawn: {rowsDrawn}".Log();
 
             GUI.EndGroup();
         }

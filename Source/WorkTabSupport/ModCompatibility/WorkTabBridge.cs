@@ -134,7 +134,6 @@ namespace PawnTableGrouped
 
         PatchesBatch RenderPatches;
         PatchesBatch LayoutPatches;
-        PatchesBatch AlwaysOnPatches;
 
         protected override bool ResolveInternal(Harmony harmony)
         {

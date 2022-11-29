@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using RWLayout.alpha2.FastAccess;
 using System;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 using WorkTab;
@@ -66,15 +67,12 @@ namespace PawnTableGrouped
 
     static class DrawUtilitiesPatches
     {
+        static Action<Rect, Pawn, WorkTypeDef> _WidgetsWork_DrawWorkBoxBackground = Dynamic.StaticVoidMethod<Rect, Pawn, WorkTypeDef>(typeof(WidgetsWork).GetMethod("DrawWorkBoxBackground", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
+
         internal static bool DrawWorkBoxBackground_prefix(Rect box, Pawn pawn, WorkTypeDef worktype)
         {
-            RenderHelper.DrawWorkBoxBackground(box, pawn, worktype);
+            _WidgetsWork_DrawWorkBoxBackground(box, pawn, worktype);
             return false;
         }
-    }
-
-    static class GUIClipPatches
-    {
-
     }
 }

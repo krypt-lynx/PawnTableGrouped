@@ -63,12 +63,5 @@ namespace PawnTableGrouped
             // restoring GUI matrix
             GUI.matrix = matrix;
         }
-
-        static Action<Rect, Pawn, WorkTypeDef> _WidgetsWork_DrawWorkBoxBackground = Dynamic.StaticVoidMethod<Rect, Pawn, WorkTypeDef>(typeof(WidgetsWork).GetMethod("DrawWorkBoxBackground", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
-
-        public static void DrawWorkBoxBackground(Rect box, Pawn pawn, WorkTypeDef worktype)
-        {
-            _WidgetsWork_DrawWorkBoxBackground(box, pawn, worktype);
-        }
     }
 }
