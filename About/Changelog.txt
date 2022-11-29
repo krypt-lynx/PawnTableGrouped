@@ -1,3 +1,6 @@
+2.2.2
+* Unreachable min priority value fixed
+
 2.2.1
 * Log spamming with detailed logging enabled fixed
 

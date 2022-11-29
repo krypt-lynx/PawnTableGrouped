@@ -43,7 +43,7 @@ namespace PawnTableGrouped.WorkTab
 
         protected override int GetPrioritiesCount()
         {
-            return global::WorkTab.Settings.maxPriority; // no, it this the *minimal* priority, not the maximal.
+            return global::WorkTab.Settings.maxPriority + 1;
         }
 
         public override object DefaultValue(IEnumerable<Pawn> pawns)
