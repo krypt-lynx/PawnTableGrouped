@@ -87,4 +87,36 @@ namespace PawnTableGrouped
             }
         }
     }
+
+    public class PlaceholderBridge : IModBridge
+    {
+        public bool IsDetected => false;
+        public bool IsActive => false;
+
+        public void Deactivate() { }
+        public string ModName() => "placeholder (you are not supposed to see this)";
+        public void Resolve(bool active, Harmony harmony) { }
+    }
+
+    public static class KnownMods
+    {
+        public static Dictionary<string, IModBridge> DetectedBridges = new Dictionary<string, IModBridge>();
+        public static IWorkTabBridge WorkTab;
+
+        internal static void AddModBridge(string packageId, ModBridge bridge)
+        {
+            KnownMods.DetectedBridges[packageId] = bridge;
+            switch (packageId)
+            {
+                case ModMod.WorkTabPackageId:
+                    WorkTab = bridge as IWorkTabBridge;
+                    break;
+            }
+        }
+
+        internal static void FinalizeInit()
+        {
+            WorkTab ??= new WorkTabPlaceholderBridge();
+        }
+    }
 }

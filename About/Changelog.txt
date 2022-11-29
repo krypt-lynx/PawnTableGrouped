@@ -1,3 +1,8 @@
+2.0.2
+* WorkTab crash on first appearence if time bar is visible fixed
+* Invalid wheel scroll limits fixed
+* Timely table updates (clock on column header will change sorting immideately)
+
 2.0.1
 * accidental strong dependency on WorkTab removed
 * tables config for format changed, it can be split between multiple defs/files now

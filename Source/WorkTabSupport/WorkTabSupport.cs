@@ -10,7 +10,7 @@ namespace PawnTableGrouped.WorkTab
     {
         public WorkTabSupport()
         {
-            Mod.RegisterModBridge("fluffy.worktab", WorkTabBridge.Instance);
+            Mod.RegisterModBridge(ModMod.WorkTabPackageId, WorkTabBridge.Instance);
         }
     }
 }

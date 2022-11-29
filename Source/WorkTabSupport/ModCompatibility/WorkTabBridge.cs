@@ -24,7 +24,7 @@ namespace PawnTableGrouped
         }
     }
 
-    public class WorkTabBridge : ModBridge<WorkTabBridge> /*, IWorkTabBridge*/
+    public class WorkTabBridge : ModBridge<WorkTabBridge>, IWorkTabBridge
     {
         Harmony harmony = null;
         MethodInfo PawnTable_PawnTableOnGUI_prefix = null;
@@ -35,7 +35,7 @@ namespace PawnTableGrouped
         internal const string WorkTabDefName = "Work";
 
 
-        public bool workTabRenderEnabled = true;
+        private bool workTabRenderEnabled = true;
         public bool WorkTabRenderEnabled
         {
             get
@@ -56,18 +56,13 @@ namespace PawnTableGrouped
                         workTabRenderEnabled = value;
                         if (value)
                         {
-                            harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
-                                prefix: new HarmonyMethod(PawnTable_PawnTableOnGUI_prefix));
-                            harmony.Patch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"),
-                                prefix: new HarmonyMethod(PawnTable_RecacheIfDirty_prefix),
-                                postfix: new HarmonyMethod(PawnTable_RecacheIfDirty_postfix));
+                            PatchEnableWorkTabRender(harmony);
                         }
                         else
                         {
-                            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"), HarmonyPatchType.Prefix, workTabHarmonyId);
-                            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"), HarmonyPatchType.Prefix, workTabHarmonyId);
-                            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"), HarmonyPatchType.Postfix, workTabHarmonyId);
+                            PatchEnablePTGRender(harmony);
                         }
+                        WorktabLayoutDisabled = ForcePatchWorkTab || !WorkTabRenderEnabled;
                     }
                 }
                 catch (Exception e)
@@ -78,10 +73,51 @@ namespace PawnTableGrouped
             }
         }
 
+        private bool worktabLayoutDisabled = false;
+        public bool WorktabLayoutDisabled
+        {
+            get => worktabLayoutDisabled;
+            set
+            {
+                if (!Instance.IsActive)
+                {
+                    return;
+                }
+                try
+                {
+                    if (worktabLayoutDisabled != value)
+                    {
+                        worktabLayoutDisabled = value;
+                        if (value)
+                        {
+                            PatchEnableLayoutFix(harmony);
+                        }
+                        else
+                        {
+                            PatchDisableLayoutFix(harmony);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Instance.Deactivate();
+                    LogHelper.LogException("Exception thrown during tempering with Work Tab layout update", e);
+                }
+            }
+        }
+
+        private bool forcePatchWorkTab = false;
+        public bool ForcePatchWorkTab {
+            get => forcePatchWorkTab;
+            set {
+                forcePatchWorkTab = value;
+                WorktabLayoutDisabled = ForcePatchWorkTab || !WorkTabRenderEnabled;
+            }
+        }
 
         delegate bool PawnTable_PawnTableOnGUI_Prefix_Delegate(PawnTable arg1, Vector2 arg2, PawnTableDef arg3, ref Vector2 arg4);
 
-        protected override bool ResolveInternal(HarmonyLib.Harmony harmony)
+        protected override bool ResolveInternal(Harmony harmony)
         {
             PawnTable_PawnTableOnGUI_prefix = ((PawnTable_PawnTableOnGUI_Prefix_Delegate)PawnTable_PawnTableOnGUI.Prefix).Method;
 
@@ -97,15 +133,19 @@ namespace PawnTableGrouped
 
 
             WorkTabRenderEnabled = !Mod.Settings.pawnTablesEnabled.Contains(WorkTabDefName);
+            ForcePatchWorkTab = Mod.Settings.fixWorkTab;
 
-
-            Patch(harmony);
-            
-            
             return true;
         }
 
-        public static void Patch(Harmony harmony)
+        public void PatchEnablePTGRender(Harmony harmony)
+        {
+            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"), HarmonyPatchType.Prefix, workTabHarmonyId);
+            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"), HarmonyPatchType.Prefix, workTabHarmonyId);
+            harmony.Unpatch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"), HarmonyPatchType.Postfix, workTabHarmonyId);
+        }
+
+        private static void PatchEnableLayoutFix(Harmony harmony)
         {
             harmony.Patch(AccessTools.Method(typeof(MainTabWindow_WorkTab), nameof(MainTabWindow_WorkTab.RebuildTable)),
                 postfix: new HarmonyMethod(typeof(MainTabWindow_WorkTabPatches), nameof(MainTabWindow_WorkTabPatches.RebuildTable_postfix)));
@@ -113,6 +153,25 @@ namespace PawnTableGrouped
                 postfix: new HarmonyMethod(typeof(MainTabWindow_WorkTabPatches), nameof(MainTabWindow_WorkTabPatches.ShowScheduler_postfix)));
             harmony.Patch(AccessTools.Method(typeof(MainTabWindow), "SetInitialSizeAndPosition"),
                 postfix: new HarmonyMethod(typeof(MainTabWindow_WorkTabPatches), nameof(MainTabWindow_WorkTabPatches.SetInitialSizeAndPosition_postfix)));
+        }
+
+        public void PatchEnableWorkTabRender(Harmony harmony)
+        {
+            harmony.Patch(AccessTools.Method(typeof(PawnTable), "PawnTableOnGUI"),
+                prefix: new HarmonyMethod(PawnTable_PawnTableOnGUI_prefix));
+            harmony.Patch(AccessTools.Method(typeof(PawnTable), "RecacheIfDirty"),
+                prefix: new HarmonyMethod(PawnTable_RecacheIfDirty_prefix),
+                postfix: new HarmonyMethod(PawnTable_RecacheIfDirty_postfix));
+        }
+
+        private static void PatchDisableLayoutFix(Harmony harmony)
+        {
+            harmony.Unpatch(AccessTools.Method(typeof(MainTabWindow_WorkTab), nameof(MainTabWindow_WorkTab.RebuildTable)),
+                HarmonyPatchType.Postfix, workTabHarmonyId);
+            harmony.Unpatch(AccessTools.PropertySetter(typeof(PriorityManager), nameof(PriorityManager.ShowScheduler)),
+                HarmonyPatchType.Postfix, workTabHarmonyId);
+            harmony.Unpatch(AccessTools.Method(typeof(MainTabWindow), "SetInitialSizeAndPosition"),
+                HarmonyPatchType.Postfix, workTabHarmonyId);
         }
 
         public override string ModName()
@@ -140,7 +199,29 @@ namespace PawnTableGrouped
             if (__instance is MainTabWindow_WorkTab workTab) {
                 if (PriorityManager.ShowScheduler)
                 {
-                    workTab.RecacheTimeBarRect();
+                    try
+                    {
+                        if (workTab.Table != null)
+                        {
+                            workTab.RecacheTimeBarRect();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        // I hope the issue is fixed
+                        LogHelper.LogException("Work Tab patch failed. Please, report share this log with the author of Grouped Pawns Lists, because the author expects this issue to be fixed\n" +
+                            "WorkTab integration is disabled to avoid further issues\n", e);
+
+                        Mod.Settings.fixWorkTab = false;
+                        Mod.Settings.pawnTablesEnabled.Remove(WorkTabBridge.WorkTabDefName);
+
+                        WorkTabBridge.Instance.WorkTabRenderEnabled = true;
+                        WorkTabBridge.Instance.ForcePatchWorkTab = false;
+
+                        EventBus<PawnTableSettingsChanged>.SendMessage(null, new PawnTableSettingsChanged());
+
+                        WorkTabBridge.Instance.Deactivate();
+                    }
                 }
             }
         }

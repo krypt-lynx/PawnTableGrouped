@@ -13,7 +13,9 @@ using Verse;
 
 namespace PawnTableGrouped
 {
-    public class ModMod { }
+    public class ModMod {
+        public const string WorkTabPackageId = "fluffy.worktab";
+    }
 
     public class Mod : CMod
     {
@@ -124,7 +126,14 @@ namespace PawnTableGrouped
                 bool isListed = loadedModIds.Contains(info.packageId);
                 $"Enumerating mod bridges: {info.bridge.ModName()}; is listed: {isListed}".Log();
                 info.bridge.Resolve(isListed, harmony);
+
+                if (isListed)
+                {
+                    KnownMods.AddModBridge(info.packageId, info.bridge);
+                }
+                KnownMods.FinalizeInit();
             }
+
         }
 
         public override string SettingsCategory()

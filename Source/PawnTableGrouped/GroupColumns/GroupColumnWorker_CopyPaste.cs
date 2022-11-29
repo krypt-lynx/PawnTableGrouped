@@ -13,6 +13,7 @@ using Verse.Sound;
 
 namespace PawnTableGrouped
 {
+    [StaticConstructorOnStartup] // not it don't. But I need to suppress the issue
     class GroupColumnWorker_CopyPaste: GroupColumnWorker
     {
         static Getter<PawnColumnWorker_CopyPaste, bool> anythingInClipboard = Dynamic.InstanceGetProperty<PawnColumnWorker_CopyPaste, bool>("AnythingInClipboard");

@@ -9,6 +9,12 @@ namespace PawnTableGrouped
 {
     public class Settings : ModSettings
     {
+#if rw_1_4_or_later
+        static bool fixWorkTabDefault = true;
+#else
+        static bool fixWorkTabDefault = false;
+#endif
+
         public bool firstRun = true;
         public bool debug = false;
         public bool showDummyColumns = false;
@@ -16,6 +22,7 @@ namespace PawnTableGrouped
         public bool usePrimarySortFunction = true;
         public bool disableGroupCells = false;
         public bool groupByColumnExperimental = false;
+        public bool fixWorkTab = fixWorkTabDefault;
 
         public HashSet<string> pawnTablesEnabled = new HashSet<string>();
 
@@ -29,6 +36,7 @@ namespace PawnTableGrouped
             Scribe_Values.Look(ref usePrimarySortFunction, nameof(usePrimarySortFunction), true);
             Scribe_Values.Look(ref disableGroupCells, nameof(disableGroupCells), false);
             Scribe_Values.Look(ref groupByColumnExperimental, nameof(groupByColumnExperimental), false);
+            Scribe_Values.Look(ref fixWorkTab, nameof(fixWorkTab), fixWorkTabDefault);
 
             Scribe_Collections.Look(ref pawnTablesEnabled, "pawnTablesEnabled");
 

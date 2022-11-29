@@ -11,6 +11,8 @@ namespace PawnTableGrouped
 {
     class GeneralSettingsTab : CTabPage
     {
+        GeneralSettingsViewModel settingsModel = new GeneralSettingsViewModel();
+
         public override string Title()
         {
             return "PTG_General".Translate();
@@ -28,7 +30,7 @@ namespace PawnTableGrouped
             CElement primarySort;
             CElement disableGroupCells;
             CElement byColumn;
-            CElement tmp; // lets hope I will not hit undefined behavior 
+            CElement fixWorkTab;
 
             CreateInfoColumns();
 
@@ -76,21 +78,29 @@ namespace PawnTableGrouped
                     Checked = Mod.Settings.groupByColumnExperimental,
                     Changed = (_, value) => Mod.Settings.groupByColumnExperimental = value,
                 }), byColumn.intrinsicHeight),
+                2,
+                (AddElement(fixWorkTab = new CCheckboxLabeled
+                {
+                    Title = "FixWorkTabRw14LayoutIssues".Translate(),
+                    Tip = "WorkTabRw14LayoutIssuesHint".Translate(),
+                    Checked = settingsModel.FixWorkTab,
+                    Changed = (_, value) => settingsModel.FixWorkTab = value,
+                    Disabled = settingsModel.FixWorkTabDisabled,
+                }), byColumn.intrinsicHeight),
                 AddElement(new CElement()), // flexable spacer
                 AddElement(modReport)
             );
 
-
             var elements = new List<CElement>();
-            tmp = new CLabel { Title = "Mods report:" };
-            tmp.AddConstraint(tmp.height ^ tmp.intrinsicHeight);
+            var reportHeader = new CLabel { Title = "Mods report:" };
+            reportHeader.AddConstraint(reportHeader.height ^ reportHeader.intrinsicHeight);
 
-            elements.Add(modReport.AddElement(tmp));
+            elements.Add(modReport.AddElement(reportHeader));
             elements.AddRange(Mod.ModBridges.Select(x => ConstructModStatusView(x.bridge)));
 
             modReport.StackTop(elements.ToArray<object>());
-
         }
+
         CVarListGuide Columns;
 
         private void CreateInfoColumns()

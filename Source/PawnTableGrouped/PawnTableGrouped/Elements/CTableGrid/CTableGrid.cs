@@ -29,8 +29,8 @@ namespace PawnTableGrouped
         float fixedWidth;
         float fixedHeight;
 
-        float scrollBodyWidth;
-        float scrollBodyHeight;
+        float scrollOuterWidth;
+        float scrollOuterHeight;
 
         Rect fixedPanelRect;
         Rect columnsPanelRect;
@@ -119,8 +119,8 @@ namespace PawnTableGrouped
             fixedWidth = Columns.IntegralSizeOf(1);
             fixedHeight = Sections[0].IntegralSizeOf(1);
 
-            scrollBodyWidth = Bounds.width - fixedWidth - vScrollWidth;
-            scrollBodyHeight = Bounds.height - fixedHeight - hScrollHeight;
+            scrollOuterWidth = Bounds.width - fixedWidth - vScrollWidth;
+            scrollOuterHeight = Bounds.height - fixedHeight - hScrollHeight;
 
             if (vScrollVisible)
             {
@@ -141,25 +141,25 @@ namespace PawnTableGrouped
             }
 
             fixedPanelRect = new Rect(Bounds.xMin, Bounds.yMin, fixedWidth, fixedHeight);
-            columnsPanelRect = new Rect(Bounds.xMin + fixedWidth, Bounds.yMin, scrollBodyWidth, fixedHeight);
+            columnsPanelRect = new Rect(Bounds.xMin + fixedWidth, Bounds.yMin, scrollOuterWidth, fixedHeight);
 
-            tableBodyOuterRect = new Rect(Bounds.xMin, Bounds.yMin + fixedHeight, fixedWidth + scrollBodyWidth, scrollBodyHeight);
+            tableBodyOuterRect = new Rect(Bounds.xMin, Bounds.yMin + fixedHeight, fixedWidth + scrollOuterWidth, scrollOuterHeight);
 
-            namesPanelRect = new Rect(0, fixedHeight, fixedWidth, scrollBodyHeight);
-            namesPanelRect = new Rect(0, 0, fixedWidth, scrollBodyHeight);
+            namesPanelRect = new Rect(0, fixedHeight, fixedWidth, scrollOuterHeight);
+            namesPanelRect = new Rect(0, 0, fixedWidth, scrollOuterHeight);
 
             hScrollZoneRect = Rect.MinMaxRect(Bounds.xMin, Bounds.yMin, Bounds.xMax, Bounds.yMin + fixedHeight);
 
             scrollInnerWidth = Columns.TotalSize() - fixedWidth;
             scrollInnerHeight = Sections.TotalSize() - fixedHeight;
 
-            scrollOuterRectClipped = new Rect(fixedWidth, 0, scrollBodyWidth, scrollBodyHeight);
+            scrollOuterRectClipped = new Rect(fixedWidth, 0, scrollOuterWidth, scrollOuterHeight);
 
-            vScrollMax = scrollInnerWidth - scrollOuterRectClipped.x;
-            hScrollMax = scrollInnerHeight - scrollOuterRectClipped.y;
+            vScrollMax = scrollInnerHeight - scrollOuterHeight;
+            hScrollMax = scrollInnerWidth - scrollOuterWidth;
         }
 
-     
+
         int controlID = 0;
         private void ScrollBegin()
         {            

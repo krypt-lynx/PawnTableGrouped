@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using RWLayout.alpha2;
+using RWLayout.alpha2.FastAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,34 +20,28 @@ namespace PawnTableGrouped
 		public string priorityColorMethod = "RimWorld.WidgetsWork:ColorOfPriority";
 
 		[Unsaved(false)]
-		MethodInfo getColorMethod = null;
-		[Unsaved(false)]
-		bool getColorMethodFailsafe = false;
+		Func<int, Color> getColor;
 		[Unsaved(false)]
 		Color getColorMethodFailsafeColor = new Color(0.74f, 0.74f, 0.74f);
 
 		public Color ColorOfPriority(int priority)
 		{
-			if (getColorMethodFailsafe)
-			{
-				return getColorMethodFailsafeColor;
-			}
-
-			try
-			{
-				if (getColorMethod == null)
+			if (getColor == null)
+            {
+				var getColorMethod = HarmonyLib.AccessTools.Method(priorityColorMethod);
+				try
 				{
-					getColorMethod = HarmonyLib.AccessTools.Method(priorityColorMethod);
-					getColorMethodFailsafe = getColorMethod == null;
+					if (getColorMethod != null)
+					{
+						getColor = Dynamic.StaticRetMethod<int, Color>(getColorMethod);
+					}
 				}
+				catch { }
 
-				return (Color)getColorMethod.Invoke(null, new object[] { priority });
+				getColor ??= (priority) => getColorMethodFailsafeColor;
 			}
-			catch
-			{
-				getColorMethodFailsafe = true;
-				return getColorMethodFailsafeColor;
-			}
+
+			return getColor(priority);
 		}
 	}
 

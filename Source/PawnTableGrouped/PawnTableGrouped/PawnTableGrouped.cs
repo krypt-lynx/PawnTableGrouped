@@ -68,6 +68,8 @@ namespace PawnTableGrouped
         bool NeedUpdateViews = true;
         public virtual void PawnTableOnGUI(Vector2 position)
         {
+            table.RecacheIfDirty();
+
             if (NeedUpdateViews)
             {
                 view.Invalidate();
