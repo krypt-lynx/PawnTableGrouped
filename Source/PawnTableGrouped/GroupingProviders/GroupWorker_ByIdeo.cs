@@ -63,7 +63,7 @@ namespace PawnTableGrouped
                 }
 
                 int rOrder;
-                if (lIdeo == null || !Order.TryGetValue(rIdeo, out rOrder))
+                if (rIdeo == null || !Order.TryGetValue(rIdeo, out rOrder))
                 {
                     rOrder = int.MaxValue / 8;
                 }
